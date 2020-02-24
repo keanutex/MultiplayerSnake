@@ -1,1 +1,5 @@
+com\levelUp\multiplayerSnake\Greeting.class
+com\levelUp\multiplayerSnake\HelloMessage.class
+com\levelUp\multiplayerSnake\GreetingController.class
+com\levelUp\multiplayerSnake\WebSocketConfig.class
 com\levelUp\multiplayerSnake\MultiplayerSnakeApplication.class
