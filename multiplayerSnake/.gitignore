@@ -1,3 +1,9 @@
+HELP.md
+target/
+.mvn/
+!**/src/main/**
+!**/src/test/**
+
 # Compiled source #
 ###################
 *.com
@@ -35,3 +41,7 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# file: ~/.gitignore_global
+.DS_Store
+.idea
