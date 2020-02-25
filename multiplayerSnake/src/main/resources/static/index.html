@@ -19,29 +19,16 @@
                 <div class="form-group">
                     <label for="connect">WebSocket connection:</label>
                     <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
-                        <button id="addPlayer" class="btn btn-default" type="submit">Add Player</button>
-                    </button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect</button>
+                    <button id="addPlayer" class="btn btn-default" type="submit">Add Player</button>
+                    <button id="moveSnake" class="btn btn-default" type="submit">Move Snake</button>
+                    <button id="displaySnakes" class="btn btn-default" type="submit">Display Snakes</button>
+                    <button id="snakeDetails" class="btn btn-default" type="submit">Get Snake Details</button>
                 </div>
             </form>
         </div>
-        <div class="col-md-6">
-                <button id="send" class="btn btn-default" type="submit">Get Snake Details</button>
-        </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Greetings</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <canvas id="gameCanvas" width="300" height="300"></canvas>
 </div>
 </body>
 </html>

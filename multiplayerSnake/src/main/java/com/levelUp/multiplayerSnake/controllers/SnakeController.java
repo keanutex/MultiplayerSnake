@@ -13,60 +13,47 @@ import java.util.ArrayList;
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class SnakeController {
 
-    private int numberOfPlayers = 0;
-    private boolean isRunning = false;
-    private int sizeOfBox = 10, bestScoreOfAll = 0;
-    private int bestScore = 0, idBestPlayer;
+    int numberOfPlayers = 0;
     ArrayList<Snake> snakes = new ArrayList<>();
-    Snake firstSnake = new Snake();
+  
 
-    @PostMapping("/changeDirection")
-    public void snakeChangeDirection(@RequestParam String changeD) {
-        for (Snake snake : snakes) {
-            snake.changeDirection(changeD);
+    @MessageMapping("/moveSnakes")
+    @SendTo("/snake/moveSnakes")
+    public String moveSnakes() {
+        for(int i = 0; i < snakes.size(); i++){
+                snakes.get(i).move();
         }
+        return "snakes moved";
     }
 
-
-
-    // game loop function
-    @GetMapping("/runGame")
-    public void runGame() {
-        // only 1 Player activate the Game-Loop
-        if (isRunning) {
-            return;
-        }
-        isRunning = true;
-        long time;
-
-        // game loop
-        while (true) {
-            // reset Game
-            if (!isRunning) {
-                return;
-            }
-        }
-    }
-    // moving snakes in the direction
-    private void moveSnake() {
-        for (Snake snake : snakes) {
-            snake.move();
-        }
-    }
     @MessageMapping("/newPlayer")
     @SendTo("/snake/newPlayer")
     public String insertPlayerIntoGame() {
-        System.out.println("lmao");
         numberOfPlayers++;
         snakes.add(new Snake());
         return "newPlayerAdded";
     }
 
-
     @MessageMapping("/snakeDetails")
     @SendTo("/snake/snakeDetails")
     public ArrayList<Snake> getSnakeDetails(){
         return snakes;
+    }
+
+    @MessageMapping("/changeDirection")
+    @SendTo("/snake/changeDirection")
+    public void snakeChangeDirection(@RequestParam String changeD, @RequestParam String playerId) {
+        for(int i = 0; i < snakes.size(); i++){
+            if(snakes.get(i).playerName.equals(playerId)){
+                snakes.get(i).changeDirection("changeD");
+            }
+        }
+    }
+
+    @MessageMapping("/getGameState")
+    @SendTo("/snake/getGameState")
+    public void getGameState(@RequestParam String changeD, @RequestParam String playerId) {
+        //return game state
     }
 
 }
