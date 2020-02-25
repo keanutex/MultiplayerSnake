@@ -1,4 +1,4 @@
-package com.levelUp.multiplayerSnake;
+package com.levelUp.multiplayerSnake.models;
 
 public class SnakeSegment {
 

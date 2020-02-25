@@ -1,7 +1,4 @@
-package com.levelUp.multiplayerSnake;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.levelUp.multiplayerSnake.models;
 
 public class Player {
     public String name;
