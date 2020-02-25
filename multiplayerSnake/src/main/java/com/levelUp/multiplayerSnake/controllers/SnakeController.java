@@ -3,14 +3,14 @@ package com.levelUp.multiplayerSnake.controllers;
 import com.levelUp.multiplayerSnake.models.Snake;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
 
-@RestController
+@Controller
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-@RequestMapping("/api/snake")
 public class SnakeController {
 
     private int numberOfPlayers = 0;
@@ -27,12 +27,7 @@ public class SnakeController {
         }
     }
 
-    @MessageMapping("/newPlayer")
-    @SendTo("/newPlayer")
-    public void insertPlayerIntoGame() {
-        numberOfPlayers++;
-        snakes.add(new Snake());
-    }
+
 
     // game loop function
     @GetMapping("/runGame")
@@ -58,11 +53,19 @@ public class SnakeController {
             snake.move();
         }
     }
-    @GetMapping("/snakeDetails")
+    @MessageMapping("/newPlayer")
+    @SendTo("/snake/newPlayer")
+    public String insertPlayerIntoGame() {
+        System.out.println("lmao");
+        numberOfPlayers++;
+        snakes.add(new Snake());
+        return "newPlayerAdded";
+    }
+
+
+    @MessageMapping("/snakeDetails")
+    @SendTo("/snake/snakeDetails")
     public ArrayList<Snake> getSnakeDetails(){
-        System.out.println("SNAKE DETAILS RAN");
-        firstSnake.createSnake();
-        snakes.add(firstSnake);
         return snakes;
     }
 

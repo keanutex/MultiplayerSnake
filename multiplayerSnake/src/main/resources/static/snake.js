@@ -23,7 +23,15 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
+        stompClient.subscribe('/snake/snakeDetails', (status) =>{
+            console.log(status.body); //run every time server is sent a message on this channel
+            //{}
+        });
+        stompClient.subscribe("/snake/newPlayer", (status) => {
+            console.log("SNAKE BOI ADDDED");
+        });
     });
+
 }
 
 function disconnect() {
@@ -35,14 +43,7 @@ function disconnect() {
 }
 
 function getSnakeDetails() {
-    fetch(ip + "/api/snake/snakeDetails", {
-        method: 'GET',
-        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}
-    }).then(function (ev) {
-        console.log(ev);
-    }).catch((function (error) {
-        console.log("Error: ", error);
-    }));
+   stompClient.send("/app/snakeDetails");
 }
 
 
