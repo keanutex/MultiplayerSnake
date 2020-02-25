@@ -1,4 +1,9 @@
 var stompClient = null;
+let ip;
+
+window.onload = function () {
+    ip = window.location.origin;
+};
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -18,8 +23,6 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/snakeDetails', function (greeting) {
-        });
     });
 }
 
@@ -32,7 +35,14 @@ function disconnect() {
 }
 
 function getSnakeDetails() {
-    stompClient.send("/app/snakeDetails");
+    fetch(ip + "/api/snake/snakeDetails", {
+        method: 'GET',
+        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}
+    }).then(function (ev) {
+        console.log(ev);
+    }).catch((function (error) {
+        console.log("Error: ", error);
+    }));
 }
 
 

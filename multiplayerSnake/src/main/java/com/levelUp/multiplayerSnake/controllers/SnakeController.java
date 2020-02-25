@@ -18,6 +18,7 @@ public class SnakeController {
     private int sizeOfBox = 10, bestScoreOfAll = 0;
     private int bestScore = 0, idBestPlayer;
     ArrayList<Snake> snakes = new ArrayList<>();
+    Snake firstSnake = new Snake();
 
     @PostMapping("/changeDirection")
     public void snakeChangeDirection(@RequestParam String changeD) {
@@ -57,9 +58,11 @@ public class SnakeController {
             snake.move();
         }
     }
-    @MessageMapping("/snakeDetails")
-    @SendTo("/snakeDetails")
+    @GetMapping("/snakeDetails")
     public ArrayList<Snake> getSnakeDetails(){
+        System.out.println("SNAKE DETAILS RAN");
+        firstSnake.createSnake();
+        snakes.add(firstSnake);
         return snakes;
     }
 
