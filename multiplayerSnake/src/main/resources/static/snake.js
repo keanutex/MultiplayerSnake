@@ -1,27 +1,53 @@
-// 192.168.0.x87 +:8080/index.html
-var canvas, ctx, playerNr = -1, maxPlayer = 0;
-var pause = false, check; // oldDirection = "r";
-let ip = "localhost", ipSecure = "", protocol = "";
-let field;
-// https wss
+var stompClient = null;
 
-// load site and give own name
-window.onload = function () {
-    field = new Array(6600);
-
-    while (check === '' || check == null) {
-        check = prompt('Please set your name, and do not forget your colour ( "Name#HexCode" ) ', '');
+function setConnected(connected) {
+    $("#connect").prop("disabled", connected);
+    $("#disconnect").prop("disabled", !connected);
+    if (connected) {
+        $("#conversation").show();
     }
-    check = check.replace("#", "xHashTagx");
-
-    ip = window.location.origin;
-    console.log("IP: "+ ip);
-    /// ip = "http://10.62.2.194:8080";
-    protocol = window.location.protocol;
-    if (protocol === "https:") {
-        ipSecure = "s";
+    else {
+        $("#conversation").hide();
     }
-};
+    $("#greetings").html("");
+}
+
+function connect() {
+    var socket = new SockJS('/gs-guide-websocket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        setConnected(true);
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/greetings', function (greeting) {
+            showGreeting(JSON.parse(greeting.body).content);
+        });
+    });
+}
+
+function disconnect() {
+    if (stompClient !== null) {
+        stompClient.disconnect();
+    }
+    setConnected(false);
+    console.log("Disconnected");
+}
+
+function sendName() {
+    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+}
+
+function showGreeting(message) {
+    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+}
+
+$(function () {
+    $("form").on('submit', function (e) {
+        e.preventDefault();
+    });
+    $( "#connect" ).click(function() { connect(); });
+    $( "#disconnect" ).click(function() { disconnect(); });
+    $( "#send" ).click(function() { sendName(); });
+});
 
 
 
