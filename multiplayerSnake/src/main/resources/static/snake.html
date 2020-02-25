@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="optic.css">
+    <script src="stomp.js"></script>
+    <title>Snake Game of MW</title>
+</head>
+
+<body>
+<main>
+    <div class="chat">
+        <h2>
+            <div class="chatHeader">
+                Chat or Console:
+            </div>
+        </h2>
+
+        <!-- <textarea name="chat" id="chatWindow" data-adaptheight rows="3" cols="40"
+        placeholder="deine diskriminierende Nachricht..." style="padding: 16px;
+        line-height: 1.5; width: 50%; " autofocus></textarea> -->
+
+        <span id="messages"> No news</span>
+        <form onsubmit="newMessage(); return false;">
+            <input placeholder="be nice to each other..."
+                   style="width: 100%;"
+                   type="text" name="" id="chatWindow">
+        </form>
+    </div>
+
+
+    <div class="mainGame">
+
+        <div class="score">
+            <h1>Scores:</h1>
+            <span id="spanId"> ERROR nothing Available</span>
+        </div>
+
+        <br/>
+
+        <canvas width="1000" height="600" id="canvas"></canvas>
+
+        <br/>
+
+        <div class="footer">
+            Highscore:
+            <span id="highScore"> ERROR nothing Available</span> <br>
+
+            <a href="index.html"> Comment Board</a>
+            <br/>
+        </div>
+    </div>
+</main>
+
+<script src="snake.js" type="application/javascript"></script>
+</body>
+</html>

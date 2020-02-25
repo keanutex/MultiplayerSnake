@@ -16,22 +16,4 @@ public class SnakeSegment {
     this.dir = dir;
   }
 
-
-  public void move(){
-    switch (this.dir){
-      case "up":
-        this.y += 1;
-        break;
-      case "down":
-        this.y -= 1;
-        break;
-      case "right":
-        this.x += 1;
-        break;
-      case "left":
-        this.x -= 1;
-        break;
-    }
-  }
-
 }

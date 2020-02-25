@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class Snake {
     private ArrayList<SnakeSegment> snakeSegments = new ArrayList<SnakeSegment>();
 
+    public Snake(){
+
+    }
 
     public Snake(ArrayList<SnakeSegment> snakeSegments) {
         this.snakeSegments = snakeSegments;
