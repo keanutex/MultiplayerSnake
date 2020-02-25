@@ -1,14 +1,9 @@
 package com.levelUp.multiplayerSnake.controllers;
 
-import com.levelUp.multiplayerSnake.models.Greeting;
-import com.levelUp.multiplayerSnake.models.HelloMessage;
 import com.levelUp.multiplayerSnake.models.Snake;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 
@@ -17,9 +12,6 @@ import java.util.ArrayList;
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RequestMapping("/api/snake")
 public class SnakeController {
-
-    @Autowired
-    private SimpMessagingTemplate webSocket;
 
     private int numberOfPlayers = 0;
     private boolean isRunning = false;
@@ -34,13 +26,9 @@ public class SnakeController {
         }
     }
 
-    @PostMapping("/getSnakes")
-    public ArrayList<Snake> getSnakes() {
-        return snakes;
-    }
-
-    @PostMapping("/newPlayer")
-    public void insertPlayerIntoGame(@RequestParam String playerName) {
+    @MessageMapping("/newPlayer")
+    @SendTo("/newPlayer")
+    public void insertPlayerIntoGame() {
         numberOfPlayers++;
         snakes.add(new Snake());
     }
@@ -69,11 +57,10 @@ public class SnakeController {
             snake.move();
         }
     }
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Greeting greeting(HelloMessage message) throws Exception {
-        Thread.sleep(1000); // simulated delay
-        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+    @MessageMapping("/snakeDetails")
+    @SendTo("/snakeDetails")
+    public ArrayList<Snake> getSnakeDetails(){
+        return snakes;
     }
 
 }
