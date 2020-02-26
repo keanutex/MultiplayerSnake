@@ -15,16 +15,20 @@ public class SnakeController {
 
     int numberOfPlayers = 0;
     ArrayList<Snake> snakes = new ArrayList<>();
-  
+
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
-    public String moveSnakes() {
-        for(int i = 0; i < snakes.size(); i++){
+    public void moveSnakes() throws InterruptedException {
+        while(true){
+            for(int i = 0; i < snakes.size(); i++){
                 snakes.get(i).move();
+            }
+            Thread.sleep(1000);
         }
-        return "snakes moved";
     }
+
+
 
     @MessageMapping("/newPlayer")
     @SendTo("/snake/newPlayer")
@@ -42,17 +46,18 @@ public class SnakeController {
 
     @MessageMapping("/changeDirection")
     @SendTo("/snake/changeDirection")
-    public void snakeChangeDirection(@RequestParam String changeD, @RequestParam String playerId) {
+    public void snakeChangeDirection(String changeD) {
         for(int i = 0; i < snakes.size(); i++){
-            if(snakes.get(i).playerName.equals(playerId)){
-                snakes.get(i).changeDirection("changeD");
-            }
+            //if(snakes.get(i).playerName.equals(playerId)){
+                snakes.get(i).changeDirection(changeD);
+            //}
         }
+        System.out.println("change direction ran: " +changeD );
     }
 
     @MessageMapping("/getGameState")
     @SendTo("/snake/getGameState")
-    public void getGameState(@RequestParam String changeD, @RequestParam String playerId) {
+    public void getGameState() {
         //return game state
     }
 

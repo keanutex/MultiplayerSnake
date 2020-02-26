@@ -37,12 +37,18 @@ function connect() {
 // Draw a "border" around the entire canvas
     ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-
     var socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
+    stompClient.debug = null; //uncomment this to get rid of debugging from stomp
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
+
+        console.log("functions here");
+        getSnakeDetails();
+        moveSnake();
+
+
         stompClient.subscribe('/snake/snakeDetails', (status) =>{
             const jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
             ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
@@ -77,22 +83,69 @@ function moveSnake(){
     stompClient.send("/app/moveSnakes");
 }
 
+let interval = setInterval(changeDirection, 5);
+
+function changeDirection() {
+    document.onkeydown = function (event) {
+        let keyCode, changeD = "Error";
+        let sendKeyCode = false;
+
+        if (event) {
+            keyCode = event.keyCode;
+        } else {
+            keyCode = window.event.keyCode;
+        }
+
+        switch (keyCode) {
+            case 65:
+            case 37:
+                changeD = "left";
+                sendKeyCode = true;
+                console.log("LEFT");
+                break;
+            case 87:
+            case 38:
+                changeD = "up";
+                sendKeyCode = true;
+                console.log("UP");
+                break;
+            case 68:
+            case 39:
+                changeD = "right";
+                sendKeyCode = true;
+                console.log("RIGHT");
+                break;
+            case 83:
+            case 40:
+                changeD = "down";
+                sendKeyCode = true;
+                console.log("DOWN");
+                break;
+            default:
+                console.log("UNRECOGNISED KEYCODE: " + keyCode);
+                break;
+        }
+        if(sendKeyCode){
+            stompClient.send("/app/changeDirection", {}, changeD); //needs to send through the direction as a field (make a JSON/class for multiple fields)
+            console.log("/app/changeDirection?changeD=" + changeD);
+            //stompClient.send("/app/changeDirection?changeD=" + changeD);
+
+        }
+    }
+}
+
 function getSnakeDetails() {
    stompClient.send("/app/snakeDetails");
     setTimeout(getSnakeDetails, 500);
 }
 
 function displaySnakes(x,y){
-
     ctx.fillStyle = SNAKE_COLOUR;
-
     // Set the border colour of the snake part
     ctx.strokestyle = SNAKE_BORDER_COLOUR;
-
     // Draw a "filled" rectangle to represent the snake part at the coordinates
     // the part is located
     ctx.fillRect(x, y, 10, 10);
-
     // Draw a border around the snake part
     ctx.strokeRect(x, y, 10, 10);
 }
