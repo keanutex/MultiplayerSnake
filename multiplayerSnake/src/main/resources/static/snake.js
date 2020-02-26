@@ -1,5 +1,4 @@
 var stompClient = null;
-let ip;
 
 const CANVAS_BORDER_COLOUR = 'black';
 const CANVAS_BACKGROUND_COLOUR = "white";
@@ -11,6 +10,8 @@ let dx = 10;
 let dy = 0;
 // Get the canvas element
 let ctx;
+
+var playerId = "";
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -30,6 +31,9 @@ function connect() {
 // Draw a "border" around the entire canvas
     ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
 
+    playerId = '_' + Math.random().toString(36).substr(2, 9);
+
+
     var socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
     stompClient.debug = null; //uncomment this to get rid of debugging from stomp
@@ -37,10 +41,9 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
 
-        console.log("functions here");
+        addPlayer();
         getSnakeDetails();
         moveSnake();
-
 
         stompClient.subscribe('/snake/snakeDetails', (status) =>{
             const jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
@@ -48,29 +51,28 @@ function connect() {
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
+
             for(let i = 0; i < jsonReturn.length; i ++){
                 for(let j = 0; j < jsonReturn[i].snakeSegments.length; j++){
                     displaySnakes(jsonReturn[i].snakeSegments[j].x,jsonReturn[i].snakeSegments[j].y);
                 }
             }
         });
-        stompClient.subscribe("/snake/newPlayer", (status) => {
-            console.log("SNAKE BOI ADDDED");
-        });
-        stompClient.subscribe("/snake/moveSnake", (status) => {
-            console.log("SNAKES MOVED");
-        });
     });
-
 }
 
 function disconnect() {
+    deletePlayer();
     if (stompClient !== null) {
         stompClient.disconnect();
     }
     setConnected(false);
     console.log("Disconnected");
     //TODO DELETE PLAYER
+}
+
+function deletePlayer(){
+    stompClient.send("/app/removeSnake/" + playerId);
 }
 
 function moveSnake(){
@@ -116,9 +118,7 @@ function changeDirection() {
                 break;
         }
         if(sendKeyCode){
-            stompClient.send("/app/changeDirection", {}, changeD); //needs to send through the direction as a field (make a JSON/class for multiple fields)
-            //stompClient.send("/app/changeDirection?changeD=" + changeD);
-
+            stompClient.send("/app/" + playerId + "/changeDirection", {}, changeD); //needs to send through the direction as a field (make a JSON/class for multiple fields)
         }
     }
 }
@@ -140,8 +140,7 @@ function displaySnakes(x,y){
 }
 
 function addPlayer(){
-    //TODO MOVE INTO CONNECT
-    stompClient.send("/app/newPlayer");
+    stompClient.send("/app/newPlayer/" + playerId);
 }
 
 $(function () {
@@ -150,7 +149,6 @@ $(function () {
     });
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#addPlayer" ).click(function() { addPlayer(); });
 });
 
 

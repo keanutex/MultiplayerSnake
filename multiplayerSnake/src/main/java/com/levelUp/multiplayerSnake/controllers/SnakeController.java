@@ -1,12 +1,15 @@
 package com.levelUp.multiplayerSnake.controllers;
 
 import com.levelUp.multiplayerSnake.models.Snake;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 
 @Controller
@@ -14,11 +17,8 @@ import java.util.ArrayList;
 public class SnakeController {
 
     int numberOfPlayers = 0;
-    ArrayList<Snake> snakes = new ArrayList<>(); //TODO CHANGE TO MAP WHERE PLAYERID IS THE KEY
+    HashMap<String, Snake> snakes = new HashMap<String, Snake>();
     public boolean isRunning = false;
-
-    //add pickups
-
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
@@ -28,43 +28,50 @@ public class SnakeController {
         }
         isRunning = true;
         while(true){
-            for(int i = 0; i < snakes.size(); i++){
-                snakes.get(i).move();
+            for (Snake snake: snakes.values()) {
+                snake.move();
             }
             Thread.sleep(1000);
         }
     }
 
-    @MessageMapping("/newPlayer")
-    @SendTo("/snake/newPlayer")
-    public String insertPlayerIntoGame() {
+    @MessageMapping("/newPlayer/{playerId}")
+    @SendTo("/snake/newPlayer/{playerId}")
+    public String insertPlayerIntoGame(@DestinationVariable String playerId) {
         numberOfPlayers++;
-        snakes.add(new Snake());
+        snakes.put(playerId, new Snake()); //TODO ADD SNAKE
         return "newPlayerAdded";
     }
 
     @MessageMapping("/snakeDetails")
     @SendTo("/snake/snakeDetails")
     public ArrayList<Snake> getSnakeDetails(){
-        return snakes;
+        Collection<Snake> values = snakes.values();
+        return new ArrayList<>(values);
     }
 
-    @MessageMapping("/changeDirection")
-    @SendTo("/snake/changeDirection")
-    public void snakeChangeDirection(String changeD) { //add unique identifier for snake
-        for(int i = 0; i < snakes.size(); i++){
-            //if(snakes.get(i).playerName.equals(playerId)){
-            if(changeD.equals("up") && snakes.get(i).getDirection().equals("down"))
+    @MessageMapping("/removeSnake/{playerId}")
+    @SendTo("/snake/removeSnake/{playerId}")
+    public void removePlayer( @DestinationVariable String playerId){
+        System.out.println("player removed " + playerId);
+        snakes.remove(playerId);
+    }
+
+
+    @MessageMapping("/{playerId}/changeDirection")
+    @SendTo("/snake/{playerId}/changeDirection")
+    public void snakeChangeDirection(String changeD, @DestinationVariable String playerId) { //add unique identifier for snake
+
+            if(changeD.equals("up") && snakes.get(playerId).getDirection().equals("down"))
                 return;
-            if(changeD.equals("down") && snakes.get(i).getDirection().equals("up"))
+            if(changeD.equals("down") && snakes.get(playerId).getDirection().equals("up"))
                 return;
-            if(changeD.equals("left") && snakes.get(i).getDirection().equals("right"))
+            if(changeD.equals("left") && snakes.get(playerId).getDirection().equals("right"))
                 return;
-            if(changeD.equals("right") && snakes.get(i).getDirection().equals("left"))
+            if(changeD.equals("right") && snakes.get(playerId).getDirection().equals("left"))
                 return;
 
-            snakes.get(i).changeDirection(changeD);
-            //}
-        }
+            snakes.get(playerId).changeDirection(changeD);
+
     }
 }
