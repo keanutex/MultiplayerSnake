@@ -46,13 +46,22 @@ public class SnakeController {
 
     @MessageMapping("/changeDirection")
     @SendTo("/snake/changeDirection")
-    public void snakeChangeDirection(String changeD) {
+    public void snakeChangeDirection(String changeD) { //add unique identifier for snake
         for(int i = 0; i < snakes.size(); i++){
             //if(snakes.get(i).playerName.equals(playerId)){
-                snakes.get(i).changeDirection(changeD);
+            if(changeD.equals("up") && snakes.get(i).getDirection().equals("down"))
+                return;
+            if(changeD.equals("down") && snakes.get(i).getDirection().equals("up"))
+                return;
+            if(changeD.equals("left") && snakes.get(i).getDirection().equals("right"))
+                return;
+            if(changeD.equals("right") && snakes.get(i).getDirection().equals("left"))
+                return;
+
+            snakes.get(i).changeDirection(changeD);
+
             //}
         }
-        System.out.println("change direction ran: " +changeD );
     }
 
     @MessageMapping("/getGameState")

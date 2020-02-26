@@ -127,7 +127,6 @@ function changeDirection() {
         }
         if(sendKeyCode){
             stompClient.send("/app/changeDirection", {}, changeD); //needs to send through the direction as a field (make a JSON/class for multiple fields)
-            console.log("/app/changeDirection?changeD=" + changeD);
             //stompClient.send("/app/changeDirection?changeD=" + changeD);
 
         }
@@ -160,9 +159,7 @@ $(function () {
     });
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#snakeDetails" ).click(function() { getSnakeDetails(); });
     $( "#addPlayer" ).click(function() { addPlayer(); });
-    $( "#moveSnake" ).click(function() { moveSnake(); });
 });
 
 
