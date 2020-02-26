@@ -14,12 +14,19 @@ import java.util.ArrayList;
 public class SnakeController {
 
     int numberOfPlayers = 0;
-    ArrayList<Snake> snakes = new ArrayList<>();
+    ArrayList<Snake> snakes = new ArrayList<>(); //TODO CHANGE TO MAP WHERE PLAYERID IS THE KEY
+    public boolean isRunning = false;
+
+    //add pickups
 
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
     public void moveSnakes() throws InterruptedException {
+        if(isRunning){
+            return;
+        }
+        isRunning = true;
         while(true){
             for(int i = 0; i < snakes.size(); i++){
                 snakes.get(i).move();
@@ -27,8 +34,6 @@ public class SnakeController {
             Thread.sleep(1000);
         }
     }
-
-
 
     @MessageMapping("/newPlayer")
     @SendTo("/snake/newPlayer")
@@ -59,15 +64,7 @@ public class SnakeController {
                 return;
 
             snakes.get(i).changeDirection(changeD);
-
             //}
         }
     }
-
-    @MessageMapping("/getGameState")
-    @SendTo("/snake/getGameState")
-    public void getGameState() {
-        //return game state
-    }
-
 }

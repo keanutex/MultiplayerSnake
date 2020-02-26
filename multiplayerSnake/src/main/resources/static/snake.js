@@ -15,13 +15,6 @@ let ctx;
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
-    if (connected) {
-        $("#conversation").show();
-    }
-    else {
-        $("#conversation").hide();
-    }
-    $("#greetings").html("");
 }
 
 function connect() {
@@ -77,6 +70,7 @@ function disconnect() {
     }
     setConnected(false);
     console.log("Disconnected");
+    //TODO DELETE PLAYER
 }
 
 function moveSnake(){
@@ -101,25 +95,21 @@ function changeDirection() {
             case 37:
                 changeD = "left";
                 sendKeyCode = true;
-                console.log("LEFT");
                 break;
             case 87:
             case 38:
                 changeD = "up";
                 sendKeyCode = true;
-                console.log("UP");
                 break;
             case 68:
             case 39:
                 changeD = "right";
                 sendKeyCode = true;
-                console.log("RIGHT");
                 break;
             case 83:
             case 40:
                 changeD = "down";
                 sendKeyCode = true;
-                console.log("DOWN");
                 break;
             default:
                 console.log("UNRECOGNISED KEYCODE: " + keyCode);
@@ -150,6 +140,7 @@ function displaySnakes(x,y){
 }
 
 function addPlayer(){
+    //TODO MOVE INTO CONNECT
     stompClient.send("/app/newPlayer");
 }
 
