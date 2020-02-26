@@ -8,14 +8,13 @@ public class Snake {
 
     public ArrayList<SnakeSegment> snakeSegments = new ArrayList<SnakeSegment>();
 
-    public boolean gameRunning = false;
     public boolean playerAlive = true;
     public boolean bestPlayer = false;
     public int playerNr;
     public int score;
     public long playTime;
 
-    public String playerColor;
+    public String playerColour;
     public String playerName;
     public UUID client;
 

@@ -2,7 +2,7 @@ var stompClient = null;
 
 const CANVAS_BORDER_COLOUR = 'black';
 const CANVAS_BACKGROUND_COLOUR = "white";
-const SNAKE_COLOUR = 'lightgreen';
+let SNAKE_COLOUR = 'lightgreen';
 const SNAKE_BORDER_COLOUR = 'darkgreen';
 // Horizontal velocity
 let dx = 10;
@@ -40,8 +40,8 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-
         addPlayer();
+        setColour();
         getSnakeDetails();
         moveSnake();
 
@@ -51,10 +51,9 @@ function connect() {
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
-
             for(let i = 0; i < jsonReturn.length; i ++){
                 for(let j = 0; j < jsonReturn[i].snakeSegments.length; j++){
-                    displaySnakes(jsonReturn[i].snakeSegments[j].x,jsonReturn[i].snakeSegments[j].y);
+                    displaySnakes(jsonReturn[i].snakeSegments[j].x, jsonReturn[i].snakeSegments[j].y, jsonReturn[i].playerColour);
                 }
             }
         });
@@ -72,7 +71,7 @@ function disconnect() {
 }
 
 function deletePlayer(){
-    stompClient.send("/app/removeSnake/" + playerId);
+    stompClient.send("/app/" + playerId + "/removeSnake");
 }
 
 function moveSnake(){
@@ -128,8 +127,8 @@ function getSnakeDetails() {
     setTimeout(getSnakeDetails, 500);
 }
 
-function displaySnakes(x,y){
-    ctx.fillStyle = SNAKE_COLOUR;
+function displaySnakes(x,y, colour){
+    ctx.fillStyle = colour;
     // Set the border colour of the snake part
     ctx.strokestyle = SNAKE_BORDER_COLOUR;
     // Draw a "filled" rectangle to represent the snake part at the coordinates
@@ -140,7 +139,7 @@ function displaySnakes(x,y){
 }
 
 function addPlayer(){
-    stompClient.send("/app/newPlayer/" + playerId);
+    stompClient.send("/app/newPlayer/" + playerId, {}, setColour()); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
 }
 
 $(function () {
@@ -152,5 +151,24 @@ $(function () {
 });
 
 
+function isColor(strColor){
+    if(strColor === ""){
+        return false;
+    }
+    var s = new Option().style;
+    s.color = strColor;
+    return s.color == strColor;
+}
 
+function setColour(){
+    let color = document.getElementById("colorText").value;
+    if(!isColor(color)) {
+        const letters = '0123456789ABCDEF';
+        color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+    }
+    return color;
+}
 

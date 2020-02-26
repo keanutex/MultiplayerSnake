@@ -37,9 +37,10 @@ public class SnakeController {
 
     @MessageMapping("/newPlayer/{playerId}")
     @SendTo("/snake/newPlayer/{playerId}")
-    public String insertPlayerIntoGame(@DestinationVariable String playerId) {
+    public String insertPlayerIntoGame(@DestinationVariable String playerId, String colour) {
         numberOfPlayers++;
         snakes.put(playerId, new Snake()); //TODO ADD SNAKE
+        snakes.get(playerId).playerColour = colour;
         return "newPlayerAdded";
     }
 
@@ -50,18 +51,22 @@ public class SnakeController {
         return new ArrayList<>(values);
     }
 
-    @MessageMapping("/removeSnake/{playerId}")
-    @SendTo("/snake/removeSnake/{playerId}")
+    @MessageMapping("{playerId}/removeSnake")
+    @SendTo("/snake/{playerId}/removeSnake")
     public void removePlayer( @DestinationVariable String playerId){
-        System.out.println("player removed " + playerId);
         snakes.remove(playerId);
     }
 
+    @MessageMapping("{playerId}/setColour")
+    @SendTo("/snake/{playerId}/setColour")
+    public void setColour( @DestinationVariable String playerId, String colour){
+        System.out.println(colour);
+        snakes.get(playerId).playerColour = colour;
+    }
 
     @MessageMapping("/{playerId}/changeDirection")
     @SendTo("/snake/{playerId}/changeDirection")
-    public void snakeChangeDirection(String changeD, @DestinationVariable String playerId) { //add unique identifier for snake
-
+    public void snakeChangeDirection(String changeD, @DestinationVariable String playerId) {
             if(changeD.equals("up") && snakes.get(playerId).getDirection().equals("down"))
                 return;
             if(changeD.equals("down") && snakes.get(playerId).getDirection().equals("up"))
@@ -72,6 +77,5 @@ public class SnakeController {
                 return;
 
             snakes.get(playerId).changeDirection(changeD);
-
     }
 }
