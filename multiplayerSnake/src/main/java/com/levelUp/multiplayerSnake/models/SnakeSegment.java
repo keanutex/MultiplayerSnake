@@ -16,4 +16,12 @@ public class SnakeSegment {
     this.dir = dir;
   }
 
+  @Override
+  public String toString() {
+    return "SnakeSegment{" +
+            "x=" + x +
+            ", y=" + y +
+            ", dir='" + dir + '\'' +
+            '}';
+  }
 }

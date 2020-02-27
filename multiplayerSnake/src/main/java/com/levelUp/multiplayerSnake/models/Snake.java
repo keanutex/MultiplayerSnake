@@ -49,8 +49,8 @@ public class Snake {
         this.snakeSegments.get(0).dir = direction;
     }
 
-    public void addSegment(String direction, int x, int y) {
-        this.snakeSegments.add(new SnakeSegment(x, y, direction));
+    public void addSegment() {
+        this.snakeSegments.add(new SnakeSegment(this.snakeSegments.get(this.snakeSegments.size() - 1).x, this.snakeSegments.get(this.snakeSegments.size() - 1).y, ""));
     }
 
     public String getDirection(){
@@ -58,4 +58,11 @@ public class Snake {
     }
 
 
+    @Override
+    public String toString() {
+        return "Snake{" +
+                "snakeSegments=" + snakeSegments +
+                ", playerColour='" + playerColour + '\'' +
+                '}';
+    }
 }

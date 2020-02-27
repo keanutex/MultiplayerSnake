@@ -1,7 +1,9 @@
 package com.levelUp.multiplayerSnake.controllers;
 
+import com.levelUp.multiplayerSnake.models.Pickup;
 import com.levelUp.multiplayerSnake.models.Snake;
 import com.levelUp.multiplayerSnake.models.SnakeSegment;
+import com.levelUp.multiplayerSnake.models.UpdatePayload;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -21,6 +23,7 @@ public class SnakeController {
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<String, Snake>();
     public boolean isRunning = false;
+    ArrayList<Pickup> pickups = new ArrayList<>();
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
@@ -28,7 +31,12 @@ public class SnakeController {
         if(isRunning){
             return;
         }
+
         isRunning = true;
+        pickups.add(new Pickup(100, 100));
+        pickups.add(new Pickup(50, 100));
+        pickups.add(new Pickup(100, 200));
+        //gameLoop
         while(true){
             for (Snake snake: snakes.values()) {
                 snake.move();
@@ -49,9 +57,10 @@ public class SnakeController {
 
     @MessageMapping("/snakeDetails")
     @SendTo("/snake/snakeDetails")
-    public ArrayList<Snake> getSnakeDetails(){
+    public UpdatePayload getSnakeDetails(){
         Collection<Snake> values = snakes.values();
-        return new ArrayList<>(values);
+        ArrayList<Snake> snakeArrayList = new ArrayList<>(values);
+        return new UpdatePayload(snakeArrayList, pickups);
     }
 
     @MessageMapping("{playerId}/removeSnake")
@@ -92,14 +101,24 @@ public class SnakeController {
                         if(snakesBase.getValue().snakeSegments.get(0).x == snakeSegments.x && snakesBase.getValue().snakeSegments.get(0).y == snakeSegments.y){
                             System.out.println("COLLISION AT: " + snakesBase.getValue().snakeSegments.get(0).x + ", " + snakesBase.getValue().snakeSegments.get(0).y
                             + "\n BETWEEN: " + snakesBase.getKey() + " AND " + snakesCheck.getKey());
+                            removePlayer(snakesBase.getKey());
+                            //Disconnect player maybe
                     }
                 }
             }
         }
 
-
-
-
-
+        for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
+            int index = 0;
+            for(Pickup pickup : pickups){
+                index++;
+                    if(snakesBase.getValue().snakeSegments.get(0).x == pickup.x && snakesBase.getValue().snakeSegments.get(0).y == pickup.y){
+                        System.out.println("ATE A PICKUP: " + snakesBase.getValue().snakeSegments.get(0).x + ", " + snakesBase.getValue().snakeSegments.get(0).y
+                                + "\n SNAKE: " + snakesBase.getKey());
+                        snakesBase.getValue().addSegment();
+                    pickups.remove(pickup);
+                }
+            }
+        }
     }
 }

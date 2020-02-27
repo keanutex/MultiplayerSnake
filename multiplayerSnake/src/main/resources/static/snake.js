@@ -41,19 +41,24 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         addPlayer();
-        setColour();
         getSnakeDetails();
         moveSnake();
 
         stompClient.subscribe('/snake/snakeDetails', (status) =>{
-            const jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
+            let jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
+            let snakesJSON = jsonReturn.snakes;
+            let pickupsJSON = jsonReturn.pickups;
+            console.log(jsonReturn);
             ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
-            for(let i = 0; i < jsonReturn.length; i ++){
-                for(let j = 0; j < jsonReturn[i].snakeSegments.length; j++){
-                    displaySnakes(jsonReturn[i].snakeSegments[j].x, jsonReturn[i].snakeSegments[j].y, jsonReturn[i].playerColour);
+            for(let j = 0; j < pickupsJSON.length; j++){
+                    displayPickups(pickupsJSON[j].x, pickupsJSON[j].y, "#000000");
+            }
+            for(let i = 0; i < snakesJSON.length; i ++){
+                for(let j = 0; j < snakesJSON[i].snakeSegments.length; j++){
+                    displaySnakes(snakesJSON[i].snakeSegments[j].x, snakesJSON[i].snakeSegments[j].y, snakesJSON[i].playerColour);
                 }
             }
         });
@@ -137,6 +142,18 @@ function displaySnakes(x,y, colour){
     // Draw a border around the snake part
     ctx.strokeRect(x, y, 10, 10);
 }
+
+function displayPickups(x,y, colour){
+    ctx.fillStyle = colour;
+    // Set the border colour of the snake part
+    ctx.strokestyle = SNAKE_BORDER_COLOUR;
+    // Draw a "filled" rectangle to represent the snake part at the coordinates
+    // the part is located
+    ctx.fillRect(x, y, 10, 10);
+    // Draw a border around the snake part
+    ctx.strokeRect(x, y, 10, 10);
+}
+
 
 function addPlayer(){
     stompClient.send("/app/newPlayer/" + playerId, {}, setColour()); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
