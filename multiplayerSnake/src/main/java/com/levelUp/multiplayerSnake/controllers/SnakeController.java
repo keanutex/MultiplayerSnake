@@ -10,10 +10,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -24,6 +21,8 @@ public class SnakeController {
     HashMap<String, Snake> snakes = new HashMap<String, Snake>();
     public boolean isRunning = false;
     ArrayList<Pickup> pickups = new ArrayList<>();
+    int serverTick = 1000;
+    int pickupSpawnCountdown = 4;
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
@@ -42,17 +41,33 @@ public class SnakeController {
                 snake.move();
             }
             checkCollisions();
-            Thread.sleep(1000);
+
+            pickupSpawnCountdown--;
+
+            if(pickupSpawnCountdown<= 0){
+                pickups.add(new Pickup(this.generateRandomCoOrd(1000), this.generateRandomCoOrd(1000)));
+                pickups.add(new Pickup(this.generateRandomCoOrd(1000), this.generateRandomCoOrd(1000)));
+                pickups.add(new Pickup(this.generateRandomCoOrd(1000), this.generateRandomCoOrd(1000)));
+                pickupSpawnCountdown = 4;
+            }
+
+
+            Thread.sleep(serverTick);
         }
+    }
+
+    public int generateRandomCoOrd(int bound){
+        int n = new Random().nextInt(bound);
+        n = (int) (Math.round(n/10.0) * 10);
+        return n;
     }
 
     @MessageMapping("/newPlayer/{playerId}")
     @SendTo("/snake/newPlayer/{playerId}")
-    public String insertPlayerIntoGame(@DestinationVariable String playerId, String colour) {
+    public void insertPlayerIntoGame(@DestinationVariable String playerId, String colour) {
         numberOfPlayers++;
         snakes.put(playerId, new Snake());
         snakes.get(playerId).playerColour = colour;
-        return "newPlayerAdded";
     }
 
     @MessageMapping("/snakeDetails")
@@ -92,6 +107,7 @@ public class SnakeController {
     }
 
     public void checkCollisions(){
+        //TODO NEEDS TO CHANGE TO AN ITERATOR (CANT DELETE OBJECT BEING LOOPED THROUGH)
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
             for(Map.Entry<String, Snake> snakesCheck : snakes.entrySet()){
                 for(SnakeSegment snakeSegments : snakesCheck.getValue().snakeSegments){
@@ -109,14 +125,12 @@ public class SnakeController {
         }
 
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
-            int index = 0;
-            for(Pickup pickup : pickups){
-                index++;
-                    if(snakesBase.getValue().snakeSegments.get(0).x == pickup.x && snakesBase.getValue().snakeSegments.get(0).y == pickup.y){
+            for(int i = 0; i < pickups.size(); i++){
+                    if(snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y){
                         System.out.println("ATE A PICKUP: " + snakesBase.getValue().snakeSegments.get(0).x + ", " + snakesBase.getValue().snakeSegments.get(0).y
                                 + "\n SNAKE: " + snakesBase.getKey());
                         snakesBase.getValue().addSegment();
-                    pickups.remove(pickup);
+                    pickups.remove(pickups.get(i));
                 }
             }
         }
