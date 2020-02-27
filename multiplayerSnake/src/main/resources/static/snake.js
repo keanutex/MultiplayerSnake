@@ -129,7 +129,7 @@ function changeDirection() {
 
 function getSnakeDetails() {
    stompClient.send("/app/snakeDetails");
-    setTimeout(getSnakeDetails, 500);
+    setTimeout(getSnakeDetails, 10);
 }
 
 function displaySnakes(x,y, colour){

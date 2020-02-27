@@ -21,7 +21,7 @@ public class SnakeController {
     HashMap<String, Snake> snakes = new HashMap<String, Snake>();
     public boolean isRunning = false;
     ArrayList<Pickup> pickups = new ArrayList<>();
-    int serverTick = 1000;
+    int serverTick = 100;
     int pickupSpawnCountdown = 4;
 
     @MessageMapping("/moveSnakes")
@@ -38,7 +38,13 @@ public class SnakeController {
         //gameLoop
         while(true){
             for (Snake snake: snakes.values()) {
-                snake.move();
+                snake.speedCounter += snake.speed;
+                if(snake.speedCounter >= 100){
+                    snake.move();
+                    snake.speedCounter = 0;
+                }
+                snake.directionChanged = false;
+
             }
             checkCollisions();
 
@@ -66,7 +72,7 @@ public class SnakeController {
     @SendTo("/snake/newPlayer/{playerId}")
     public void insertPlayerIntoGame(@DestinationVariable String playerId, String colour) {
         numberOfPlayers++;
-        snakes.put(playerId, new Snake());
+        snakes.put(playerId, new Snake(100));
         snakes.get(playerId).playerColour = colour;
     }
 
@@ -102,7 +108,9 @@ public class SnakeController {
                 return;
             if(changeD.equals("right") && snakes.get(playerId).getDirection().equals("left"))
                 return;
-
+            if(snakes.get(playerId).directionChanged)
+                return;
+            snakes.get(playerId).directionChanged = true;
             snakes.get(playerId).changeDirection(changeD);
     }
 

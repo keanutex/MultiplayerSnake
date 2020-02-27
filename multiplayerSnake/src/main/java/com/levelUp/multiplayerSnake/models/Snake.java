@@ -7,8 +7,12 @@ public class Snake {
 
     public ArrayList<SnakeSegment> snakeSegments = new ArrayList<SnakeSegment>();
     public String playerColour;
+    public double speed;
+    public double speedCounter = 0;
+    public boolean directionChanged = false;
 
-    public Snake(){
+    public Snake(double speed){
+        this.speed = speed;
         int n = new Random().nextInt(100);
         n = (int) (Math.round(n/10.0) * 10);
         this.snakeSegments.add(new SnakeSegment(n, n, "up"));
