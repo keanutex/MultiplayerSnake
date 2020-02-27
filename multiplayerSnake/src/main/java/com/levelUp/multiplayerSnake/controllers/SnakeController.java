@@ -1,6 +1,7 @@
 package com.levelUp.multiplayerSnake.controllers;
 
 import com.levelUp.multiplayerSnake.models.Snake;
+import com.levelUp.multiplayerSnake.models.SnakeSegment;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -31,6 +33,7 @@ public class SnakeController {
             for (Snake snake: snakes.values()) {
                 snake.move();
             }
+            checkCollisions();
             Thread.sleep(1000);
         }
     }
@@ -39,7 +42,7 @@ public class SnakeController {
     @SendTo("/snake/newPlayer/{playerId}")
     public String insertPlayerIntoGame(@DestinationVariable String playerId, String colour) {
         numberOfPlayers++;
-        snakes.put(playerId, new Snake()); //TODO ADD SNAKE
+        snakes.put(playerId, new Snake());
         snakes.get(playerId).playerColour = colour;
         return "newPlayerAdded";
     }
@@ -77,5 +80,26 @@ public class SnakeController {
                 return;
 
             snakes.get(playerId).changeDirection(changeD);
+    }
+
+    public void checkCollisions(){
+        for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
+            for(Map.Entry<String, Snake> snakesCheck : snakes.entrySet()){
+                for(SnakeSegment snakeSegments : snakesCheck.getValue().snakeSegments){
+                    if(snakesBase.getValue().snakeSegments.get(0).equals(snakeSegments)){
+                        continue;
+                    }
+                        if(snakesBase.getValue().snakeSegments.get(0).x == snakeSegments.x && snakesBase.getValue().snakeSegments.get(0).y == snakeSegments.y){
+                            System.out.println("COLLISION AT: " + snakesBase.getValue().snakeSegments.get(0).x + ", " + snakesBase.getValue().snakeSegments.get(0).y
+                            + "\n BETWEEN: " + snakesBase.getKey() + " AND " + snakesCheck.getKey());
+                    }
+                }
+            }
+        }
+
+
+
+
+
     }
 }
