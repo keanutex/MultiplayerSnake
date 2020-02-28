@@ -4,14 +4,10 @@ const CANVAS_BORDER_COLOUR = 'black';
 const CANVAS_BACKGROUND_COLOUR = "white";
 let SNAKE_COLOUR = 'lightgreen';
 const SNAKE_BORDER_COLOUR = 'darkgreen';
-// Horizontal velocity
-let dx = 10;
-// Vertical velocity
-let dy = 0;
 // Get the canvas element
 let ctx;
 
-var playerId = "";
+let playerId = "";
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -28,7 +24,8 @@ function connect() {
     ctx.strokestyle = CANVAS_BORDER_COLOUR;
 // Draw a "filled" rectangle to cover the entire canvas
     ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-// Draw a "border" around the entire canvas
+
+
     ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
 
     playerId = '_' + Math.random().toString(36).substr(2, 9);
@@ -52,9 +49,11 @@ function connect() {
             ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+            ctx.lineWidth = 20;
             ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
+            ctx.lineWidth = 1;
             for(let j = 0; j < pickupsJSON.length; j++){
-                    displayPickups(pickupsJSON[j].x, pickupsJSON[j].y, "#000000");
+                    displayPickups(pickupsJSON[j].x, pickupsJSON[j].y, pickupsJSON[j].colour);
             }
             for(let i = 0; i < snakesJSON.length; i ++){
                 for(let j = 0; j < snakesJSON[i].snakeSegments.length; j++){

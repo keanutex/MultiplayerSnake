@@ -13,7 +13,7 @@ public class Snake {
 
     public Snake(double speed){
         this.speed = speed;
-        int n = new Random().nextInt(100);
+        int n = new Random().nextInt(1000);
         n = (int) (Math.round(n/10.0) * 10);
         this.snakeSegments.add(new SnakeSegment(n, n, "up"));
         this.snakeSegments.add(new SnakeSegment(n +10, n +10, "up"));

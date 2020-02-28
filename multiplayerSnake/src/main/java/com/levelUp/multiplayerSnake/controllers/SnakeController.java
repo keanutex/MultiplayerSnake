@@ -23,50 +23,52 @@ public class SnakeController {
     ArrayList<Pickup> pickups = new ArrayList<>();
     int serverTick = 100;
     int pickupSpawnCountdown = 4;
+    int pickupCounter = 0;
+    int pickupMax = 100;
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
     public void moveSnakes() throws InterruptedException {
-        if(isRunning){
+        if (isRunning) {
             return;
         }
-
         isRunning = true;
-        pickups.add(new Pickup(100, 100));
-        pickups.add(new Pickup(50, 100));
-        pickups.add(new Pickup(100, 200));
-
         //gameLoop
-        while(true){
-            for (Snake snake: snakes.values()) {
+        while (true) {
+            for (Snake snake : snakes.values()) {
                 snake.speedCounter += snake.speed;
-                if(snake.speedCounter >= 100){
+                if (snake.speedCounter >= 100) {
                     snake.move();
                     snake.speedCounter = 0;
                 }
                 snake.directionChanged = false;
-
             }
             checkCollisions();
 
             pickupSpawnCountdown--;
 
-            if(pickupSpawnCountdown<= 0){
-                pickups.add(new Pickup(this.generateRandomCoOrd(1000), this.generateRandomCoOrd(1000)));
-                pickups.add(new Pickup(this.generateRandomCoOrd(1000), this.generateRandomCoOrd(1000)));
-                pickups.add(new Pickup(this.generateRandomCoOrd(1000), this.generateRandomCoOrd(1000)));
-                pickupSpawnCountdown = 4;
+            if (pickupSpawnCountdown <= 0) {
+                if (pickupCounter < pickupMax) {
+                    pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
+                    pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
+                    pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
+                    pickupCounter += 3;
+                    pickupSpawnCountdown = 10;
+                }
             }
-
-
             Thread.sleep(serverTick);
         }
     }
 
-    public int generateRandomCoOrd(int bound){
-        int n = new Random().nextInt(bound);
-        n = (int) (Math.round(n/10.0) * 10);
-        return n;
+    public int generateRandomCoOrd(int min, int max) {
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        int number = r.nextInt((max - min) + 1) + min;
+        number = (int) (Math.round(number / 10.0) * 10);
+        return number;
     }
 
     @MessageMapping("/newPlayer/{playerId}")
@@ -79,7 +81,7 @@ public class SnakeController {
 
     @MessageMapping("/snakeDetails")
     @SendTo("/snake/snakeDetails")
-    public UpdatePayload getSnakeDetails(){
+    public UpdatePayload getSnakeDetails() {
         Collection<Snake> values = snakes.values();
         ArrayList<Snake> snakeArrayList = new ArrayList<>(values);
         return new UpdatePayload(snakeArrayList, pickups);
@@ -87,13 +89,13 @@ public class SnakeController {
 
     @MessageMapping("{playerId}/removeSnake")
     @SendTo("/snake/{playerId}/removeSnake")
-    public void removePlayer( @DestinationVariable String playerId){
+    public void removePlayer(@DestinationVariable String playerId) {
         snakes.remove(playerId);
     }
 
     @MessageMapping("{playerId}/setColour")
     @SendTo("/snake/{playerId}/setColour")
-    public void setColour( @DestinationVariable String playerId, String colour){
+    public void setColour(@DestinationVariable String playerId, String colour) {
         System.out.println(colour);
         snakes.get(playerId).playerColour = colour;
     }
@@ -101,48 +103,50 @@ public class SnakeController {
     @MessageMapping("/{playerId}/changeDirection")
     @SendTo("/snake/{playerId}/changeDirection")
     public void snakeChangeDirection(String changeD, @DestinationVariable String playerId) {
-            if(changeD.equals("up") && snakes.get(playerId).getDirection().equals("down"))
-                return;
-            if(changeD.equals("down") && snakes.get(playerId).getDirection().equals("up"))
-                return;
-            if(changeD.equals("left") && snakes.get(playerId).getDirection().equals("right"))
-                return;
-            if(changeD.equals("right") && snakes.get(playerId).getDirection().equals("left"))
-                return;
-            if(snakes.get(playerId).directionChanged)
-                return;
-            snakes.get(playerId).directionChanged = true;
-            snakes.get(playerId).changeDirection(changeD);
+        if (snakes.get(playerId) == null) {
+            return;
+        }
+        if (changeD.equals("up") && snakes.get(playerId).getDirection().equals("down"))
+            return;
+        if (changeD.equals("down") && snakes.get(playerId).getDirection().equals("up"))
+            return;
+        if (changeD.equals("left") && snakes.get(playerId).getDirection().equals("right"))
+            return;
+        if (changeD.equals("right") && snakes.get(playerId).getDirection().equals("left"))
+            return;
+        if (snakes.get(playerId).directionChanged)
+            return;
+        snakes.get(playerId).directionChanged = true;
+        snakes.get(playerId).changeDirection(changeD);
     }
 
-    public void checkCollisions(){
+    public void checkCollisions() {
         ArrayList<String> keysToDelete = new ArrayList<>();
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
-            for(Map.Entry<String, Snake> snakesCheck : snakes.entrySet()){
-                for(SnakeSegment snakeSegments : snakesCheck.getValue().snakeSegments){
-                    if(snakesBase.getValue().snakeSegments.get(0).equals(snakeSegments)){
+            if(snakesBase.getValue().snakeSegments.get(0).x <= 0 ||  snakesBase.getValue().snakeSegments.get(0).x >= 990 || snakesBase.getValue().snakeSegments.get(0).y <= 0 ||  snakesBase.getValue().snakeSegments.get(0).y >= 990)
+                keysToDelete.add(snakesBase.getKey());
+            for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
+                for (SnakeSegment snakeSegments : snakesCheck.getValue().snakeSegments) {
+                    if (snakesBase.getValue().snakeSegments.get(0).equals(snakeSegments)) {
                         continue;
                     }
-                        if(snakesBase.getValue().snakeSegments.get(0).x == snakeSegments.x && snakesBase.getValue().snakeSegments.get(0).y == snakeSegments.y){
-                            System.out.println("COLLISION AT: " + snakesBase.getValue().snakeSegments.get(0).x + ", " + snakesBase.getValue().snakeSegments.get(0).y
-                            + "\n BETWEEN: " + snakesBase.getKey() + " AND " + snakesCheck.getKey());
-                            keysToDelete.add(snakesBase.getKey());
+                    if (snakesBase.getValue().snakeSegments.get(0).x == snakeSegments.x && snakesBase.getValue().snakeSegments.get(0).y == snakeSegments.y) {
+                        keysToDelete.add(snakesBase.getKey());
                     }
                 }
             }
         }
-        for(int i = 0; i < keysToDelete.size(); i ++){
+        for (int i = 0; i < keysToDelete.size(); i++) {
             //disconnect players in this array
             removePlayer(keysToDelete.get(i));
         }
 
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
-            for(int i = 0; i < pickups.size(); i++){
-                    if(snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y){
-                        System.out.println("ATE A PICKUP: " + snakesBase.getValue().snakeSegments.get(0).x + ", " + snakesBase.getValue().snakeSegments.get(0).y
-                                + "\n SNAKE: " + snakesBase.getKey());
-                        snakesBase.getValue().addSegment();
+            for (int i = 0; i < pickups.size(); i++) {
+                if (snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y) {
+                    snakesBase.getValue().addSegment();
                     pickups.remove(pickups.get(i));
+                    pickupCounter--;
                 }
             }
         }
