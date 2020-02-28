@@ -72,7 +72,6 @@ function disconnect() {
     }
     setConnected(false);
     console.log("Disconnected");
-    //TODO DELETE PLAYER
 }
 
 function deletePlayer(){

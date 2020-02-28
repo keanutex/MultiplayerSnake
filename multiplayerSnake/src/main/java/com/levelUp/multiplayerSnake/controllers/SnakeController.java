@@ -35,6 +35,7 @@ public class SnakeController {
         pickups.add(new Pickup(100, 100));
         pickups.add(new Pickup(50, 100));
         pickups.add(new Pickup(100, 200));
+
         //gameLoop
         while(true){
             for (Snake snake: snakes.values()) {
@@ -115,7 +116,7 @@ public class SnakeController {
     }
 
     public void checkCollisions(){
-        //TODO NEEDS TO CHANGE TO AN ITERATOR (CANT DELETE OBJECT BEING LOOPED THROUGH)
+        ArrayList<String> keysToDelete = new ArrayList<>();
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
             for(Map.Entry<String, Snake> snakesCheck : snakes.entrySet()){
                 for(SnakeSegment snakeSegments : snakesCheck.getValue().snakeSegments){
@@ -125,11 +126,14 @@ public class SnakeController {
                         if(snakesBase.getValue().snakeSegments.get(0).x == snakeSegments.x && snakesBase.getValue().snakeSegments.get(0).y == snakeSegments.y){
                             System.out.println("COLLISION AT: " + snakesBase.getValue().snakeSegments.get(0).x + ", " + snakesBase.getValue().snakeSegments.get(0).y
                             + "\n BETWEEN: " + snakesBase.getKey() + " AND " + snakesCheck.getKey());
-                            removePlayer(snakesBase.getKey());
-                            //Disconnect player maybe
+                            keysToDelete.add(snakesBase.getKey());
                     }
                 }
             }
+        }
+        for(int i = 0; i < keysToDelete.size(); i ++){
+            //disconnect players in this array
+            removePlayer(keysToDelete.get(i));
         }
 
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
