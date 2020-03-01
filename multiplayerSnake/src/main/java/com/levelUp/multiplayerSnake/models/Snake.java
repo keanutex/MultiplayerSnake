@@ -60,6 +60,10 @@ public class Snake {
     public String getDirection(){
         return this.snakeSegments.get(0).dir;
     }
+    
+    public int getLength() {
+    	return this.snakeSegments.size(); 	
+    }
 
 
     @Override
