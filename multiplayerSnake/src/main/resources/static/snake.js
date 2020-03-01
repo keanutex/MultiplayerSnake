@@ -9,6 +9,7 @@ let ctx;
 
 let playerId = "";
 
+
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -45,7 +46,9 @@ function connect() {
             let jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
             let snakesJSON = jsonReturn.snakes;
             let pickupsJSON = jsonReturn.pickups;
+            let messageJSON = jsonReturn.gameMessages;
             console.log(jsonReturn);
+            document.getElementById('textArea').value = messageJSON;
             ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -154,7 +157,7 @@ function displayPickups(x,y, colour){
 
 
 function addPlayer(){
-    stompClient.send("/app/newPlayer/" + playerId, {}, setColour()); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
+    stompClient.send("/app/newPlayer/" + playerId, {}, setColour(),setName()); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
 }
 
 $(function () {
@@ -164,7 +167,6 @@ $(function () {
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
 });
-
 
 function isColor(strColor){
     if(strColor === ""){
@@ -187,3 +189,17 @@ function setColour(){
     return color;
 }
 
+function setName(){
+    names = ['noodles', 'William Snakewpeare', 'Danger Noodle','Severus Snake', 'Nope Rope', 'Mr. Wiggles', 'Spaghetti' ,'Monty Python']
+    const name =  document.getElementById('nameText').value
+    if(name === '') {
+        return get_random(names)
+    }else {
+        return name;
+    }
+}
+
+
+get_random = function (list) {
+    return list[Math.floor((Math.random()*list.length))];
+}

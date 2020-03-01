@@ -25,6 +25,7 @@ public class SnakeController {
     int pickupSpawnCountdown = 4;
     int pickupCounter = 0;
     int pickupMax = 100;
+    private ArrayList<String> gameMessages;
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
@@ -73,9 +74,9 @@ public class SnakeController {
 
     @MessageMapping("/newPlayer/{playerId}")
     @SendTo("/snake/newPlayer/{playerId}")
-    public void insertPlayerIntoGame(@DestinationVariable String playerId, String colour) {
+    public void insertPlayerIntoGame(@DestinationVariable String playerId, String colour, String name) {
         numberOfPlayers++;
-        snakes.put(playerId, new Snake(100));
+        snakes.put(playerId, new Snake(100,colour,name));
         snakes.get(playerId).playerColour = colour;
     }
 
@@ -84,13 +85,14 @@ public class SnakeController {
     public UpdatePayload getSnakeDetails() {
         Collection<Snake> values = snakes.values();
         ArrayList<Snake> snakeArrayList = new ArrayList<>(values);
-        return new UpdatePayload(snakeArrayList, pickups);
+        return new UpdatePayload(snakeArrayList, pickups,gameMessages);
     }
 
     @MessageMapping("{playerId}/removeSnake")
     @SendTo("/snake/{playerId}/removeSnake")
     public void removePlayer(@DestinationVariable String playerId) {
         snakes.remove(playerId);
+
     }
 
     @MessageMapping("{playerId}/setColour")
@@ -138,7 +140,8 @@ public class SnakeController {
         }
         for (int i = 0; i < keysToDelete.size(); i++) {
             //disconnect players in this array
-            removePlayer(keysToDelete.get(i));
+            this.gameMessages.add(keysToDelete.get(i));
+            removePlayer(snakes.get(keysToDelete.get(i)));
         }
 
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {

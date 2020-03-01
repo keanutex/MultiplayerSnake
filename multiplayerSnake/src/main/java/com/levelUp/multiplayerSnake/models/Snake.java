@@ -10,9 +10,22 @@ public class Snake {
     public double speed;
     public double speedCounter = 0;
     public boolean directionChanged = false;
+    private String name;
 
     public Snake(double speed){
         this.speed = speed;
+        placeSnake();
+    }
+
+    public Snake(double speed,String Colour,String name){
+        this.speed = speed;
+        this.playerColour = Colour;
+        this.name = name;
+        placeSnake();
+    }
+
+
+    private void placeSnake(){
         int n = new Random().nextInt(1000);
         n = (int) (Math.round(n/10.0) * 10);
         this.snakeSegments.add(new SnakeSegment(n, n, "up"));

@@ -20,12 +20,22 @@
                     <label for="connect">WebSocket connection:</label>
                     <button id="connect" class="btn btn-default" type="submit">Connect</button>
                     <input id = "colorText" type="text" placeholder="Input Color">
+                    <input id = "nameText" type="text" placeholder="Input Name">
                     <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect</button>
                 </div>
             </form>
         </div>
     </div>
-    <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+    <div class = row >
+        <div class="col-md-11">
+        <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+        </div>
+        <div class = "col-md-1">
+            <textarea id = "textArea">
+
+            </textarea>
+        </div>
+    </div>
 </div>
 </body>
 </html>
