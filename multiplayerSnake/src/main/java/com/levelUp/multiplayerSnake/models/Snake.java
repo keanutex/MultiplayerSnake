@@ -74,6 +74,8 @@ public class Snake {
         return this.snakeSegments.get(0).dir;
     }
 
+    public String getName(){return name;}
+
 
     @Override
     public String toString() {

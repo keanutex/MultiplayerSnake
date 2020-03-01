@@ -1,15 +1,14 @@
 package com.levelUp.multiplayerSnake.controllers;
 
-import com.levelUp.multiplayerSnake.models.Pickup;
-import com.levelUp.multiplayerSnake.models.Snake;
-import com.levelUp.multiplayerSnake.models.SnakeSegment;
-import com.levelUp.multiplayerSnake.models.UpdatePayload;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.levelUp.multiplayerSnake.models.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -25,7 +24,7 @@ public class SnakeController {
     int pickupSpawnCountdown = 4;
     int pickupCounter = 0;
     int pickupMax = 100;
-    private ArrayList<String> gameMessages;
+    private ArrayList<String> gameMessages = new ArrayList<String>();
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
@@ -74,10 +73,10 @@ public class SnakeController {
 
     @MessageMapping("/newPlayer/{playerId}")
     @SendTo("/snake/newPlayer/{playerId}")
-    public void insertPlayerIntoGame(@DestinationVariable String playerId, String colour, String name) {
+    public void insertPlayerIntoGame(@DestinationVariable String playerId, String data) throws IOException {
+        snakeInputInfo parsedData = new ObjectMapper().readerFor(snakeInputInfo.class).readValue(data);
         numberOfPlayers++;
-        snakes.put(playerId, new Snake(100,colour,name));
-        snakes.get(playerId).playerColour = colour;
+        snakes.put(playerId, new Snake(100,parsedData.getColour(),parsedData.getName()));
     }
 
     @MessageMapping("/snakeDetails")
@@ -90,7 +89,7 @@ public class SnakeController {
 
     @MessageMapping("{playerId}/removeSnake")
     @SendTo("/snake/{playerId}/removeSnake")
-    public void removePlayer(@DestinationVariable String playerId) {
+    public void removePlayer(@DestinationVariable String playerId) { //TODO is person disconnects this should be called
         snakes.remove(playerId);
 
     }
@@ -140,8 +139,8 @@ public class SnakeController {
         }
         for (int i = 0; i < keysToDelete.size(); i++) {
             //disconnect players in this array
-            this.gameMessages.add(keysToDelete.get(i));
-            removePlayer(snakes.get(keysToDelete.get(i)));
+            gameMessages.add(snakes.get(keysToDelete.get(i)).getName() + " has died");
+            removePlayer(keysToDelete.get(i));
         }
 
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {

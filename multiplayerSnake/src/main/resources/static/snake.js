@@ -46,9 +46,11 @@ function connect() {
             let jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
             let snakesJSON = jsonReturn.snakes;
             let pickupsJSON = jsonReturn.pickups;
-            let messageJSON = jsonReturn.gameMessages;
-            console.log(jsonReturn);
-            document.getElementById('textArea').value = messageJSON;
+            let display = '';
+            for(let k = 0; k<jsonReturn.gameMessages.length; k++ ){
+                display += '\n ' + jsonReturn.gameMessages[k];
+            }
+            document.getElementById('textArea').value = display;
             ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -157,7 +159,11 @@ function displayPickups(x,y, colour){
 
 
 function addPlayer(){
-    stompClient.send("/app/newPlayer/" + playerId, {}, setColour(),setName()); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
+    const info = {
+        colour: setColour(),
+        name: setName()
+    }
+    stompClient.send("/app/newPlayer/" + playerId, {}, JSON.stringify(info)); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
 }
 
 $(function () {
