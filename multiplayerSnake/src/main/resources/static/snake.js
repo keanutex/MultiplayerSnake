@@ -45,7 +45,6 @@ function connect() {
             let jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
             let snakesJSON = jsonReturn.snakes;
             let pickupsJSON = jsonReturn.pickups;
-            console.log(jsonReturn);
             ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);

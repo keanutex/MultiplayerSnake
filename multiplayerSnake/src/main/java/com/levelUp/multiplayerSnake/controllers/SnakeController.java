@@ -75,7 +75,7 @@ public class SnakeController {
     @SendTo("/snake/newPlayer/{playerId}")
     public void insertPlayerIntoGame(@DestinationVariable String playerId, String colour) {
         numberOfPlayers++;
-        snakes.put(playerId, new Snake(100));
+        snakes.put(playerId, new Snake(100, "up"));
         snakes.get(playerId).playerColour = colour;
     }
 
@@ -96,7 +96,6 @@ public class SnakeController {
     @MessageMapping("{playerId}/setColour")
     @SendTo("/snake/{playerId}/setColour")
     public void setColour(@DestinationVariable String playerId, String colour) {
-        System.out.println(colour);
         snakes.get(playerId).playerColour = colour;
     }
 

@@ -2,18 +2,12 @@ package com.levelUp.multiplayerSnake.models;
 
 public class SnakeSegment {
 
-  public SnakeSegment(){
-
-  }
-
   public int x;
   public int y;
-  public String dir;
 
-  public SnakeSegment(int x, int y, String dir){
+  public SnakeSegment(int x, int y){
     this.x = x;
     this.y = y;
-    this.dir = dir;
   }
 
   @Override
@@ -21,7 +15,6 @@ public class SnakeSegment {
     return "SnakeSegment{" +
             "x=" + x +
             ", y=" + y +
-            ", dir='" + dir + '\'' +
             '}';
   }
 }
