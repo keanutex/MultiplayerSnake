@@ -1,0 +1,97 @@
+body {
+    background-color: grey;
+}
+
+body * {
+    box-sizing: border-box;
+}
+
+main {
+    display: flex;
+    font-size: 1.5vmin;
+}
+
+.btn:hover {
+    background-color: Red;
+}
+
+red {
+    color: red;
+}
+
+darkred {
+    color: #9f0000;
+}
+
+green {
+    color: #98ff00;
+}
+
+yellow {
+    color: yellow;
+}
+
+blue {
+    color: blue;
+}
+
+white {
+    color: white;
+    background-color: blue;
+}
+
+small {
+    font-size: x-small;
+}
+
+canvas {
+    border: 5px solid #000000;
+    width: 100%;
+    background-color: lightgray;
+}
+
+table, th, td {
+    background-color: lightgray;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.game {
+    background-color: #545454;
+}
+
+.close-CSS {
+    background-image: url('https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg');
+    background-size: 19px 19px;
+    height: 19px;
+    width: 19px;
+}
+
+.mainGame {
+    display: block;
+}
+
+
+.chat {
+    margin-top: 20px;
+    margin-right: 20px;
+    border: 5px solid black;
+    max-height: 95vh;
+    overflow-y: auto;
+    width: 20vw;
+}
+
+.chatHeader {
+    font-size: 3vmin;
+}
+
+.score {
+    max-height: 225px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.footer{
+    text-align: right;
+}
+
