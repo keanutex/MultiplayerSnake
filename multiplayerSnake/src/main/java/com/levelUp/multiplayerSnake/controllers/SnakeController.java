@@ -1,9 +1,6 @@
 package com.levelUp.multiplayerSnake.controllers;
 
-import com.levelUp.multiplayerSnake.models.Pickup;
-import com.levelUp.multiplayerSnake.models.Snake;
-import com.levelUp.multiplayerSnake.models.SnakeSegment;
-import com.levelUp.multiplayerSnake.models.UpdatePayload;
+import com.levelUp.multiplayerSnake.models.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -25,6 +22,7 @@ public class SnakeController {
     int pickupSpawnCountdown = 4;
     int pickupCounter = 0;
     int pickupMax = 100;
+    Board board = new Board();
 
     @MessageMapping("/moveSnakes")
     @SendTo("/snake/moveSnakes")
@@ -44,7 +42,6 @@ public class SnakeController {
                 snake.directionChanged = false;
             }
             checkCollisions();
-
             pickupSpawnCountdown--;
 
             if (pickupSpawnCountdown <= 0) {
@@ -122,14 +119,14 @@ public class SnakeController {
     public void checkCollisions() {
         ArrayList<String> keysToDelete = new ArrayList<>();
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
-            if(snakesBase.getValue().snakeSegments.get(0).x <= 0 ||  snakesBase.getValue().snakeSegments.get(0).x >= 990 || snakesBase.getValue().snakeSegments.get(0).y <= 0 ||  snakesBase.getValue().snakeSegments.get(0).y >= 990)
+            if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990)
                 keysToDelete.add(snakesBase.getKey());
             for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
                 for (SnakeSegment snakeSegments : snakesCheck.getValue().snakeSegments) {
-                    if (snakesBase.getValue().snakeSegments.get(0).equals(snakeSegments)) {
+                    if (snakesBase.getValue().head().equals(snakeSegments)) {
                         continue;
                     }
-                    if (snakesBase.getValue().snakeSegments.get(0).x == snakeSegments.x && snakesBase.getValue().snakeSegments.get(0).y == snakeSegments.y) {
+                    if (snakesBase.getValue().head().x == snakeSegments.x && snakesBase.getValue().head().y == snakeSegments.y) {
                         keysToDelete.add(snakesBase.getKey());
                     }
                 }
@@ -142,7 +139,7 @@ public class SnakeController {
 
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
             for (int i = 0; i < pickups.size(); i++) {
-                if (snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y) {
+                if (snakesBase.getValue().head().x == pickups.get(i).x && snakesBase.getValue().head().y == pickups.get(i).y) {
                     snakesBase.getValue().addSegment();
                     pickups.remove(pickups.get(i));
                     pickupCounter--;

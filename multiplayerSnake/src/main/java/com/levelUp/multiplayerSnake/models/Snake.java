@@ -25,6 +25,13 @@ public class Snake {
         this.snakeSegments.add(new SnakeSegment(n +40, n +40));
     }
 
+    public SnakeSegment head(){
+        return snakeSegments.get(0);
+    }
+    public SnakeSegment tail(){
+        return snakeSegments.get(snakeSegments.size() - 1);
+    }
+
     public void move(){
         int x = 0;
         int y = 0;
