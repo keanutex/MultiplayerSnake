@@ -21,45 +21,44 @@ public class SnakeService {
     int pickupSpawnCountdown = 4;
     int pickupCounter = 0;
     int pickupMax = 100;
-    Board board = new Board();
 
     public void gameLoop() throws InterruptedException {
         while (true) {
             for (Snake snake : snakes.values()) {
-                board.instance[snake.tail().x / 10][snake.tail().y / 10].setSnakeOccupied(false);
-            }
-
-            for (Snake snake : snakes.values()) {
+                if(snake.speedBoost){
+                    snake.boostSpeedCounter += 10;
+                    if(snake.boostSpeedCounter >= 4000){
+                        snake.speedBoost = false;
+                        snake.speed = snake.baseSpeed;
+                        snake.boostSpeedCounter= 0;
+                    }
+                }else{
+                    snake.speed = snake.baseSpeed;
+                }
                 snake.speedCounter += snake.speed;
                 if (snake.speedCounter >= 100 && !snake.snakeMoved) {
+                    //snake moves
                     snake.snakeMoved = true;
                     snake.move();
                     snake.speedCounter = 0;
+                    snake.directionChanged = false;
                 } else {
+                    //snake doesnt move
                     snake.snakeMoved = false;
                 }
-                snake.directionChanged = false;
             }
             checkCollisions();
 
-            for (Snake snake : snakes.values()) {
-                board.instance[snake.head().x / 10][snake.head().y / 10].setSnakeOccupied(true);
-            }
-
+            //pickup spawning
             pickupSpawnCountdown--;
-
             if (pickupSpawnCountdown <= 0) {
                 if (pickupCounter < pickupMax) {
-                    int n1 = this.generateRandomCoOrd(10, 980);
-                    int n2 = this.generateRandomCoOrd(10, 980);
-                    Pickup toAdd = new Pickup(n1, n2, "food");
-                    pickups.add(toAdd);
-                    board.instance[n1 / 10][n2 / 10].setPickupOnTile(toAdd);
-                    n1 = this.generateRandomCoOrd(10, 980);
-                    n2 = this.generateRandomCoOrd(10, 980);
-                    toAdd = new Pickup(n1, n2, "food");
-                    pickups.add(toAdd);
-                    board.instance[n1 / 10][n2 / 10].setPickupOnTile(toAdd);
+                    if(generateRandomCoOrd(0, 15) <= 1){
+                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "speed"));
+                    }else{
+                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
+                    }
+                    pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
                     pickupCounter += 2;
                     pickupSpawnCountdown = 100;
                 }
@@ -81,7 +80,7 @@ public class SnakeService {
 
     public void addPlayer(String playerId, String colour) {
         numberOfPlayers++;
-        snakes.put(playerId, new Snake(20, "up"));
+        snakes.put(playerId, new Snake(30, "up"));
         snakes.get(playerId).playerColour = colour;
     }
 
@@ -103,6 +102,8 @@ public class SnakeService {
         if (snakes.get(playerId) == null) {
             return;
         }
+        if (snakes.get(playerId).directionChanged)
+            return;
         if (changeD.equals("up") && snakes.get(playerId).getDirection().equals("down"))
             return;
         if (changeD.equals("down") && snakes.get(playerId).getDirection().equals("up"))
@@ -111,41 +112,61 @@ public class SnakeService {
             return;
         if (changeD.equals("right") && snakes.get(playerId).getDirection().equals("left"))
             return;
-        if (snakes.get(playerId).directionChanged)
-            return;
-        snakes.get(playerId).directionChanged = true;
         snakes.get(playerId).changeDirection(changeD);
+        snakes.get(playerId).directionChanged = true;
     }
 
     public void checkCollisions() {
         ArrayList<String> keysToDelete = new ArrayList<>();
 
-        for (Map.Entry<String, Snake> snake : snakes.entrySet()) {
-            if (!snake.getValue().snakeMoved) {
+        for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
+            //pickups collisions
+            for (int i = 0; i < pickups.size(); i++) {
+                if (snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y) {
+                    if(pickups.get(i).type.equals("food")){
+                        snakesBase.getValue().baseSpeed *= 0.995;
+                        System.out.println(snakesBase.getValue().baseSpeed);
+                        snakesBase.getValue().addSegment();
+                        pickups.remove(pickups.get(i));
+                        pickupCounter--;
+                    }else if(pickups.get(i).type.equals("speed")){
+                        snakesBase.getValue().boostSpeedCounter= 0;
+                        snakesBase.getValue().speed *= 4;
+                        snakesBase.getValue().speedBoost =true;
+                        pickups.remove(pickups.get(i));
+                        pickupCounter--;
+                    }
+
+                }
+            }
+            //snake collisions
+            if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990){
+                keysToDelete.add(snakesBase.getKey());
                 break;
             }
-            if(snake.getValue().snakeSegments.size() > 50){
-                ls.addMessage(LoggingService.messageTypes.past50,snake.getValue().name);
-            }
-            if (snake.getValue().head().x / 10 < 1 || snake.getValue().head().y / 10 < 1 || snake.getValue().head().x / 10 > 98 || snake.getValue().head().y / 10 > 98) {
-                ls.addMessage(LoggingService.messageTypes.diedToWall,snake.getValue().name);
-                keysToDelete.add(snake.getKey());
-            } else {
-                if (board.instance[snake.getValue().head().x / 10][snake.getValue().head().y / 10].isSnakeOccupied()) {
-                    keysToDelete.add(snake.getKey());
-                } else if (board.instance[snake.getValue().head().x / 10][snake.getValue().head().y / 10].getPickupOnTile() != null && board.instance[snake.getValue().head().x / 10][snake.getValue().head().y / 10].getPickupOnTile().type.equals("food")) {
-                    snake.getValue().addSegment();
-                    pickups.remove(board.instance[snake.getValue().head().x / 10][snake.getValue().head().y / 10].getPickupOnTile());
-                    pickupCounter--;
+            for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
+                for (int i = 0; i < snakesCheck.getValue().getLength(); i++) {
+                    if (snakesBase.getValue().snakeSegments.get(0).equals(snakesCheck.getValue().snakeSegments.get(i))) {
+                        continue;
+                    }
+                    if (snakesBase.getValue().head().x == snakesCheck.getValue().snakeSegments.get(i).x && snakesBase.getValue().head().y == snakesCheck.getValue().snakeSegments.get(i).y) {
+                        if(!snakesBase.getKey().equals(snakesCheck.getKey())){
+                            growSnakesOnCollision(snakesCheck.getValue(), snakesBase.getValue().getLength());
+                        }
+                        keysToDelete.add(snakesBase.getKey());
+                    }
                 }
             }
         }
         for (int i = 0; i < keysToDelete.size(); i++) {
-            Snake snakeToDelete = snakes.get(keysToDelete.get(i));
-            for (SnakeSegment segment : snakeToDelete.snakeSegments) {
-                board.instance[segment.x / 10][segment.y / 10].setSnakeOccupied(false);
-            }
             removePlayer(keysToDelete.get(i));
         }
+    }
+
+    public void growSnakesOnCollision(Snake snakeToGrow, int amount){
+        for(int i = 0; i < amount; i ++){
+            snakeToGrow.addSegment();
+        }
+
     }
 }
