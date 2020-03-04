@@ -21,6 +21,16 @@ public class SnakeService {
     public void gameLoop() throws InterruptedException {
         while (true) {
             for (Snake snake : snakes.values()) {
+                if(snake.speedBoost){
+                    snake.boostSpeedCounter += 10;
+                    if(snake.boostSpeedCounter >= 4000){
+                        snake.speedBoost = false;
+                        snake.speed = snake.baseSpeed;
+                        snake.boostSpeedCounter= 0;
+                    }
+                }else{
+                    snake.speed = snake.baseSpeed;
+                }
                 snake.speedCounter += snake.speed;
                 if (snake.speedCounter >= 100 && !snake.snakeMoved) {
                     //snake moves
@@ -39,14 +49,12 @@ public class SnakeService {
             pickupSpawnCountdown--;
             if (pickupSpawnCountdown <= 0) {
                 if (pickupCounter < pickupMax) {
-                    int n1 = this.generateRandomCoOrd(10, 980);
-                    int n2 = this.generateRandomCoOrd(10, 980);
-                    Pickup toAdd = new Pickup(n1, n2, "food");
-                    pickups.add(toAdd);
-                    n1 = this.generateRandomCoOrd(10, 980);
-                    n2 = this.generateRandomCoOrd(10, 980);
-                    toAdd = new Pickup(n1, n2, "food");
-                    pickups.add(toAdd);
+                    if(generateRandomCoOrd(0, 15) <= 1){
+                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "speed"));
+                    }else{
+                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
+                    }
+                    pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
                     pickupCounter += 2;
                     pickupSpawnCountdown = 100;
                 }
@@ -68,7 +76,7 @@ public class SnakeService {
 
     public void addPlayer(String playerId, String colour) {
         numberOfPlayers++;
-        snakes.put(playerId, new Snake(20, "up"));
+        snakes.put(playerId, new Snake(30, "up"));
         snakes.get(playerId).playerColour = colour;
     }
 
@@ -106,15 +114,28 @@ public class SnakeService {
 
     public void checkCollisions() {
         ArrayList<String> keysToDelete = new ArrayList<>();
-        ArrayList<Snake> snakesToGrow = new ArrayList<>();
+
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
+            //pickups collisions
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y) {
-                    snakesBase.getValue().addSegment();
-                    pickups.remove(pickups.get(i));
-                    pickupCounter--;
+                    if(pickups.get(i).type.equals("food")){
+                        snakesBase.getValue().baseSpeed *= 0.995;
+                        System.out.println(snakesBase.getValue().baseSpeed);
+                        snakesBase.getValue().addSegment();
+                        pickups.remove(pickups.get(i));
+                        pickupCounter--;
+                    }else if(pickups.get(i).type.equals("speed")){
+                        snakesBase.getValue().boostSpeedCounter= 0;
+                        snakesBase.getValue().speed *= 4;
+                        snakesBase.getValue().speedBoost =true;
+                        pickups.remove(pickups.get(i));
+                        pickupCounter--;
+                    }
+
                 }
             }
+            //snake collisions
             if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990){
                 keysToDelete.add(snakesBase.getKey());
                 break;

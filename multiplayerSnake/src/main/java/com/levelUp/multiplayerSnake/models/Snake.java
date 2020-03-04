@@ -13,10 +13,14 @@ public class Snake {
     public boolean directionChanged = false;
     public boolean snakeMoved = false;
     int increment = 10;
+    public int boostSpeedCounter = 0;
+    public double baseSpeed = 0;
+    public boolean speedBoost = false;
 
-    public Snake(double speed, String dir){
+    public Snake(double baseSpeed, String dir){
         this.dir = dir;
-        this.speed = speed;
+        this.speed = baseSpeed;
+        this.baseSpeed = baseSpeed;
         int n = generateRandomCoOrd(100, 900);
         this.snakeSegments.add(new SnakeSegment(n, n));
         this.snakeSegments.add(new SnakeSegment(n +10, n +10));
