@@ -24,12 +24,16 @@ public class LoggingService {
         switch(type){
             case past50:
                 logs.add(name +" has a length of 50");
+                break;
             case diedToSelf:
                 logs.add(name + " has just eaten themselves");
+                break;
             case diedToWall:
                 logs.add(name + " didn't notice the wall there");
+                break;
             case diedToEnemy:
                 logs.add(name + " was killed");
+                break;
         }
     }
 }

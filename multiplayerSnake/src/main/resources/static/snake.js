@@ -71,7 +71,7 @@ function connect() {
                 display += body[i] + '\n'
             }
             console.log(display);
-            document.getElementById('loggingArea').value += display;
+            document.getElementById('loggingArea').value = display;
 
         })
     });
