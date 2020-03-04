@@ -13,6 +13,12 @@ public class Pickup {
         this.type = type;
         if(type.equals("food")){
             this.colour = "#FFD700";
+        }else if(type.equals("speed")){
+            this.colour = "#000000";
+        }else if(type.equals("shoot")){
+            this.colour = "#949494";
+        }else if(type.equals("invincible")){
+
         }
     }
 
