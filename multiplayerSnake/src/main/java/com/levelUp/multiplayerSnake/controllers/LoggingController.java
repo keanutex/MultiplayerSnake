@@ -17,8 +17,10 @@ public class LoggingController {
 
     @MessageMapping("/logging")
     @SendTo("/loggingRes/moveSnakes")
-    public ArrayList<String> getLogging{
-
+    public ArrayList<String> getLogging(){
+        return logs;
     }
+
+
 
 }
