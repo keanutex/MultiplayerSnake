@@ -1,6 +1,8 @@
 package com.levelUp.multiplayerSnake.Services;
 
+import com.levelUp.multiplayerSnake.controllers.LoggingController;
 import com.levelUp.multiplayerSnake.models.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -8,6 +10,8 @@ import java.util.*;
 @Service
 public class SnakeService {
 
+    @Autowired
+    LoggingService ls;
 
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<String, Snake>();
@@ -120,7 +124,11 @@ public class SnakeService {
             if (!snake.getValue().snakeMoved) {
                 break;
             }
+            if(snake.getValue().snakeSegments.size() > 50){
+                ls.addMessage(LoggingService.messageTypes.past50,snake.getValue().name);
+            }
             if (snake.getValue().head().x / 10 < 1 || snake.getValue().head().y / 10 < 1 || snake.getValue().head().x / 10 > 98 || snake.getValue().head().y / 10 > 98) {
+                ls.addMessage(LoggingService.messageTypes.diedToWall,snake.getValue().name);
                 keysToDelete.add(snake.getKey());
             } else {
                 if (board.instance[snake.getValue().head().x / 10][snake.getValue().head().y / 10].isSnakeOccupied()) {

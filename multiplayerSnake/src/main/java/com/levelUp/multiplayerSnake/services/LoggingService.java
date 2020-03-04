@@ -1,13 +1,12 @@
-package com.levelUp.multiplayerSnake.services;
+package com.levelUp.multiplayerSnake.Services;
 
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-
-@Service("ls")
+@Service
 public class LoggingService {
     public enum messageTypes {
-        past100,
+        past50,
         diedToWall,
         diedToEnemy,
         diedToSelf
@@ -22,7 +21,16 @@ public class LoggingService {
 
 
     public void addMessage(messageTypes type, String name){
-
+        switch(type){
+            case past50:
+                logs.add(name +" has a length of 50");
+            case diedToSelf:
+                logs.add(name + " has just eaten themselves");
+            case diedToWall:
+                logs.add(name + " didn't notice there was wall there");
+            case diedToEnemy:
+                logs.add(name + " was killed");
+        }
     }
 }
 
