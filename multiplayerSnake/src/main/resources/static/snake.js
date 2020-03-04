@@ -15,7 +15,7 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var gameCanvas = document.getElementById("gameCanvas");
+    const gameCanvas = document.getElementById("gameCanvas");
 // Return a two dimensional drawing context
     ctx = gameCanvas.getContext("2d");
 //  Select the colour to fill the canvas
@@ -31,7 +31,7 @@ function connect() {
     playerId = '_' + Math.random().toString(36).substr(2, 9);
 
 
-    var socket = new SockJS('/gs-guide-websocket');
+    const socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
     stompClient.debug = null; //uncomment this to get rid of debugging from stomp
     stompClient.connect({}, function (frame) {
@@ -80,6 +80,12 @@ function moveSnake(){
     stompClient.send("/app/moveSnakes");
 }
 
+window.onbeforeunload = closingCode;
+function closingCode(){
+    disconnect();
+    return null;
+}
+
 let interval = setInterval(changeDirection, 5);
 
 function changeDirection() {
@@ -126,7 +132,7 @@ function changeDirection() {
 
 function getSnakeDetails() {
    stompClient.send("/app/snakeDetails");
-    setTimeout(getSnakeDetails, 10);
+    setTimeout(getSnakeDetails, 5);
 }
 
 function displaySnakes(x,y, colour){

@@ -4,8 +4,7 @@ public class BoardTile {
     private int x;
     private int y;
     private boolean snakeOccupied = false;
-    private boolean pickupOccupied = false;
-    private String pickup = "";
+    private Pickup pickupOnTile = null;
 
     public int getX() {
         return x;
@@ -31,19 +30,11 @@ public class BoardTile {
         this.snakeOccupied = snakeOccupied;
     }
 
-    public boolean isPickupOccupied() {
-        return pickupOccupied;
+    public Pickup getPickupOnTile() {
+        return pickupOnTile;
     }
 
-    public void setPickupOccupied(boolean pickupOccupied) {
-        this.pickupOccupied = pickupOccupied;
-    }
-
-    public String getPickup() {
-        return pickup;
-    }
-
-    public void setPickup(String pickup) {
-        this.pickup = pickup;
+    public void setPickupOnTile(Pickup pickupOnTile) {
+        this.pickupOnTile = pickupOnTile;
     }
 }

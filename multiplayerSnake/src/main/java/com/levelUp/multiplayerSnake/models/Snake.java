@@ -9,8 +9,9 @@ public class Snake {
     String dir;
     public String playerColour;
     public double speed;
-    public double speedCounter = 0;
+    public double speedCounter = 100;
     public boolean directionChanged = false;
+    public boolean snakeMoved = false;
     int increment = 10;
 
     public Snake(double speed, String dir){
