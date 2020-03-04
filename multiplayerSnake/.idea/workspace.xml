@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e1c069c-d025-432b-acec-f84648858c31" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/services/LoggingService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/configer/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/configer/WebSocketConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/controllers/LoggingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/controllers/LoggingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/controllers/SnakeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/controllers/SnakeController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +78,7 @@
       <workItem from="1583132657895" duration="329000" />
       <workItem from="1583159755076" duration="4888000" />
       <workItem from="1583223550483" duration="2158000" />
-      <workItem from="1583302796050" duration="228000" />
+      <workItem from="1583302796050" duration="2456000" />
     </task>
     <task id="LOCAL-00001" summary="changed gitignore">
       <created>1582611458351</created>

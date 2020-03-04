@@ -123,6 +123,7 @@ public class SnakeController {
         ArrayList<String> keysToDelete = new ArrayList<>();
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
             if(snakesBase.getValue().snakeSegments.get(0).x <= 0 ||  snakesBase.getValue().snakeSegments.get(0).x >= 990 || snakesBase.getValue().snakeSegments.get(0).y <= 0 ||  snakesBase.getValue().snakeSegments.get(0).y >= 990)
+
                 keysToDelete.add(snakesBase.getKey());
             for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
                 for (SnakeSegment snakeSegments : snakesCheck.getValue().snakeSegments) {
