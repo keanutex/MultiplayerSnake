@@ -17,8 +17,7 @@ public class Snake {
     public Snake(double speed, String dir){
         this.dir = dir;
         this.speed = speed;
-        int n = new Random().nextInt(1000);
-        n = (int) (Math.round(n/10.0) * 10);
+        int n = generateRandomCoOrd(100, 900);
         this.snakeSegments.add(new SnakeSegment(n, n));
         this.snakeSegments.add(new SnakeSegment(n +10, n +10));
         this.snakeSegments.add(new SnakeSegment(n +20, n +20));
@@ -57,6 +56,18 @@ public class Snake {
         this.snakeSegments.add(0, new SnakeSegment(x, y));
         this.snakeSegments.remove(this.snakeSegments.size() - 1);
     }
+
+    private int generateRandomCoOrd(int min, int max) {
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        int number = r.nextInt((max - min) + 1) + min;
+        number = (int) (Math.round(number / 10.0) * 10);
+        return number;
+    }
+
 
     public void changeDirection(String direction) {
         this.dir = direction;
