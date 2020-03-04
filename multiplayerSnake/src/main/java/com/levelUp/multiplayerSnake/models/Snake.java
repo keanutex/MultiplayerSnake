@@ -9,8 +9,9 @@ public class Snake {
     String dir;
     public String playerColour;
     public double speed;
-    public double speedCounter = 0;
+    public double speedCounter = 100;
     public boolean directionChanged = false;
+    public boolean snakeMoved = false;
     int increment = 10;
 
     public Snake(double speed, String dir){
@@ -23,6 +24,13 @@ public class Snake {
         this.snakeSegments.add(new SnakeSegment(n +20, n +20));
         this.snakeSegments.add(new SnakeSegment(n +30, n +30));
         this.snakeSegments.add(new SnakeSegment(n +40, n +40));
+    }
+
+    public SnakeSegment head(){
+        return snakeSegments.get(0);
+    }
+    public SnakeSegment tail(){
+        return snakeSegments.get(snakeSegments.size() - 1);
     }
 
     public void move(){
