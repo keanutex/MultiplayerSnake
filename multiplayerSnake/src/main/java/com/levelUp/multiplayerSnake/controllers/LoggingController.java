@@ -19,8 +19,8 @@ public class LoggingController {
     private LoggingService loggingService;
 
 
-    @MessageMapping("/logging")
-    @SendTo("/loggingRes/moveSnakes")
+    @MessageMapping("/loggingDetails")
+    @SendTo("/logging/logs")
     public ArrayList<String> getLogging(){
        return  loggingService.getLogs();
     }

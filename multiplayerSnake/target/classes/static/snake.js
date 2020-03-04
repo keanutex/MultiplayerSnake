@@ -1,4 +1,4 @@
-let stompClient = null;
+var stompClient = null;
 
 const CANVAS_BORDER_COLOUR = 'black';
 const CANVAS_BACKGROUND_COLOUR = "white";
@@ -9,14 +9,13 @@ let ctx;
 
 let playerId = "";
 
-
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
 }
 
 function connect() {
-    var gameCanvas = document.getElementById("gameCanvas");
+    const gameCanvas = document.getElementById("gameCanvas");
 // Return a two dimensional drawing context
     ctx = gameCanvas.getContext("2d");
 //  Select the colour to fill the canvas
@@ -32,7 +31,7 @@ function connect() {
     playerId = '_' + Math.random().toString(36).substr(2, 9);
 
 
-    var socket = new SockJS('/gs-guide-websocket');
+    const socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
     stompClient.debug = null; //uncomment this to get rid of debugging from stomp
     stompClient.connect({}, function (frame) {
@@ -41,16 +40,12 @@ function connect() {
         addPlayer();
         getSnakeDetails();
         moveSnake();
+        getLoggingDetails();
 
         stompClient.subscribe('/snake/snakeDetails', (status) =>{
             let jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
             let snakesJSON = jsonReturn.snakes;
             let pickupsJSON = jsonReturn.pickups;
-            let display = '';
-            for(let k = 0; k<jsonReturn.gameMessages.length; k++ ){
-                display += '\n ' + jsonReturn.gameMessages[k];
-            }
-            document.getElementById('textArea').value = display;
             ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -60,8 +55,25 @@ function connect() {
             for(let j = 0; j < pickupsJSON.length; j++){
                     displayPickups(pickupsJSON[j].x, pickupsJSON[j].y, pickupsJSON[j].colour);
             }
-            displaySnakes(snakesJSON);
+            for(let i = 0; i < snakesJSON.length; i ++){
+                for(let j = 0; j < snakesJSON[i].snakeSegments.length; j++){
+                    displaySnakes(snakesJSON[i].snakeSegments[j].x, snakesJSON[i].snakeSegments[j].y, snakesJSON[i].playerColour);
+                }
+            }
         });
+
+        stompClient.subscribe('/logging/logs',(status)=> {
+            const body = JSON.parse(status.body);
+            console.log(body);
+            let display = '';
+            for(let i = 0;i<body.length; i++){
+                console.log('shit',body[i]);
+                display += body[i] + '\n'
+            }
+            console.log(display);
+            document.getElementById('loggingArea').value += display;
+
+        })
     });
 }
 
@@ -80,6 +92,12 @@ function deletePlayer(){
 
 function moveSnake(){
     stompClient.send("/app/moveSnakes");
+}
+
+window.onbeforeunload = closingCode;
+function closingCode(){
+    disconnect();
+    return null;
 }
 
 let interval = setInterval(changeDirection, 5);
@@ -128,10 +146,10 @@ function changeDirection() {
 
 function getSnakeDetails() {
    stompClient.send("/app/snakeDetails");
-    setTimeout(getSnakeDetails, 10);
+    setTimeout(getSnakeDetails, 5);
 }
 
-function displayBodyPart(x,y, colour){
+function displaySnakes(x,y, colour){
     ctx.fillStyle = colour;
     // Set the border colour of the snake part
     ctx.strokestyle = SNAKE_BORDER_COLOUR;
@@ -140,16 +158,6 @@ function displayBodyPart(x,y, colour){
     ctx.fillRect(x, y, 10, 10);
     // Draw a border around the snake part
     ctx.strokeRect(x, y, 10, 10);
-}
-
-function displaySnakes(snakesJSON){
-    ctx.font = "30px Arial";
-    for(let i = 0; i < snakesJSON.length; i ++) {
-        ctx.strokeText(snakesJSON.name, snakesJSON[i].x, snakesJSON[i].y +10);
-        for (let j = 0; j < snakesJSON[i].snakeSegments.length; j++) {
-            displayBodyPart(snakesJSON[i].snakeSegments[j].x, snakesJSON[i].snakeSegments[j].y, snakesJSON[i].playerColour);
-        }
-    }
 }
 
 function displayPickups(x,y, colour){
@@ -165,11 +173,7 @@ function displayPickups(x,y, colour){
 
 
 function addPlayer(){
-    const info = {
-        colour: setColour(),
-        name: setName()
-    }
-    stompClient.send("/app/newPlayer/" + playerId, {}, JSON.stringify(info)); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
+    stompClient.send("/app/newPlayer/" + playerId, {}, setColour()); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
 }
 
 $(function () {
@@ -179,6 +183,7 @@ $(function () {
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
 });
+
 
 function isColor(strColor){
     if(strColor === ""){
@@ -201,17 +206,10 @@ function setColour(){
     return color;
 }
 
-function setName(){
-    names = ['noodles', 'William Snakespeare', 'Danger Noodle','Severus Snake', 'Nope Rope', 'Mr. Wiggles', 'Spaghetti' ,'Monty Python']
-    const name =  document.getElementById('nameText').value
-    if(name === '') {
-        return get_random(names)
-    }else {
-        return name;
-    }
-}
 
 
-get_random = function (list) {
-    return list[Math.floor((Math.random()*list.length))];
+function getLoggingDetails() {
+    stompClient.send("/app/loggingDetails");
+    setTimeout(getLoggingDetails, 1000);
 }
+

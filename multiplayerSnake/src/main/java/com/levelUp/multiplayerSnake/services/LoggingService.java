@@ -12,7 +12,7 @@ public class LoggingService {
         diedToSelf
     };
 
-    private ArrayList<String> logs = new ArrayList<String>();
+    private ArrayList<String> logs = new ArrayList<>();
 
 
     public ArrayList<String> getLogs(){
@@ -27,7 +27,7 @@ public class LoggingService {
             case diedToSelf:
                 logs.add(name + " has just eaten themselves");
             case diedToWall:
-                logs.add(name + " didn't notice there was wall there");
+                logs.add(name + " didn't notice the wall there");
             case diedToEnemy:
                 logs.add(name + " was killed");
         }
