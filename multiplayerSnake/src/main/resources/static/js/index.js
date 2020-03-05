@@ -16,3 +16,12 @@ document.querySelector(".form-colorpicker").addEventListener("change", e => {
 });
 
 // ------------------------- Storage -----------------------------------------
+document.querySelector(".btn-submit").addEventListener("click", () => {
+  window.localStorage.setItem(
+    "user",
+    JSON.stringify({
+      username: document.querySelector(".form-input").value,
+      color: document.querySelector(".form-colorpicker").value
+    })
+  );
+});

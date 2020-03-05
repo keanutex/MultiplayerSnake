@@ -1,3 +1,7 @@
+const user = JSON.parse(window.localStorage.getItem("user"));
+
+console.log(user);
+
 var stompClient = null;
 
 const CANVAS_BORDER_COLOUR = "black";
@@ -9,10 +13,10 @@ let ctx;
 
 let playerId = "";
 
-// function setConnected(connected) {
-//     $("#connect").prop("disabled", connected);
-//     $("#disconnect").prop("disabled", !connected);
-// }
+function setConnected(connected) {
+  $("#connect").prop("disabled", connected);
+  $("#disconnect").prop("disabled", !connected);
+}
 
 function connect() {
   const gameCanvas = document.getElementById("gameCanvas");
@@ -136,7 +140,11 @@ function changeDirection() {
         break;
     }
     if (sendKeyCode) {
-      stompClient.send("/app/" + playerId + "/changeDirection", {}, changeD); //needs to send through the direction as a field (make a JSON/class for multiple fields)
+      stompClient.send(
+        "/app/" + user.username + "/changeDirection",
+        {},
+        changeD
+      ); //needs to send through the direction as a field (make a JSON/class for multiple fields)
     }
   };
 }
@@ -169,7 +177,7 @@ function displayPickups(x, y, colour) {
 }
 
 function addPlayer() {
-  stompClient.send("/app/newPlayer/" + playerId, {}, setColour()); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
+  stompClient.send("/app/newPlayer/" + user.username, {}, user.color); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
 }
 
 $(function() {
@@ -204,3 +212,5 @@ function setColour() {
   }
   return color;
 }
+
+connect();
