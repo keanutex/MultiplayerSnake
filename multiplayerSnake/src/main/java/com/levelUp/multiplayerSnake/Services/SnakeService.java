@@ -144,6 +144,7 @@ public class SnakeService {
             }
             //snake collisions
             if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990){
+                ls.addMessage(LoggingService.messageTypes.diedToWall,snakesBase.getValue().name);
                 keysToDelete.add(snakesBase.getKey());
                 break;
             }

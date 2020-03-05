@@ -40,7 +40,6 @@ function connect() {
         addPlayer();
         getSnakeDetails();
         moveSnake();
-        getLoggingDetails();
 
         stompClient.subscribe('/snake/snakeDetails', (status) =>{
             let jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
@@ -63,15 +62,10 @@ function connect() {
         });
 
         stompClient.subscribe('/logging/logs',(status)=> {
+            console.log('here');
             const body = JSON.parse(status.body);
             console.log(body);
-            let display = '';
-            for(let i = 0;i<body.length; i++){
-                console.log('shit',body[i]);
-                display += body[i] + '\n'
-            }
-            console.log(display);
-            document.getElementById('loggingArea').value = display;
+            document.getElementById('loggingArea').value += body;
 
         })
     });
@@ -149,6 +143,8 @@ function getSnakeDetails() {
     setTimeout(getSnakeDetails, 5);
 }
 
+
+
 function displaySnakes(x,y, colour){
     ctx.fillStyle = colour;
     // Set the border colour of the snake part
@@ -208,8 +204,6 @@ function setColour(){
 
 
 
-function getLoggingDetails() {
-    stompClient.send("/app/loggingDetails");
-    setTimeout(getLoggingDetails, 1000);
-}
+
+
 

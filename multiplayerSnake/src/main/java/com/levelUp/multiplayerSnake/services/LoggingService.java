@@ -1,10 +1,15 @@
 package com.levelUp.multiplayerSnake.Services;
 
+import com.levelUp.multiplayerSnake.controllers.LoggingController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 @Service
 public class LoggingService {
+
+    @Autowired
+    private LoggingController lc;
     public enum messageTypes {
         past50,
         diedToWall,
@@ -12,27 +17,22 @@ public class LoggingService {
         diedToSelf
     };
 
-    private ArrayList<String> logs = new ArrayList<>();
-
-
-    public ArrayList<String> getLogs(){
-        return logs;
-    }
-
 
     public void addMessage(messageTypes type, String name){
+
         switch(type){
             case past50:
-                logs.add(name +" has a length of 50");
+                lc.getLogging(name +" has a length of 50");
                 break;
             case diedToSelf:
-                logs.add(name + " has just eaten themselves");
+                lc.getLogging(name + " has just eaten themselves");
                 break;
             case diedToWall:
-                logs.add(name + " didn't notice the wall there");
+                System.out.println(lc);
+                lc.getLogging(name + " didn't notice the wall there");
                 break;
             case diedToEnemy:
-                logs.add(name + " was killed");
+                lc.getLogging(name + " was killed");
                 break;
         }
     }
