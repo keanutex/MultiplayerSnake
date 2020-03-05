@@ -1,31 +1,81 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Hello WebSocket</title>
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    <script src="/snake.js"></script>
-</head>
-<body>
-<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-    enabled. Please enable
-    Javascript and reload this page!</h2></noscript>
-<div id="main-content" class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="connect">WebSocket connection:</label>
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <input id = "colorText" type="text" placeholder="Input Color">
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect</button>
-                </div>
-            </form>
-        </div>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiplayer Snake</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="shadowbox shadowbox-1">
+      <img
+        src="./img/cobra-logo-bw-1.png"
+        alt="shadowbox"
+        class="shadowbox-img"
+      />
     </div>
-    <canvas id="gameCanvas" width="1000" height="1000"></canvas>
-</div>
-</body>
+    <div class="shadowbox shadowbox-2">
+      <img
+        src="./img/cobra-logo-bw-2.png"
+        alt="shadowbox"
+        class="shadowbox-img"
+      />
+    </div>
+
+    <div class="img-box">
+      <img
+        src="./img/cobra-logo.png"
+        alt="logo-box"
+        class="log-box-img log-box-img-0"
+      />
+
+      <img
+        src="./img/cobra-logo-1.png"
+        alt="logo-box"
+        class="log-box-img log-box-img-1"
+      />
+      <img
+        src="./img/cobra-logo-2.png"
+        alt="logo-box"
+        class="log-box-img log-box-img-2"
+      />
+      <img
+        src="./img/cobra-logo-3.png"
+        alt="logo-box"
+        class="log-box-img log-box-img-3"
+      />
+    </div>
+    <h1 class="heading-primary">Snakes on the browser</h1>
+
+    <div class="form-box">
+      <form action="#" class="form">
+        <div class="form-colorbox">
+          <input
+            type="color"
+            name="usercolor"
+            value="#638268"
+            class="form-colorpicker"
+          />
+        </div>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="username"
+          class="form-input"
+          required
+        />
+        <label for="username" class="form-label">
+          <span class="snake-square">&nbsp;</span>
+        </label>
+        <div class="submit-box">
+          <a class="btn-submit" href="game.html"
+            ><span>&rarr;</span> Join Now</a
+          >
+        </div>
+      </form>
+    </div>
+
+    <script src="./js/style.js"></script>
+  </body>
 </html>
