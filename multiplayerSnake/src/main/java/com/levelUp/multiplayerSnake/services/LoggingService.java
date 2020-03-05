@@ -3,13 +3,12 @@ package com.levelUp.multiplayerSnake.Services;
 import com.levelUp.multiplayerSnake.controllers.LoggingController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
 @Service
 public class LoggingService {
 
-    @Autowired
-    private LoggingController lc;
     public enum messageTypes {
         past50,
         diedToWall,
@@ -18,22 +17,19 @@ public class LoggingService {
     };
 
 
-    public void addMessage(messageTypes type, String name){
+    public String addMessage(messageTypes type, String name){
 
         switch(type){
             case past50:
-                lc.getLogging(name +" has a length of 50");
-                break;
+                return(name +" has a length of 50");
             case diedToSelf:
-                lc.getLogging(name + " has just eaten themselves");
-                break;
+                return(name + " has just eaten themselves");
             case diedToWall:
-                System.out.println(lc);
-                lc.getLogging(name + " didn't notice the wall there");
-                break;
+                return(name + " didn't notice the wall there");
             case diedToEnemy:
-                lc.getLogging(name + " was killed");
-                break;
+                return(name + " was killed");
+            default:
+                return ("invalid");
         }
     }
 }

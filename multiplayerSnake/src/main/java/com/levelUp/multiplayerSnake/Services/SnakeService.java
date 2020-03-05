@@ -11,7 +11,7 @@ import java.util.*;
 public class SnakeService {
 
     @Autowired
-    LoggingService ls;
+    LoggingController loggingController;
 
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<String, Snake>();
@@ -140,11 +140,11 @@ public class SnakeService {
                 }
             }
             if(snakesBase.getValue().getLength()>=50){
-                ls.addMessage(LoggingService.messageTypes.past50,snakesBase.getValue().name);
+                loggingController.getLogging(LoggingService.messageTypes.past50,snakesBase.getValue().name);
             }
             //snake collisions
             if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990){
-                ls.addMessage(LoggingService.messageTypes.diedToWall,snakesBase.getValue().name);
+                loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getValue().name);
                 keysToDelete.add(snakesBase.getKey());
                 break;
             }
@@ -155,10 +155,10 @@ public class SnakeService {
                     }
                     if (snakesBase.getValue().head().x == snakesCheck.getValue().snakeSegments.get(i).x && snakesBase.getValue().head().y == snakesCheck.getValue().snakeSegments.get(i).y) {
                         if(!snakesBase.getKey().equals(snakesCheck.getKey())){
-                            ls.addMessage(LoggingService.messageTypes.diedToEnemy,snakesBase.getValue().name);
+                            loggingController.getLogging(LoggingService.messageTypes.diedToEnemy,snakesBase.getValue().name);
                             growSnakesOnCollision(snakesCheck.getValue(), snakesBase.getValue().getLength());
                         } else{
-                            ls.addMessage(LoggingService.messageTypes.diedToSelf,snakesBase.getValue().name);
+                            loggingController.getLogging(LoggingService.messageTypes.diedToSelf,snakesBase.getValue().name);
                         }
                         keysToDelete.add(snakesBase.getKey());
                     }
