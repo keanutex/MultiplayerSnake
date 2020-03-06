@@ -44,8 +44,8 @@ function connect() {
     setConnected(true);
     console.log("Connected: " + frame);
     addPlayer();
-    getSnakeDetails();
-    moveSnake();
+    // getSnakeDetails();
+    // moveSnake();
 
     stompClient.subscribe("/snake/snakeDetails", status => {
       let jsonReturn = JSON.parse(status.body); //run every time server is sent a message on this channel
@@ -74,6 +74,8 @@ function connect() {
         }
       }
     });
+    moveSnake();
+    getSnakeDetails();
   });
 }
 
