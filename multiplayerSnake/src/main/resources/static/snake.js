@@ -1,7 +1,5 @@
 const user = JSON.parse(window.localStorage.getItem("user"));
 
-console.log(user);
-
 var stompClient = null;
 
 const CANVAS_BORDER_COLOUR = "black";
@@ -17,6 +15,10 @@ function setConnected(connected) {
   $("#connect").prop("disabled", connected);
   $("#disconnect").prop("disabled", !connected);
 }
+
+document.querySelector("#newsnake").addEventListener("click", () => {
+  addPlayer();
+});
 
 function connect() {
   const gameCanvas = document.getElementById("gameCanvas");
@@ -44,9 +46,6 @@ function connect() {
     setConnected(true);
     console.log("Connected: " + frame);
     addPlayer();
-    // getSnakeDetails();
-    // moveSnake();
-
     stompClient.subscribe("/snake/snakeDetails", status => {
       let jsonReturn = JSON.parse(status.body); //run every time server is sent a message on this channel
       let snakesJSON = jsonReturn.snakes;

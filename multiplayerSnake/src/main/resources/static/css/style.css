@@ -334,12 +334,3 @@ form {
 .submit-box {
   margin-bottom: 1rem;
 }
-
-/* -------------------------------- CANVAS ------------------------------- */
-.canvas {
-  border: black 20px solid;
-  /* transform: translate(-50%, -50%);
-  position: absolute;
-  top: 50%;
-  left: 50%; */
-}
