@@ -9,8 +9,6 @@ const SNAKE_BORDER_COLOUR = "darkgreen";
 // Get the canvas element
 let ctx;
 
-let playerId = "";
-
 function setConnected(connected) {
   $("#connect").prop("disabled", connected);
   $("#disconnect").prop("disabled", !connected);
@@ -32,12 +30,6 @@ function connect() {
   ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-  playerId =
-    "_" +
-    Math.random()
-      .toString(36)
-      .substr(2, 9);
 
   const socket = new SockJS("/gs-guide-websocket");
   stompClient = Stomp.over(socket);
@@ -88,7 +80,7 @@ function disconnect() {
 }
 
 function deletePlayer() {
-  stompClient.send("/app/" + playerId + "/removeSnake");
+  stompClient.send("/app/" + user.username + "/removeSnake");
 }
 
 function moveSnake() {
