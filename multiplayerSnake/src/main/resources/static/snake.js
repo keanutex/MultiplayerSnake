@@ -40,6 +40,7 @@ function connect() {
         addPlayer();
         getSnakeDetails();
         moveSnake();
+        getLogs();
 
         stompClient.subscribe('/snake/snakeDetails', (status) =>{
             let jsonReturn = JSON.parse(status.body);//run every time server is sent a message on this channel
@@ -62,14 +63,21 @@ function connect() {
         });
 
         stompClient.subscribe('/logging/logs',(status)=> {
-            console.log('here');
             const body = JSON.parse(status.body);
-            console.log(body);
-            document.getElementById('loggingArea').value += body;
+            document.getElementById('loggingArea').value = "";
+            body.forEach(elem => {
+                document.getElementById('loggingArea').value += elem +'\n';
+            })
 
+        })
+
+        stompClient.subscribe('/messaging/messages' + playerId, (status) => {
+            console.log(status);
+            console.log('ah shit here we go again')
         })
     });
 }
+
 
 function disconnect() {
     deletePlayer();
@@ -201,6 +209,18 @@ function setColour(){
     }
     return color;
 }
+
+
+function getLogs() {
+    stompClient.send("/app/loggingDetails");
+    setTimeout(getLogs,1000);
+}
+
+function sendMessage(){
+    console.log('sending',{playerID: playerId, message: document.getElementById("message").value});
+    stompClient.send("app/message",{playerID: playerId, message: document.getElementById("message").value});
+}
+
 
 
 
