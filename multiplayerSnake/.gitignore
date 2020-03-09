@@ -26,6 +26,7 @@ target/
 *.tar
 *.zip
 
+
 # Logs and databases #
 ######################
 *.log
@@ -39,6 +40,7 @@ target/
 ._*
 .Spotlight-V100
 .Trashes
+.vscode
 ehthumbs.db
 Thumbs.db
 

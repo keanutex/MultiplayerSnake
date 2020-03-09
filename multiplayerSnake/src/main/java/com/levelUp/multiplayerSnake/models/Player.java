@@ -20,5 +20,14 @@ public class Player {
 	public int getScoreMax() {
 		return this.scoreMax;
 	}
+
+	public void setScoreCur(int score){
+		scoreCur+=score;
+	}
+
+	public void setScoreMax(int score){
+		scoreMax+=score;
+	}
+	
 	
 }
