@@ -12,6 +12,10 @@ public class Player {
 		this.scoreCur = 0;
 		this.scoreMax = 0;
 	}
+	public String getName()
+	{
+		return this.name;
+	}
 	
 	public int getScoreCur() {
 		return this.scoreCur;

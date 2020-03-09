@@ -17,6 +17,9 @@ public class SnakeService {
     int pickupSpawnCountdown = 4;
     int pickupCounter = 0;
     int pickupMax = 100;
+    Player player;
+    int foodScore=5;
+    int speedScore=10;
 
     public void gameLoop() throws InterruptedException {
         while (true) {
@@ -75,6 +78,7 @@ public class SnakeService {
     }
 
     public void addPlayer(String playerId, String colour) {
+         player = new Player(playerId);
         numberOfPlayers++;
         snakes.put(playerId, new Snake(30, "up"));
         snakes.get(playerId).playerColour = colour;
@@ -119,19 +123,23 @@ public class SnakeService {
             //pickups collisions
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y) {
+
                     if(pickups.get(i).type.equals("food")){
+                        player.setScoreCur(foodScore);
                         snakesBase.getValue().baseSpeed *= 0.995;
                         System.out.println(snakesBase.getValue().baseSpeed);
                         snakesBase.getValue().addSegment();
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
                     }else if(pickups.get(i).type.equals("speed")){
+                        player.setScoreCur(speedScore);
                         snakesBase.getValue().boostSpeedCounter= 0;
                         snakesBase.getValue().speed *= 4;
                         snakesBase.getValue().speedBoost =true;
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
                     }
+                    System.out.println(player.getName()+" :" +  player.getScoreCur());
 
                 }
             }
