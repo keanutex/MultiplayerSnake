@@ -10,21 +10,33 @@ public class SnakeService {
 
 
     int numberOfPlayers = 0;
-    HashMap<String, Snake> snakes = new HashMap<String, Snake>();
+    HashMap<String, Snake> snakes = new HashMap<>();
 
     ArrayList<Pickup> pickups = new ArrayList<>();
     ArrayList<Bullet> bullets = new ArrayList<>();
-    int serverTick = 20;
-    int pickupSpawnCountdown = 4;
+
+    final static int SERVER_TICK = 20;
+
+
+    final static double BULLET_SPEED_INCREMENTER = 0.995;
+    final static int BULLET_LIFESPAN = 50;
+    final static int BULLET_SPEED_CYCLE = 100;
+
+    final static double SNAKE_STARTING_SPEED = 30;
+
+    //PICKUPS
+    double pickupSpawnCountdown = 0;
     int pickupCounter = 0;
-    int pickupMax = 100;
+    final static int MAXIMUM_PICKUPS = 100;
+    final static int PICKUPS_PER_SPAWN = 2;
+    final static double PICKUP_SPAWN_RATE = 4*SERVER_TICK;
 
     public void gameLoop() throws InterruptedException {
         while (true) {
             for (Snake snake : snakes.values()) {
                 if(snake.isSpeedBoost()){
-                    snake.setBoostSpeedCounter(snake.getBoostSpeedCounter() + 10);
-                    if(snake.getBoostSpeedCounter() >= 4000){
+                    snake.setBoostSpeedCounter(snake.getBoostSpeedCounter() + 1);
+                    if(snake.getBoostSpeedCounter() >= 400){
                         snake.setSpeedBoost(false);
                         snake.setSpeed(snake.getBaseSpeed());
                         snake.setBoostSpeedCounter(0);
@@ -46,9 +58,9 @@ public class SnakeService {
             }
             ArrayList<Bullet> bulletsToDelete = new ArrayList<>();
             for(Bullet bullet : bullets){
-                if(bullet.getSpeedCounter() >= 100){
+                if(bullet.getSpeedCounter() >= BULLET_SPEED_CYCLE){
                     bullet.setDeathTimer(bullet.getDeathTimer() + 1);
-                    if(bullet.getDeathTimer() > 50){
+                    if(bullet.getDeathTimer() > BULLET_LIFESPAN){
                         bulletsToDelete.add(bullet);
                     }
                     bullet.move();
@@ -63,20 +75,24 @@ public class SnakeService {
             checkCollisions();
 
             //pickup spawning
-            pickupSpawnCountdown--;
-            if (pickupSpawnCountdown <= 0) {
-                if (pickupCounter < pickupMax) {
-                    if(generateRandomCoOrd(0, 20) <= 1){
-                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "speed"));
-                    }else if (generateRandomCoOrd(0, 20) <= 2){
-                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "shoot"));
+            pickupSpawnCountdown++;
+            if (pickupSpawnCountdown >= PICKUP_SPAWN_RATE) {
+                if (pickupCounter < MAXIMUM_PICKUPS) {
+                    for(int i = 0; i < PICKUPS_PER_SPAWN; i++){
+                        int random = generateRandomCoOrd(0, 150);
+                        if(random <= 0){
+                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "speed"));
+                        }else if (random <= 20){
+                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "shoot"));
+                        }else{
+                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
+                        }
+                        pickupCounter ++;
                     }
-                    pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
-                    pickupCounter += 2;
-                    pickupSpawnCountdown = 100;
                 }
+                pickupSpawnCountdown = 0;
             }
-            Thread.sleep(serverTick);
+            Thread.sleep(SERVER_TICK);
         }
     }
 
@@ -84,7 +100,6 @@ public class SnakeService {
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");
         }
-
         Random r = new Random();
         int number = r.nextInt((max - min) + 1) + min;
         number = (int) (Math.round(number / 10.0) * 10);
@@ -93,7 +108,7 @@ public class SnakeService {
 
     public void addPlayer(String playerId, String colour) {
         numberOfPlayers++;
-        snakes.put(playerId, new Snake(30, "up"));
+        snakes.put(playerId, new Snake(SNAKE_STARTING_SPEED, "up"));
         snakes.get(playerId).setPlayerColour(colour);
     }
 
@@ -143,7 +158,7 @@ public class SnakeService {
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().getSnakeSegments().get(0).getX() == pickups.get(i).getX() && snakesBase.getValue().getSnakeSegments().get(0).getY() == pickups.get(i).getY()) {
                     if(pickups.get(i).getType().equals("food")){
-                        snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * 0.995);
+                        snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * BULLET_SPEED_INCREMENTER);
                         System.out.println(snakesBase.getValue().getBaseSpeed());
                         snakesBase.getValue().addSegment();
                         pickups.remove(pickups.get(i));
@@ -192,12 +207,13 @@ public class SnakeService {
 
     public void fireBullet(String playerId){
         Snake snakeThatShot = snakes.get(playerId);
+
         int xIncrement = 0;
         int yIncrement = 0;
 
 
         if(snakeThatShot !=null){
-
+            snakeThatShot.setBaseSpeed(snakeThatShot.getBaseSpeed() / BULLET_SPEED_INCREMENTER);
             switch(snakeThatShot.getDirection()){
                 case "up":
                     yIncrement = -20;
