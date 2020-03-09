@@ -1,11 +1,7 @@
 package com.levelUp.multiplayerSnake.Services;
 
-import com.levelUp.multiplayerSnake.controllers.LoggingController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
-import java.util.ArrayList;
 @Service
 public class LoggingService {
 
