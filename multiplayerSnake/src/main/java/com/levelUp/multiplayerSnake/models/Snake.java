@@ -12,10 +12,13 @@ public class Snake {
     public double speedCounter = 100;
     public boolean directionChanged = false;
     public boolean snakeMoved = false;
-    int increment = 10;
+    final int increment = 10;
     public int boostSpeedCounter = 0;
     public double baseSpeed = 0;
     public boolean speedBoost = false;
+    public boolean canShoot = false;
+    public double shootCounter = 0;
+
 
     public Snake(double baseSpeed, String dir){
         this.dir = dir;
@@ -27,6 +30,9 @@ public class Snake {
         this.snakeSegments.add(new SnakeSegment(n +20, n +20));
         this.snakeSegments.add(new SnakeSegment(n +30, n +30));
         this.snakeSegments.add(new SnakeSegment(n +40, n +40));
+    }
+    public void removeTail(){
+        snakeSegments.remove(tail());
     }
 
     public SnakeSegment head(){

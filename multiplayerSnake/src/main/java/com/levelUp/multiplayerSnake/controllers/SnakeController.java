@@ -29,6 +29,12 @@ public class SnakeController {
         //gameLoop
         snakeService.gameLoop();
     }
+    @MessageMapping("/{playerId}/shoot")
+    @SendTo("/snake/{playerId}/shoot")
+    public void shoot(@DestinationVariable String playerId) {
+        snakeService.fireBullet(playerId);
+    }
+
 
     @MessageMapping("/newPlayer/{playerId}")
     @SendTo("/snake/newPlayer/{playerId}")

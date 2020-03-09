@@ -13,6 +13,7 @@ public class SnakeService {
     HashMap<String, Snake> snakes = new HashMap<String, Snake>();
 
     ArrayList<Pickup> pickups = new ArrayList<>();
+    ArrayList<Bullet> bullets = new ArrayList<>();
     int serverTick = 20;
     int pickupSpawnCountdown = 4;
     int pickupCounter = 0;
@@ -43,16 +44,32 @@ public class SnakeService {
                     snake.snakeMoved = false;
                 }
             }
+            ArrayList<Bullet> bulletsToDelete = new ArrayList<>();
+            for(Bullet bullet : bullets){
+                if(bullet.getSpeedCounter() >= 100){
+                    bullet.setDeathTimer(bullet.getDeathTimer() + 1);
+                    if(bullet.getDeathTimer() > 50){
+                        bulletsToDelete.add(bullet);
+                    }
+                    bullet.move();
+                    bullet.setSpeedCounter(0);
+                }
+                bullet.setSpeedCounter(bullet.getSpeedCounter() + bullet.getSpeed());
+            }
+
+            for(int i = 0; i < bulletsToDelete.size(); i++){
+                bullets.remove(bulletsToDelete.get(i));
+            }
             checkCollisions();
 
             //pickup spawning
             pickupSpawnCountdown--;
             if (pickupSpawnCountdown <= 0) {
                 if (pickupCounter < pickupMax) {
-                    if(generateRandomCoOrd(0, 15) <= 1){
+                    if(generateRandomCoOrd(0, 20) <= 1){
                         pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "speed"));
-                    }else{
-                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
+                    }else if (generateRandomCoOrd(0, 20) <= 2){
+                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "shoot"));
                     }
                     pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
                     pickupCounter += 2;
@@ -83,7 +100,7 @@ public class SnakeService {
     public UpdatePayload getPayload() {
         Collection<Snake> values = snakes.values();
         ArrayList<Snake> snakeArrayList = new ArrayList<>(values);
-        return new UpdatePayload(snakeArrayList, pickups);
+        return new UpdatePayload(snakeArrayList, pickups, bullets);
     }
 
     public void removePlayer(String playerId) {
@@ -115,8 +132,14 @@ public class SnakeService {
     public void checkCollisions() {
         ArrayList<String> keysToDelete = new ArrayList<>();
 
+        //boundary collision
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
-            //pickups collisions
+            if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990){
+                keysToDelete.add(snakesBase.getKey());
+                break;
+            }
+
+            //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y) {
                     if(pickups.get(i).type.equals("food")){
@@ -132,14 +155,14 @@ public class SnakeService {
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
                     }
-
                 }
             }
-            //snake collisions
-            if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990){
-                keysToDelete.add(snakesBase.getKey());
-                break;
+            for(Bullet bullet: bullets){
+                if(bullet.getX() == snakesBase.getValue().head().x && bullet.getY() == snakesBase.getValue().head().y){
+                    snakes.remove(snakesBase.getKey());
+                }
             }
+            //snake on snake collisions
             for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
                 for (int i = 0; i < snakesCheck.getValue().getLength(); i++) {
                     if (snakesBase.getValue().snakeSegments.get(0).equals(snakesCheck.getValue().snakeSegments.get(i))) {
@@ -154,6 +177,8 @@ public class SnakeService {
                 }
             }
         }
+
+        //deleting the snakes that collided
         for (int i = 0; i < keysToDelete.size(); i++) {
             removePlayer(keysToDelete.get(i));
         }
@@ -163,6 +188,40 @@ public class SnakeService {
         for(int i = 0; i < amount; i ++){
             snakeToGrow.addSegment();
         }
+    }
 
+    public void fireBullet(String playerId){
+        Snake snakeThatShot = snakes.get(playerId);
+        int xIncrement = 0;
+        int yIncrement = 0;
+
+
+        if(snakeThatShot !=null){
+
+            switch(snakeThatShot.getDirection()){
+                case "up":
+                    yIncrement = -20;
+                    break;
+                case "down":
+                    yIncrement = 20;
+                    break;
+                case "left":
+                    xIncrement = -20;
+                    break;
+                case "right":
+                    xIncrement = 20;
+                    break;
+                default:
+                    System.out.println("direction not recognised");
+            }
+
+            Bullet bullet = new Bullet(snakeThatShot.head().x + xIncrement, snakeThatShot.head().y + yIncrement, snakeThatShot.getDirection(), 50);
+            if(snakeThatShot.getLength()  < 3){
+                return;
+            }else{
+                snakeThatShot.removeTail();
+            }
+            bullets.add(bullet);
+        }
     }
 }
