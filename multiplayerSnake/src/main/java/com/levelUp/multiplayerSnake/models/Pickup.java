@@ -2,21 +2,21 @@ package com.levelUp.multiplayerSnake.models;
 
 public class Pickup {
 
-    public int x;
-    public int y;
-    public String colour;
-    public String type;
+    private int x;
+    private int y;
+    private String colour;
+    private String type;
 
     public Pickup(int x, int y, String type){
-        this.x = x;
-        this.y = y;
-        this.type = type;
+        this.setX(x);
+        this.setY(y);
+        this.setType(type);
         if(type.equals("food")){
-            this.colour = "#FFD700";
+            this.setColour("#FFD700");
         }else if(type.equals("speed")){
-            this.colour = "#000000";
+            this.setColour("#000000");
         }else if(type.equals("shoot")){
-            this.colour = "#949494";
+            this.setColour("#949494");
         }else if(type.equals("invincible")){
 
         }
@@ -25,8 +25,40 @@ public class Pickup {
     @Override
     public String toString() {
         return "Pickup{" +
-                "x=" + x +
-                ", y=" + y +
+                "x=" + getX() +
+                ", y=" + getY() +
                 '}';
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

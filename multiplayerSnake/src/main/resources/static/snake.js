@@ -109,11 +109,11 @@ function closingCode() {
   return null;
 }
 
-let interval = setInterval(changeDirection, 5);
+let interval = setInterval(keyBoardInput, 5);
 
 
 
-function changeDirection() {
+function keyBoardInput() {
   document.onkeydown = function(event) {
     let keyCode,
       changeD = "Error";

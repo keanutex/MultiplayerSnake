@@ -22,26 +22,26 @@ public class SnakeService {
     public void gameLoop() throws InterruptedException {
         while (true) {
             for (Snake snake : snakes.values()) {
-                if(snake.speedBoost){
-                    snake.boostSpeedCounter += 10;
-                    if(snake.boostSpeedCounter >= 4000){
-                        snake.speedBoost = false;
-                        snake.speed = snake.baseSpeed;
-                        snake.boostSpeedCounter= 0;
+                if(snake.isSpeedBoost()){
+                    snake.setBoostSpeedCounter(snake.getBoostSpeedCounter() + 10);
+                    if(snake.getBoostSpeedCounter() >= 4000){
+                        snake.setSpeedBoost(false);
+                        snake.setSpeed(snake.getBaseSpeed());
+                        snake.setBoostSpeedCounter(0);
                     }
                 }else{
-                    snake.speed = snake.baseSpeed;
+                    snake.setSpeed(snake.getBaseSpeed());
                 }
-                snake.speedCounter += snake.speed;
-                if (snake.speedCounter >= 100 && !snake.snakeMoved) {
+                snake.setSpeedCounter(snake.getSpeedCounter() + snake.getSpeed());
+                if (snake.getSpeedCounter() >= 100 && !snake.isSnakeMoved()) {
                     //snake moves
-                    snake.snakeMoved = true;
+                    snake.setSnakeMoved(true);
                     snake.move();
-                    snake.speedCounter = 0;
-                    snake.directionChanged = false;
+                    snake.setSpeedCounter(0);
+                    snake.setDirectionChanged(false);
                 } else {
                     //snake doesnt move
-                    snake.snakeMoved = false;
+                    snake.setSnakeMoved(false);
                 }
             }
             ArrayList<Bullet> bulletsToDelete = new ArrayList<>();
@@ -94,7 +94,7 @@ public class SnakeService {
     public void addPlayer(String playerId, String colour) {
         numberOfPlayers++;
         snakes.put(playerId, new Snake(30, "up"));
-        snakes.get(playerId).playerColour = colour;
+        snakes.get(playerId).setPlayerColour(colour);
     }
 
     public UpdatePayload getPayload() {
@@ -108,14 +108,14 @@ public class SnakeService {
     }
 
     public void setColour(String playerId, String colour) {
-        snakes.get(playerId).playerColour = colour;
+        snakes.get(playerId).setPlayerColour(colour);
     }
 
     public void snakeChangeDirection(String changeD, String playerId) {
         if (snakes.get(playerId) == null) {
             return;
         }
-        if (snakes.get(playerId).directionChanged)
+        if (snakes.get(playerId).isDirectionChanged())
             return;
         if (changeD.equals("up") && snakes.get(playerId).getDirection().equals("down"))
             return;
@@ -126,7 +126,7 @@ public class SnakeService {
         if (changeD.equals("right") && snakes.get(playerId).getDirection().equals("left"))
             return;
         snakes.get(playerId).changeDirection(changeD);
-        snakes.get(playerId).directionChanged = true;
+        snakes.get(playerId).setDirectionChanged(true);
     }
 
     public void checkCollisions() {
@@ -134,41 +134,41 @@ public class SnakeService {
 
         //boundary collision
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
-            if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990){
+            if(snakesBase.getValue().head().getX() <= 0 ||  snakesBase.getValue().head().getX() >= 990 || snakesBase.getValue().head().getY() <= 0 ||  snakesBase.getValue().head().getY() >= 990){
                 keysToDelete.add(snakesBase.getKey());
                 break;
             }
 
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
-                if (snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y) {
-                    if(pickups.get(i).type.equals("food")){
-                        snakesBase.getValue().baseSpeed *= 0.995;
-                        System.out.println(snakesBase.getValue().baseSpeed);
+                if (snakesBase.getValue().getSnakeSegments().get(0).getX() == pickups.get(i).getX() && snakesBase.getValue().getSnakeSegments().get(0).getY() == pickups.get(i).getY()) {
+                    if(pickups.get(i).getType().equals("food")){
+                        snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * 0.995);
+                        System.out.println(snakesBase.getValue().getBaseSpeed());
                         snakesBase.getValue().addSegment();
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
-                    }else if(pickups.get(i).type.equals("speed")){
-                        snakesBase.getValue().boostSpeedCounter= 0;
-                        snakesBase.getValue().speed *= 4;
-                        snakesBase.getValue().speedBoost =true;
+                    }else if(pickups.get(i).getType().equals("speed")){
+                        snakesBase.getValue().setBoostSpeedCounter(0);
+                        snakesBase.getValue().setSpeed( snakesBase.getValue().getSpeed() * 4);
+                        snakesBase.getValue().setSpeedBoost(true);
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
                     }
                 }
             }
             for(Bullet bullet: bullets){
-                if(bullet.getX() == snakesBase.getValue().head().x && bullet.getY() == snakesBase.getValue().head().y){
+                if(bullet.getX() == snakesBase.getValue().head().getX() && bullet.getY() == snakesBase.getValue().head().getY()){
                     snakes.remove(snakesBase.getKey());
                 }
             }
             //snake on snake collisions
             for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
                 for (int i = 0; i < snakesCheck.getValue().getLength(); i++) {
-                    if (snakesBase.getValue().snakeSegments.get(0).equals(snakesCheck.getValue().snakeSegments.get(i))) {
+                    if (snakesBase.getValue().getSnakeSegments().get(0).equals(snakesCheck.getValue().getSnakeSegments().get(i))) {
                         continue;
                     }
-                    if (snakesBase.getValue().head().x == snakesCheck.getValue().snakeSegments.get(i).x && snakesBase.getValue().head().y == snakesCheck.getValue().snakeSegments.get(i).y) {
+                    if (snakesBase.getValue().head().getX() == snakesCheck.getValue().getSnakeSegments().get(i).getX() && snakesBase.getValue().head().getY() == snakesCheck.getValue().getSnakeSegments().get(i).getY()) {
                         if(!snakesBase.getKey().equals(snakesCheck.getKey())){
                             growSnakesOnCollision(snakesCheck.getValue(), snakesBase.getValue().getLength());
                         }
@@ -215,7 +215,7 @@ public class SnakeService {
                     System.out.println("direction not recognised");
             }
 
-            Bullet bullet = new Bullet(snakeThatShot.head().x + xIncrement, snakeThatShot.head().y + yIncrement, snakeThatShot.getDirection(), 50);
+            Bullet bullet = new Bullet(snakeThatShot.head().getX() + xIncrement, snakeThatShot.head().getY() + yIncrement, snakeThatShot.getDirection(), 50);
             if(snakeThatShot.getLength()  < 3){
                 return;
             }else{
