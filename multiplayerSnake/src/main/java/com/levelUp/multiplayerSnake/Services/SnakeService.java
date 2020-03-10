@@ -128,9 +128,12 @@ public class SnakeService {
     private void updateHighscore(Integer curHighScore) {
 
         try {
-            FileWriter writer = new FileWriter("doc/highscore.txt", false);
+            FileWriter writer = new FileWriter("src/main/resources/static/highscore.txt", false);
+            FileWriter writer1 = new FileWriter("doc/highscore.txt", false);
             writer.write(String.valueOf(curHighScore) );
+            writer1.write(String.valueOf(curHighScore) );
             writer.close();
+            writer1.close();
             System.out.println("done");
         } catch (IOException e) {
             e.printStackTrace();
