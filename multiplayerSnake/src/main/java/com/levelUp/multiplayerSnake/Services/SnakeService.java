@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -117,16 +119,22 @@ public class SnakeService {
             while(scanner.hasNextInt())
             {   HighScore = scanner.nextInt();}
         } catch (FileNotFoundException e) {
+            e.printStackTrace();}
+        if(HighScore<curHighScore)
+        {updateHighscore(curHighScore);}
+
+    }
+
+    private void updateHighscore(Integer curHighScore) {
+
+        try {
+            FileWriter writer = new FileWriter("doc/highscore.txt", false);
+            writer.write(String.valueOf(curHighScore) );
+            writer.close();
+            System.out.println("done");
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-        if(HighScore<curHighScore)
-        {
-            System.out.println("New high Score");
-        }else{
-            System.out.println("old high Score");
-        }
-
     }
 
     public void setColour(String playerId, String colour) {
