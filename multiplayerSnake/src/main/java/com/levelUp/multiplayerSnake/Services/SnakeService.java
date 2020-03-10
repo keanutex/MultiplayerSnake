@@ -3,6 +3,8 @@ package com.levelUp.multiplayerSnake.Services;
 import com.levelUp.multiplayerSnake.models.*;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 @Service
@@ -13,6 +15,7 @@ public class SnakeService {
     HashMap<String, Snake> snakes = new HashMap<String, Snake>();
 
     ArrayList<Pickup> pickups = new ArrayList<>();
+    private ArrayList<Integer> Playerscores = new ArrayList<>(); // List for storing scores
     int serverTick = 20;
     int pickupSpawnCountdown = 4;
     int pickupCounter = 0;
@@ -91,7 +94,39 @@ public class SnakeService {
     }
 
     public void removePlayer(String playerId) {
+        numberOfPlayers--;
         snakes.remove(playerId);
+        Playerscores.add(player.getScoreCur());
+        if(numberOfPlayers ==0){
+        
+           /*get high score details
+           1. read current high score from file
+           2. compare it with the highest score
+           */
+          Collections.sort(Playerscores, Collections.reverseOrder());
+          checkHighScore(Playerscores.get(0));
+           
+        }
+    }
+
+    private void checkHighScore(Integer curHighScore) {
+        Scanner scanner;
+        int HighScore = 0;
+        try {
+            scanner = new Scanner(new File("doc/highscore.txt"));
+            while(scanner.hasNextInt())
+            {   HighScore = scanner.nextInt();}
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if(HighScore<curHighScore)
+        {
+            System.out.println("New high Score");
+        }else{
+            System.out.println("old high Score");
+        }
+
     }
 
     public void setColour(String playerId, String colour) {
@@ -139,7 +174,6 @@ public class SnakeService {
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
                     }
-                    System.out.println(player.getName()+" :" +  player.getScoreCur());
 
                 }
             }
