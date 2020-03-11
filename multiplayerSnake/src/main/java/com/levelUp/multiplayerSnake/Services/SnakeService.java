@@ -218,8 +218,12 @@ public class SnakeService {
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
             //boundary collision
             if (snakesBase.getValue().head().getX() <= 0 || snakesBase.getValue().head().getX() >= 990 || snakesBase.getValue().head().getY() <= 0 || snakesBase.getValue().head().getY() >= 990) {
+                loggingController.getLogging(LoggingService.messageTypes.diedToWall, snakesBase.getKey());
                 keysToDelete.add(snakesBase.getKey());
                 break;
+            }
+            if (snakesBase.getValue().getLength() >= 50) {
+                loggingController.getLogging(LoggingService.messageTypes.past50, snakesBase.getKey());
             }
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
@@ -254,33 +258,27 @@ public class SnakeService {
                 if (didCollide(bullet.getX(), bullet.getY(), snakesBase.getValue().head().getX(), snakesBase.getValue().head().getY(), bullet.getDir(), snakesBase.getValue().getDir())) {
                     keysToDelete.add(snakesBase.getKey());
                 }
-            if(snakesBase.getValue().getLength()>=50){
-                loggingController.getLogging(LoggingService.messageTypes.past50,snakesBase.getValue().name);
             }
-            //snake collisions
-            if(snakesBase.getValue().head().x <= 0 ||  snakesBase.getValue().head().x >= 990 || snakesBase.getValue().head().y <= 0 ||  snakesBase.getValue().head().y >= 990){
-                loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getValue().name);
-                keysToDelete.add(snakesBase.getKey());
-                break;
-            }
-            //snake on snake collisions
-            for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
-                for (int i = 0; i < snakesCheck.getValue().getLength(); i++) {
-                    if (snakesBase.getValue().getSnakeSegments().get(0).equals(snakesCheck.getValue().getSnakeSegments().get(i))) {
-                        continue;
-                    }
-                    if (snakesBase.getValue().head().getX() == snakesCheck.getValue().getSnakeSegments().get(i).getX() && snakesBase.getValue().head().getY() == snakesCheck.getValue().getSnakeSegments().get(i).getY()) {
-                        if (!snakesBase.getKey().equals(snakesCheck.getKey())) {
-                            loggingController.getLogging(LoggingService.messageTypes.diedToEnemy,snakesBase.getValue().name);
-                            growSnakesOnCollision(snakesCheck.getValue(), snakesBase.getValue().getLength());
-                        } else{
-                            loggingController.getLogging(LoggingService.messageTypes.diedToSelf,snakesBase.getValue().name);
+
+                //snake on snake collisions
+                for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
+                    for (int i = 0; i < snakesCheck.getValue().getLength(); i++) {
+                        if (snakesBase.getValue().getSnakeSegments().get(0).equals(snakesCheck.getValue().getSnakeSegments().get(i))) {
+                            continue;
                         }
-                        keysToDelete.add(snakesBase.getKey());
+                        if (snakesBase.getValue().head().getX() == snakesCheck.getValue().getSnakeSegments().get(i).getX() && snakesBase.getValue().head().getY() == snakesCheck.getValue().getSnakeSegments().get(i).getY()) {
+                            if (!snakesBase.getKey().equals(snakesCheck.getKey())) {
+                                loggingController.getLogging(LoggingService.messageTypes.diedToEnemy, snakesBase.getKey());
+                                growSnakesOnCollision(snakesCheck.getValue(), snakesBase.getValue().getLength());
+                            } else {
+                                loggingController.getLogging(LoggingService.messageTypes.diedToSelf, snakesBase.getKey());
+                            }
+                            keysToDelete.add(snakesBase.getKey());
+                        }
                     }
                 }
             }
-        }
+
         //deleting the snakes that collided
         for (int i = 0; i < keysToDelete.size(); i++) {
             removePlayer(keysToDelete.get(i));
