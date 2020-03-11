@@ -29,12 +29,11 @@ public class SnakeService {
     int pickupCounter = 0;
     final static int MAXIMUM_PICKUPS = 100;
     final static int PICKUPS_PER_SPAWN = 2;
-    final static double PICKUP_SPAWN_RATE = 4*SERVER_TICK;
+    final static double PICKUP_SPAWN_RATE = 4 * SERVER_TICK;
     final static int SUPER_FOOD_GROW_AMOUNT = 10;
     public boolean isRunning = true;
 
     //GAME LOOP
-    //This value would probably be stored elsewhere.
     final double GAME_HERTZ = 30.0;
     //Calculate how many ns each frame should take for our target game hertz.
     final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_HERTZ;
@@ -53,117 +52,46 @@ public class SnakeService {
     //Simple way of finding FPS.
     int lastSecondTime = (int) (lastUpdateTime / 1000000000);
 
-
-    //game loop
-    private int fps = 60;
-    private int frameCount = 0;
-
-    public void runGameLoop(){
-        Thread loop = new Thread()
-        {
-            public void run()
-            {
-                gameLoop();
-            }
-        };
+    public void runGameLoop() {
+        Thread loop = new Thread(this::gameLoop);
         loop.start();
     }
 
-    public void gameLoop(){
-
+    public void gameLoop() {
         while (isRunning) {
             double now = System.nanoTime();
             int updateCount = 0;
 
-            while ( now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < TIME_BETWEEN_UPDATES)
-            {
-                Thread.yield();
-                //This stops the app from consuming all your CPU. It makes this slightly less accurate, but is worth it.
-                //You can remove this line and it will still work (better), your CPU just climbs on certain OSes.
-                //FYI on some OS's this can cause pretty bad stuttering. Scroll down and have a look at different peoples' solutions to this.
-                try {Thread.sleep(1);} catch(Exception e) {}
-                now = System.nanoTime();
-            }
-
-            for (Snake snake : snakes.values()) {
-                if(snake.isSpeedBoost()){
-                    snake.setBoostSpeedCounter(snake.getBoostSpeedCounter() + 1);
-                    if(snake.getBoostSpeedCounter() >= 400){
-                        snake.setSpeedBoost(false);
-                        snake.setSpeed(snake.getBaseSpeed());
-                        snake.setBoostSpeedCounter(0);
-                    }
-                }else{
-                    snake.setSpeed(snake.getBaseSpeed());
-                }
-                snake.setSpeedCounter(snake.getSpeedCounter() + snake.getSpeed());
-                if (snake.getSpeedCounter() >= 100 && !snake.isSnakeMoved()) {
-                    //snake moves
-                    snake.setSnakeMoved(true);
-                    snake.move();
-                    snake.setSpeedCounter(0);
-                    snake.setDirectionChanged(false);
-                } else {
-                    //snake doesnt move
-                    snake.setSnakeMoved(false);
-                }
-            }
-            ArrayList<Bullet> bulletsToDelete = new ArrayList<>();
-            for(Bullet bullet : bullets){
-                if(bullet.getSpeedCounter() >= BULLET_SPEED_CYCLE){
-                    bullet.setDeathTimer(bullet.getDeathTimer() + 1);
-                    if(bullet.getDeathTimer() > BULLET_LIFESPAN){
-                        bulletsToDelete.add(bullet);
-                    }
-                    bullet.move();
-                    bullet.setSpeedCounter(0);
-                }
-                bullet.setSpeedCounter(bullet.getSpeedCounter() + bullet.getSpeed());
-            }
-
-            for(int i = 0; i < bulletsToDelete.size(); i++){
-                bullets.remove(bulletsToDelete.get(i));
-            }
+            moveSnakes();
+            moveBullets();
             checkCollisions();
+            spawnPickups();
 
-            //pickup spawning
-            pickupSpawnCountdown++;
-            if (pickupSpawnCountdown >= PICKUP_SPAWN_RATE) {
-                if (pickupCounter < MAXIMUM_PICKUPS) {
-                    for(int i = 0; i < PICKUPS_PER_SPAWN; i++){
-                        int random = generateRandomCoOrd(0, 200);
-                        if(random <= 0){
-                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "SPEED"));
-                        }else if(random <= 10) {
-                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "SUPER_FOOD"));
-                        }else{
-                                pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "FOOD"));
-                            }
-                        pickupCounter ++;
-                    }
-                }
-                pickupSpawnCountdown = 0;
-            }
-            while( now - lastUpdateTime > TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BEFORE_RENDER )
-            {
+            while (now - lastUpdateTime > TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BEFORE_RENDER) {
                 lastUpdateTime += TIME_BETWEEN_UPDATES;
                 updateCount++;
             }
 
-            if ( now - lastUpdateTime > TIME_BETWEEN_UPDATES)
-            {
+            if (now - lastUpdateTime > TIME_BETWEEN_UPDATES) {
                 lastUpdateTime = now - TIME_BETWEEN_UPDATES;
             }
             lastRenderTime = now;
 
             int thisSecond = (int) (lastUpdateTime / 1000000000);
-            if (thisSecond > lastSecondTime)
-            {
-                fps = frameCount;
-                frameCount = 0;
+            if (thisSecond > lastSecondTime) {
                 lastSecondTime = thisSecond;
             }
-            //Thread.sleep(SERVER_TICK);
+            while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < TIME_BETWEEN_UPDATES) {
+                Thread.yield();
+                //This stops the app from consuming all your CPU. It makes this slightly less accurate, but is worth it.
+                //You can remove this line and it will still work (better), your CPU just climbs on certain OSes.
+                //FYI on some OS's this can cause pretty bad stuttering.
+                try {
+                    Thread.sleep(1);
+                } catch (Exception e) {
+                }
+                now = System.nanoTime();
+            }
         }
     }
 
@@ -215,12 +143,77 @@ public class SnakeService {
         snakes.get(playerId).setDirectionChanged(true);
     }
 
+    public void moveSnakes() {
+        for (Snake snake : snakes.values()) {
+            if (snake.isSpeedBoost()) {
+                snake.setBoostSpeedCounter(snake.getBoostSpeedCounter() + 1);
+                if (snake.getBoostSpeedCounter() >= 400) {
+                    snake.setSpeedBoost(false);
+                    snake.setSpeed(snake.getBaseSpeed());
+                    snake.setBoostSpeedCounter(0);
+                }
+            } else {
+                snake.setSpeed(snake.getBaseSpeed());
+            }
+            snake.setSpeedCounter(snake.getSpeedCounter() + snake.getSpeed());
+            if (snake.getSpeedCounter() >= 100 && !snake.isSnakeMoved()) {
+                //snake moves
+                snake.setSnakeMoved(true);
+                snake.move();
+                snake.setSpeedCounter(0);
+                snake.setDirectionChanged(false);
+            } else {
+                //snake doesn't move
+                snake.setSnakeMoved(false);
+            }
+        }
+    }
+
+    public void moveBullets() {
+        ArrayList<Bullet> bulletsToDelete = new ArrayList<>();
+        for (Bullet bullet : bullets) {
+            if (bullet.getSpeedCounter() >= BULLET_SPEED_CYCLE) {
+                bullet.setDeathTimer(bullet.getDeathTimer() + 1);
+                if (bullet.getDeathTimer() > BULLET_LIFESPAN) {
+                    bulletsToDelete.add(bullet);
+                }
+                bullet.move();
+                bullet.setSpeedCounter(0);
+            }
+            bullet.setSpeedCounter(bullet.getSpeedCounter() + bullet.getSpeed());
+        }
+
+        for (int i = 0; i < bulletsToDelete.size(); i++) {
+            bullets.remove(bulletsToDelete.get(i));
+        }
+    }
+
+    public void spawnPickups() {
+        pickupSpawnCountdown++;
+        if (pickupSpawnCountdown >= PICKUP_SPAWN_RATE) {
+            if (pickupCounter < MAXIMUM_PICKUPS) {
+                for (int i = 0; i < PICKUPS_PER_SPAWN; i++) {
+                    int random = generateRandomCoOrd(0, 200);
+                    if (random <= 0) {
+                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "SPEED"));
+                    } else if (random <= 10) {
+                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "SUPER_FOOD"));
+                    } else {
+                        pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "FOOD"));
+                    }
+                    pickupCounter++;
+                }
+            }
+            pickupSpawnCountdown = 0;
+        }
+    }
+
     public void checkCollisions() {
         ArrayList<String> keysToDelete = new ArrayList<>();
 
         //boundary collision
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
-            if(snakesBase.getValue().head().getX() <= 0 ||  snakesBase.getValue().head().getX() >= 990 || snakesBase.getValue().head().getY() <= 0 ||  snakesBase.getValue().head().getY() >= 990){
+            if (snakesBase.getValue().head().getX() <= 0 || snakesBase.getValue().head().getX() >= 990 || snakesBase.getValue().head().getY() <= 0 || snakesBase.getValue().head().getY() >= 990) {
                 keysToDelete.add(snakesBase.getKey());
                 break;
             }
@@ -228,29 +221,33 @@ public class SnakeService {
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().getSnakeSegments().get(0).getX() == pickups.get(i).getX() && snakesBase.getValue().getSnakeSegments().get(0).getY() == pickups.get(i).getY()) {
-                    if(pickups.get(i).getType().equals("FOOD")){
-                        snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * BULLET_SPEED_INCREMENTER);
-                        snakesBase.getValue().addSegment();
-                        pickups.remove(pickups.get(i));
-                        pickupCounter--;
-                    }else if(pickups.get(i).getType().equals("SPEED")){
-                        snakesBase.getValue().setBoostSpeedCounter(0);
-                        snakesBase.getValue().setSpeed( snakesBase.getValue().getSpeed() * 4);
-                        snakesBase.getValue().setSpeedBoost(true);
-                        pickups.remove(pickups.get(i));
-                        pickupCounter--;
-                    }else if(pickups.get(i).getType().equals("SUPER_FOOD")){
-                        snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * Math.pow(BULLET_SPEED_INCREMENTER,  SUPER_FOOD_GROW_AMOUNT));
-                        for(int j = 0; j < SUPER_FOOD_GROW_AMOUNT; j++){
+                    switch (pickups.get(i).getType()) {
+                        case "FOOD":
+                            snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * BULLET_SPEED_INCREMENTER);
                             snakesBase.getValue().addSegment();
-                        }
-                        pickups.remove(pickups.get(i));
-                        pickupCounter--;
+                            pickups.remove(pickups.get(i));
+                            pickupCounter--;
+                            break;
+                        case "SPEED":
+                            snakesBase.getValue().setBoostSpeedCounter(0);
+                            snakesBase.getValue().setSpeed(snakesBase.getValue().getSpeed() * 4);
+                            snakesBase.getValue().setSpeedBoost(true);
+                            pickups.remove(pickups.get(i));
+                            pickupCounter--;
+                            break;
+                        case "SUPER_FOOD":
+                            snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * Math.pow(BULLET_SPEED_INCREMENTER, SUPER_FOOD_GROW_AMOUNT));
+                            for (int j = 0; j < SUPER_FOOD_GROW_AMOUNT; j++) {
+                                snakesBase.getValue().addSegment();
+                            }
+                            pickups.remove(pickups.get(i));
+                            pickupCounter--;
+                            break;
                     }
                 }
             }
-            for(Bullet bullet: bullets){
-                if(didCollide(bullet.getX(), bullet.getY(), snakesBase.getValue().head().getX(), snakesBase.getValue().head().getY(), bullet.getDir(), snakesBase.getValue().getDir())){
+            for (Bullet bullet : bullets) {
+                if (didCollide(bullet.getX(), bullet.getY(), snakesBase.getValue().head().getX(), snakesBase.getValue().head().getY(), bullet.getDir(), snakesBase.getValue().getDir())) {
                     keysToDelete.add(snakesBase.getKey());
                 }
             }
@@ -261,7 +258,7 @@ public class SnakeService {
                         continue;
                     }
                     if (snakesBase.getValue().head().getX() == snakesCheck.getValue().getSnakeSegments().get(i).getX() && snakesBase.getValue().head().getY() == snakesCheck.getValue().getSnakeSegments().get(i).getY()) {
-                        if(!snakesBase.getKey().equals(snakesCheck.getKey())){
+                        if (!snakesBase.getKey().equals(snakesCheck.getKey())) {
                             growSnakesOnCollision(snakesCheck.getValue(), snakesBase.getValue().getLength());
                         }
                         keysToDelete.add(snakesBase.getKey());
@@ -276,21 +273,21 @@ public class SnakeService {
         }
     }
 
-    public void growSnakesOnCollision(Snake snakeToGrow, int amount){
-        for(int i = 0; i < amount; i ++){
+    public void growSnakesOnCollision(Snake snakeToGrow, int amount) {
+        for (int i = 0; i < amount; i++) {
             snakeToGrow.addSegment();
         }
     }
 
-    public void fireBullet(String playerId){
+    public void fireBullet(String playerId) {
         Snake snakeThatShot = snakes.get(playerId);
 
         int xIncrement = 0;
         int yIncrement = 0;
 
-        if(snakeThatShot !=null){
+        if (snakeThatShot != null) {
             snakeThatShot.setBaseSpeed(snakeThatShot.getBaseSpeed() / BULLET_SPEED_INCREMENTER);
-            switch(snakeThatShot.getDirection()){
+            switch (snakeThatShot.getDirection()) {
                 case "up":
                     yIncrement = -20;
                     break;
@@ -308,45 +305,45 @@ public class SnakeService {
             }
 
             Bullet bullet = new Bullet(snakeThatShot.head().getX() + xIncrement, snakeThatShot.head().getY() + yIncrement, snakeThatShot.getDirection(), 50);
-            if(snakeThatShot.getLength()  < 3){
+            if (snakeThatShot.getLength() < 3) {
                 return;
-            }else{
+            } else {
                 snakeThatShot.removeTail();
             }
             bullets.add(bullet);
         }
     }
 
-    public boolean didCollide(int bulletX, int bulletY, int snakeX, int snakeY, String bulletDir, String snakeDir){
+    public boolean didCollide(int bulletX, int bulletY, int snakeX, int snakeY, String bulletDir, String snakeDir) {
         boolean collision = false;
-        if(bulletX == snakeX && bulletY == snakeY){
-           return true;
+        if (bulletX == snakeX && bulletY == snakeY) {
+            return true;
         }
-        switch (bulletDir){
+        switch (bulletDir) {
             case "up":
-                if(snakeDir.equals("down") ){
-                    if(bulletX == snakeX && (bulletY + 10) == snakeY){
+                if (snakeDir.equals("down")) {
+                    if (bulletX == snakeX && (bulletY + 10) == snakeY) {
                         collision = true;
                     }
                 }
                 break;
             case "down":
-                if(snakeDir.equals("up")){
-                    if(bulletX == snakeX && (bulletY - 10) == snakeY){
+                if (snakeDir.equals("up")) {
+                    if (bulletX == snakeX && (bulletY - 10) == snakeY) {
                         collision = true;
                     }
                 }
                 break;
             case "left":
-                if(snakeDir.equals("right")){
-                    if((bulletX+10) == snakeX && bulletY == snakeY){
+                if (snakeDir.equals("right")) {
+                    if ((bulletX + 10) == snakeX && bulletY == snakeY) {
                         collision = true;
                     }
                 }
                 break;
             case "right":
-                if(snakeDir.equals("left")){
-                    if((bulletX-10) == snakeX && (bulletY + 10) == snakeY){
+                if (snakeDir.equals("left")) {
+                    if ((bulletX - 10) == snakeX && (bulletY + 10) == snakeY) {
                         collision = true;
                     }
                 }
