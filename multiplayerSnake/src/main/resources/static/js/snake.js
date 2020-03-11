@@ -42,6 +42,7 @@ function connect() {
       let jsonReturn = JSON.parse(status.body); //run every time server is sent a message on this channel
       let snakesJSON = jsonReturn.snakes;
       let pickupsJSON = jsonReturn.pickups;
+      let bulletsJSON = jsonReturn.bullets;
       ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
       ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
       ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -49,7 +50,7 @@ function connect() {
       ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
       ctx.lineWidth = 1;
       for (let j = 0; j < pickupsJSON.length; j++) {
-        displayPickups(
+        displayEntity(
           pickupsJSON[j].x,
           pickupsJSON[j].y,
           pickupsJSON[j].colour
@@ -57,13 +58,20 @@ function connect() {
       }
       for (let i = 0; i < snakesJSON.length; i++) {
         for (let j = 0; j < snakesJSON[i].snakeSegments.length; j++) {
-          displaySnakes(
+          displayEntity(
             snakesJSON[i].snakeSegments[j].x,
             snakesJSON[i].snakeSegments[j].y,
             snakesJSON[i].playerColour
           );
         }
       }
+      for (let i = 0; i < bulletsJSON.length; i++) {
+                displayEntity(
+                  bulletsJSON[i].x,
+                  bulletsJSON[i].y,
+                  '#f0697b'
+                );
+            }
     });
     moveSnake();
     getSnakeDetails();
@@ -93,9 +101,11 @@ function closingCode() {
   return null;
 }
 
-let interval = setInterval(changeDirection, 5);
+let interval = setInterval(keyBoardInput, 5);
 
-function changeDirection() {
+
+
+function keyBoardInput() {
   document.onkeydown = function(event) {
     let keyCode,
       changeD = "Error";
@@ -128,6 +138,12 @@ function changeDirection() {
         changeD = "down";
         sendKeyCode = true;
         break;
+      case 32:
+      event.preventDefault();
+         stompClient.send(
+            "/app/" + user.username + "/shoot"
+          );
+      break;
       default:
         console.log("UNRECOGNISED KEYCODE: " + keyCode);
         break;
@@ -147,7 +163,7 @@ function getSnakeDetails() {
   setTimeout(getSnakeDetails, 5);
 }
 
-function displaySnakes(x, y, colour) {
+function displayEntity(x, y, colour) {
   ctx.fillStyle = colour;
   // Set the border colour of the snake part
   ctx.strokestyle = SNAKE_BORDER_COLOUR;
