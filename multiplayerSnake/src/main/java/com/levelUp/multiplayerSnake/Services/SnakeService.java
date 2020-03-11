@@ -100,14 +100,8 @@ public class SnakeService {
         snakes.remove(playerId);
         Playerscores.add(player.getScoreCur());
         if(numberOfPlayers ==0){
-        
-           /*get high score details
-           1. read current high score from file
-           2. compare it with the highest score
-           */
           Collections.sort(Playerscores, Collections.reverseOrder());
-          checkHighScore(Playerscores.get(0));
-           
+          checkHighScore(Playerscores.get(0));  
         }
     }
 
@@ -128,13 +122,12 @@ public class SnakeService {
     private void updateHighscore(Integer curHighScore) {
 
         try {
-            FileWriter writer = new FileWriter("src/main/resources/static/highscore.txt", false);
+            FileWriter writer = new FileWriter("src/main/resources/static/js/highscore.txt", false);
             FileWriter writer1 = new FileWriter("doc/highscore.txt", false);
             writer.write(String.valueOf(curHighScore) );
             writer1.write(String.valueOf(curHighScore) );
             writer.close();
             writer1.close();
-            System.out.println("done");
         } catch (IOException e) {
             e.printStackTrace();
         }

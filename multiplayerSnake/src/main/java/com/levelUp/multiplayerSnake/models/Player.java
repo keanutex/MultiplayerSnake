@@ -6,7 +6,6 @@ public class Player {
 	private String name;
 	private int scoreCur;
 	private int scoreMax;
-	private ArrayList<Integer> score = new ArrayList<>();
 	
 	public Player(String name) {
 		
