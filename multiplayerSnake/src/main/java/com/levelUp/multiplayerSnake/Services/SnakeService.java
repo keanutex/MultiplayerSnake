@@ -8,7 +8,6 @@ import java.util.*;
 @Service
 public class SnakeService {
 
-
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<>();
 
@@ -17,7 +16,7 @@ public class SnakeService {
 
     final static int SERVER_TICK = 20;
 
-
+    //BULLETS
     final static double BULLET_SPEED_INCREMENTER = 0.995;
     final static int BULLET_LIFESPAN = 50;
     final static int BULLET_SPEED_CYCLE = 100;
@@ -211,13 +210,12 @@ public class SnakeService {
     public void checkCollisions() {
         ArrayList<String> keysToDelete = new ArrayList<>();
 
-        //boundary collision
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
+            //boundary collision
             if (snakesBase.getValue().head().getX() <= 0 || snakesBase.getValue().head().getX() >= 990 || snakesBase.getValue().head().getY() <= 0 || snakesBase.getValue().head().getY() >= 990) {
                 keysToDelete.add(snakesBase.getKey());
                 break;
             }
-
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().getSnakeSegments().get(0).getX() == pickups.get(i).getX() && snakesBase.getValue().getSnakeSegments().get(0).getY() == pickups.get(i).getY()) {
@@ -246,6 +244,7 @@ public class SnakeService {
                     }
                 }
             }
+            //bullet collisions
             for (Bullet bullet : bullets) {
                 if (didCollide(bullet.getX(), bullet.getY(), snakesBase.getValue().head().getX(), snakesBase.getValue().head().getY(), bullet.getDir(), snakesBase.getValue().getDir())) {
                     keysToDelete.add(snakesBase.getKey());
@@ -266,7 +265,6 @@ public class SnakeService {
                 }
             }
         }
-
         //deleting the snakes that collided
         for (int i = 0; i < keysToDelete.size(); i++) {
             removePlayer(keysToDelete.get(i));
@@ -350,5 +348,12 @@ public class SnakeService {
                 break;
         }
         return collision;
+    }
+
+    public void clearGameState(){
+        snakes.clear();
+        pickups.clear();
+        bullets.clear();
+
     }
 }
