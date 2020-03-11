@@ -27,8 +27,14 @@ public class SnakeController {
         }
         isRunning = true;
         //gameLoop
-        snakeService.gameLoop();
+        snakeService.runGameLoop();
     }
+    @MessageMapping("/{playerId}/shoot")
+    @SendTo("/snake/{playerId}/shoot")
+    public void shoot(@DestinationVariable String playerId) {
+        snakeService.fireBullet(playerId);
+    }
+
 
     @MessageMapping("/newPlayer/{playerId}")
     @SendTo("/snake/newPlayer/{playerId}")
