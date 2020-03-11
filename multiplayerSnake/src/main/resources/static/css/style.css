@@ -1,0 +1,336 @@
+@keyframes movesnake {
+  0% {
+    transform: translateX(10rem);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.9;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateX(-10rem);
+    opacity: 0;
+  }
+}
+
+@keyframes animate-logo-0 {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes animate-logo-1 {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes animate-logo-2 {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes animate-logo-3 {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 62.5%; /* 1rem = 10px*/
+  background-color: #f2f2f2;
+  text-align: center;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.body-game {
+  overflow: scroll;
+}
+
+/* -------------------------- PAGE STYLE ---------------------------- */
+
+.img-box {
+  width: 30rem;
+  height: 21rem;
+  position: relative;
+  margin: 0 auto;
+}
+
+.log-box-img {
+  width: 100%;
+  display: block;
+  position: absolute;
+  top: 10%;
+  left: 0;
+}
+
+.log-box-img {
+  animation: animate-logo-0 1.5s infinite ease-in-out;
+}
+.log-box-img-1 {
+  animation: animate-logo-1 1.5s infinite ease-in-out;
+}
+.log-box-img-2 {
+  animation: animate-logo-2 1.5s infinite ease-in-out;
+}
+.log-box-img-3 {
+  animation: animate-logo-3 1.5s infinite ease-in-out;
+}
+
+.heading-primary {
+  font-size: 3rem;
+  font-family: "Rage";
+  font-weight: 100;
+  color: #4a472e;
+  text-transform: uppercase;
+  margin-bottom: 6rem;
+}
+
+.shadowbox {
+  position: absolute;
+  z-index: -1000;
+}
+
+.shadowbox-1 {
+  transform: scale(2.3) translate(8%, 28%);
+  opacity: 0.05;
+}
+.shadowbox-2 {
+  transform: scale(2.3) translate(60%, 28%);
+  opacity: 0.05;
+}
+
+/* -------------------------- FORM ---------------------------- */
+
+form {
+  position: relative;
+  font-size: 0;
+  margin-left: 2.5rem;
+}
+
+.form-input::placeholder {
+  letter-spacing: 0.2rem;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.form-colorbox {
+  margin-bottom: 0;
+  height: 5.75rem;
+  width: 3rem;
+  position: absolute;
+  top: -0.25rem;
+  left: -3rem;
+}
+
+.form-colorpicker {
+  width: 100%;
+  height: 100%;
+  border: none;
+  cursor: pointer;
+}
+
+.form-box {
+  width: 20rem;
+  height: 5rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.form-box p {
+  display: inline-block;
+  position: absolute;
+  top: -2rem;
+  left: -16rem;
+  font-size: 1rem;
+  font-family: "Viner Hand ITC", "sans";
+  color: #bba398;
+  transform: rotate(-30deg);
+}
+
+.form-text-arrow-box {
+  position: absolute;
+  top: -1rem;
+  left: -13rem;
+  width: 10rem;
+  opacity: 0.5;
+}
+
+.form-text-arrow {
+  width: 100%;
+  height: 100%;
+}
+
+.form-input {
+  width: 100%;
+  height: 100%;
+  padding: 2rem 1rem;
+  border: #638268 solid 1px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  text-align: center;
+  color: #638268;
+}
+
+.form-input:focus {
+  outline: none;
+}
+
+.form-input:placeholder-shown + .form-label {
+  opacity: 0;
+  transform: translateY(-4rem);
+}
+
+.form-label {
+  display: block;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #638268;
+  margin-top: 1rem;
+  opacity: 1;
+  transform: translateY(-8rem);
+  transition: all 0.2s;
+}
+/* -------------------------- SNAKE ---------------------------- */
+
+.snake-square {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-color: #638268;
+  position: relative;
+  animation: movesnake 3s infinite linear;
+}
+
+.snake-square::before,
+.snake-square::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+}
+
+.snake-square::before {
+  left: -1.2rem;
+}
+
+.snake-square::after {
+  left: 1.2rem;
+}
+
+/* -------------------------- submit btn ---------------------------- */
+
+.btn-submit span {
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.btn-submit {
+  display: inline-block;
+  padding: 0.7rem;
+  font-size: 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin-right: 2rem;
+  transition: all ease 0.3s;
+  color: #638268;
+  letter-spacing: 2px;
+  text-emphasis: bold;
+  border: none;
+}
+
+.btn-submit:hover {
+  transform: translateY(-1rem);
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-submit:active {
+  transform: translateY(-0.5rem);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.submit-box {
+  margin-bottom: 1rem;
+}
