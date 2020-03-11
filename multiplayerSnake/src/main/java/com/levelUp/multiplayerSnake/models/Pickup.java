@@ -26,15 +26,7 @@ public class Pickup {
                 break;
         }
     }
-
-    @Override
-    public String toString() {
-        return "Pickup{" +
-                "x=" + getX() +
-                ", y=" + getY() +
-                '}';
-    }
-
+    
     public int getX() {
         return x;
     }
@@ -65,5 +57,13 @@ public class Pickup {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Pickup{" +
+                "x=" + getX() +
+                ", y=" + getY() +
+                '}';
     }
 }

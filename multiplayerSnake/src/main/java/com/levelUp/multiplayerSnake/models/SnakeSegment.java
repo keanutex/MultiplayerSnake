@@ -10,14 +10,6 @@ public class SnakeSegment {
     this.setY(y);
   }
 
-  @Override
-  public String toString() {
-    return "SnakeSegment{" +
-            "x=" + getX() +
-            ", y=" + getY() +
-            '}';
-  }
-
   public int getX() {
     return x;
   }
@@ -32,5 +24,13 @@ public class SnakeSegment {
 
   public void setY(int y) {
     this.y = y;
+  }
+
+  @Override
+  public String toString() {
+    return "SnakeSegment{" +
+            "x=" + getX() +
+            ", y=" + getY() +
+            '}';
   }
 }
