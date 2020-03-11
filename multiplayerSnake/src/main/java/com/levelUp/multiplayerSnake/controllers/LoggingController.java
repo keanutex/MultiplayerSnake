@@ -29,7 +29,6 @@ public class LoggingController {
 
     @RequestMapping(path="/loggingDetails")
     public void getLogging(LoggingService.messageTypes type,String name){
-        System.out.println("logging called ");
         this.template.convertAndSend("/logging/loggingDetails",loggingService.addMessage(type,name));
     }
 }

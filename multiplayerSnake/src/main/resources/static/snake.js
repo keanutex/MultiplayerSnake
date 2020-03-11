@@ -72,13 +72,14 @@ function connect() {
           );
         }
       }
-        stompClient.subscribe('/logging/loggingDetails',(status)=> {
-          console.log(status.body);
-                document.getElementById('loggingArea').value += status.body +'\n';
-        });
-        stompClient.subscribe('/messaging/message', (status) => {
-          document.getElementById("loggingArea").value += status.body  +'\n';
-        });
+    });
+    stompClient.subscribe('/logging/loggingDetails',(status)=> {
+      console.log(status.body);
+      document.getElementById('loggingArea').value += status.body +'\n';
+    });
+    stompClient.subscribe('/messaging/message', (status) => {
+
+      document.getElementById("loggingArea").value += status.body  +'\n';
     });
     moveSnake();
     getSnakeDetails();
