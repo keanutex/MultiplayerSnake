@@ -93,19 +93,22 @@
       
         <p>&nbsp;</p>
             <div id="list">
-              <h1>HIGH SCORE</h1>
-            <h1><iframe src="js/highscore.txt" frameborder="0" height="200"
+              <h1 style="color:greenyellow; font-size:25px;">HIGH SCORE</h1>
+            <h1><iframe id="myFrame" src="js/highscore.txt" frameborder="0" height="200"
             width="5%"></iframe></h1>
         </div>
     </div>
 
     <script src="./js/index.js"></script>
   </body>
-  <style>
-#list  h1 {
-    font: arial;
-    font-size: 260%;
+  <script>
+    var frame = document.getElementById('myFrame');
+        frame.onload = function () {
+            var body = frame.contentWindow.document.querySelector('body');
+            body.style.color = 'red';
+            body.style.fontSize = '30px';
+            body.style.lineHeight = '20px';
+        };
+    </script>
     
-}
-  </style>
 </html>
