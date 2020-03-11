@@ -1,6 +1,8 @@
 package com.levelUp.multiplayerSnake.Services;
 
 import com.levelUp.multiplayerSnake.models.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -15,7 +17,6 @@ public class SnakeService {
 
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<String, Snake>();
-
     ArrayList<Pickup> pickups = new ArrayList<>();
     private ArrayList<Integer> Playerscores = new ArrayList<>(); // List for storing scores
     int serverTick = 20;
@@ -25,6 +26,8 @@ public class SnakeService {
     Player player;
     int foodScore=5;
     int speedScore=10;
+    @Autowired
+    HighscoreService highscore;
 
     public void gameLoop() throws InterruptedException {
         while (true) {
@@ -98,39 +101,7 @@ public class SnakeService {
     public void removePlayer(String playerId) {
         numberOfPlayers--;
         snakes.remove(playerId);
-        Playerscores.add(player.getScoreCur());
-        if(numberOfPlayers ==0){
-          Collections.sort(Playerscores, Collections.reverseOrder());
-          checkHighScore(Playerscores.get(0));  
-        }
-    }
-
-    private void checkHighScore(Integer curHighScore) {
-        Scanner scanner;
-        int HighScore = 0;
-        try {
-            scanner = new Scanner(new File("doc/highscore.txt"));
-            while(scanner.hasNextInt())
-            {   HighScore = scanner.nextInt();}
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();}
-        if(HighScore<curHighScore)
-        {updateHighscore(curHighScore);}
-
-    }
-
-    private void updateHighscore(Integer curHighScore) {
-
-        try {
-            FileWriter writer = new FileWriter("src/main/resources/static/js/highscore.txt", false);
-            FileWriter writer1 = new FileWriter("doc/highscore.txt", false);
-            writer.write(String.valueOf(curHighScore) );
-            writer1.write(String.valueOf(curHighScore) );
-            writer.close();
-            writer1.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        highscore.savePlayerScore(player, numberOfPlayers);
     }
 
     public void setColour(String playerId, String colour) {
@@ -164,14 +135,15 @@ public class SnakeService {
                 if (snakesBase.getValue().snakeSegments.get(0).x == pickups.get(i).x && snakesBase.getValue().snakeSegments.get(0).y == pickups.get(i).y) {
 
                     if(pickups.get(i).type.equals("food")){
-                        player.setScoreCur(foodScore);
+                        highscore.updatePlayerScore(player, "food");
                         snakesBase.getValue().baseSpeed *= 0.995;
                         System.out.println(snakesBase.getValue().baseSpeed);
                         snakesBase.getValue().addSegment();
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
                     }else if(pickups.get(i).type.equals("speed")){
-                        player.setScoreCur(speedScore);
+                        //highscore.savePlayerScore(player, numberOfPlayers);
+                        highscore.updatePlayerScore(player, "speed");
                         snakesBase.getValue().boostSpeedCounter= 0;
                         snakesBase.getValue().speed *= 4;
                         snakesBase.getValue().speedBoost =true;
