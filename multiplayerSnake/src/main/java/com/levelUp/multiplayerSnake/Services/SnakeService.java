@@ -1,7 +1,10 @@
 package com.levelUp.multiplayerSnake.Services;
 
 import com.levelUp.multiplayerSnake.controllers.LoggingController;
-import com.levelUp.multiplayerSnake.models.*;
+import com.levelUp.multiplayerSnake.models.Bullet;
+import com.levelUp.multiplayerSnake.models.Pickup;
+import com.levelUp.multiplayerSnake.models.Snake;
+import com.levelUp.multiplayerSnake.models.UpdatePayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
