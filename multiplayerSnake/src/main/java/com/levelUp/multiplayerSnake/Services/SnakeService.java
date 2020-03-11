@@ -30,6 +30,7 @@ public class SnakeService {
     final static int MAXIMUM_PICKUPS = 100;
     final static int PICKUPS_PER_SPAWN = 2;
     final static double PICKUP_SPAWN_RATE = 4*SERVER_TICK;
+    final static int SUPER_FOOD_GROW_AMOUNT = 10;
 
     public void gameLoop() throws InterruptedException {
         while (true) {
@@ -79,14 +80,14 @@ public class SnakeService {
             if (pickupSpawnCountdown >= PICKUP_SPAWN_RATE) {
                 if (pickupCounter < MAXIMUM_PICKUPS) {
                     for(int i = 0; i < PICKUPS_PER_SPAWN; i++){
-                        int random = generateRandomCoOrd(0, 150);
+                        int random = generateRandomCoOrd(0, 200);
                         if(random <= 0){
-                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "speed"));
-                        }else if (random <= 20){
-                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "shoot"));
+                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "SPEED"));
+                        }else if(random <= 10) {
+                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980),this.generateRandomCoOrd(10, 980), "SUPER_FOOD"));
                         }else{
-                            pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "food"));
-                        }
+                                pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "FOOD"));
+                            }
                         pickupCounter ++;
                     }
                 }
@@ -157,16 +158,22 @@ public class SnakeService {
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().getSnakeSegments().get(0).getX() == pickups.get(i).getX() && snakesBase.getValue().getSnakeSegments().get(0).getY() == pickups.get(i).getY()) {
-                    if(pickups.get(i).getType().equals("food")){
+                    if(pickups.get(i).getType().equals("FOOD")){
                         snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * BULLET_SPEED_INCREMENTER);
-                        System.out.println(snakesBase.getValue().getBaseSpeed());
                         snakesBase.getValue().addSegment();
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
-                    }else if(pickups.get(i).getType().equals("speed")){
+                    }else if(pickups.get(i).getType().equals("SPEED")){
                         snakesBase.getValue().setBoostSpeedCounter(0);
                         snakesBase.getValue().setSpeed( snakesBase.getValue().getSpeed() * 4);
                         snakesBase.getValue().setSpeedBoost(true);
+                        pickups.remove(pickups.get(i));
+                        pickupCounter--;
+                    }else if(pickups.get(i).getType().equals("SUPER_FOOD")){
+                        snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * Math.pow(BULLET_SPEED_INCREMENTER,  SUPER_FOOD_GROW_AMOUNT));
+                        for(int j = 0; j < SUPER_FOOD_GROW_AMOUNT; j++){
+                            snakesBase.getValue().addSegment();
+                        }
                         pickups.remove(pickups.get(i));
                         pickupCounter--;
                     }

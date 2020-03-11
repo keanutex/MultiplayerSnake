@@ -12,17 +12,17 @@ public class Pickup {
         this.setY(y);
         this.setType(type);
         switch (type) {
-            case "food":
-                this.setColour("#FFD700");
+            case "FOOD":
+                this.setColour("#ffdb78");
                 break;
-            case "speed":
+            case "SPEED":
                 this.setColour("#000000");
                 break;
-            case "shoot":
+            case "SHOOT":
                 this.setColour("#949494");
                 break;
-            case "invincible":
-
+            case "SUPER_FOOD":
+                this.setColour("#ffbe0d");
                 break;
         }
     }
