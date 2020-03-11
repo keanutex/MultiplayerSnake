@@ -173,8 +173,8 @@ public class SnakeService {
                 }
             }
             for(Bullet bullet: bullets){
-                if(bullet.getX() == snakesBase.getValue().head().getX() && bullet.getY() == snakesBase.getValue().head().getY()){
-                    snakes.remove(snakesBase.getKey());
+                if(didCollide(bullet.getX(), bullet.getY(), snakesBase.getValue().head().getX(), snakesBase.getValue().head().getY(), bullet.getDir(), snakesBase.getValue().getDir())){
+                    keysToDelete.add(snakesBase.getKey());
                 }
             }
             //snake on snake collisions
@@ -211,7 +211,6 @@ public class SnakeService {
         int xIncrement = 0;
         int yIncrement = 0;
 
-
         if(snakeThatShot !=null){
             snakeThatShot.setBaseSpeed(snakeThatShot.getBaseSpeed() / BULLET_SPEED_INCREMENTER);
             switch(snakeThatShot.getDirection()){
@@ -239,5 +238,43 @@ public class SnakeService {
             }
             bullets.add(bullet);
         }
+    }
+
+    public boolean didCollide(int bulletX, int bulletY, int snakeX, int snakeY, String bulletDir, String snakeDir){
+        boolean collision = false;
+        if(bulletX == snakeX && bulletY == snakeY){
+           return true;
+        }
+        switch (bulletDir){
+            case "up":
+                if(snakeDir.equals("down") ){
+                    if(bulletX == snakeX && (bulletY + 10) == snakeY){
+                        collision = true;
+                    }
+                }
+                break;
+            case "down":
+                if(snakeDir.equals("up")){
+                    if(bulletX == snakeX && (bulletY - 10) == snakeY){
+                        collision = true;
+                    }
+                }
+                break;
+            case "left":
+                if(snakeDir.equals("right")){
+                    if((bulletX+10) == snakeX && bulletY == snakeY){
+                        collision = true;
+                    }
+                }
+                break;
+            case "right":
+                if(snakeDir.equals("left")){
+                    if((bulletX-10) == snakeX && (bulletY + 10) == snakeY){
+                        collision = true;
+                    }
+                }
+                break;
+        }
+        return collision;
     }
 }

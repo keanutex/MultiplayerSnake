@@ -107,10 +107,6 @@ public class Snake {
         return snakeSegments;
     }
 
-    public void setSnakeSegments(ArrayList<SnakeSegment> snakeSegments) {
-        this.snakeSegments = snakeSegments;
-    }
-
     public String getDir() {
         return dir;
     }

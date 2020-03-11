@@ -11,14 +11,19 @@ public class Pickup {
         this.setX(x);
         this.setY(y);
         this.setType(type);
-        if(type.equals("food")){
-            this.setColour("#FFD700");
-        }else if(type.equals("speed")){
-            this.setColour("#000000");
-        }else if(type.equals("shoot")){
-            this.setColour("#949494");
-        }else if(type.equals("invincible")){
+        switch (type) {
+            case "food":
+                this.setColour("#FFD700");
+                break;
+            case "speed":
+                this.setColour("#000000");
+                break;
+            case "shoot":
+                this.setColour("#949494");
+                break;
+            case "invincible":
 
+                break;
         }
     }
 
