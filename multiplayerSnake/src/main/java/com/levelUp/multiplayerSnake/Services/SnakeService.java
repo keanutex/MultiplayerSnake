@@ -31,9 +31,60 @@ public class SnakeService {
     final static int PICKUPS_PER_SPAWN = 2;
     final static double PICKUP_SPAWN_RATE = 4*SERVER_TICK;
     final static int SUPER_FOOD_GROW_AMOUNT = 10;
+    public boolean isRunning = true;
 
-    public void gameLoop() throws InterruptedException {
-        while (true) {
+    //GAME LOOP
+    //This value would probably be stored elsewhere.
+    final double GAME_HERTZ = 30.0;
+    //Calculate how many ns each frame should take for our target game hertz.
+    final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_HERTZ;
+    //At the very most we will update the game this many times before a new render.
+    //If you're worried about visual hitches more than perfect timing, set this to 1.
+    final int MAX_UPDATES_BEFORE_RENDER = 5;
+    //We will need the last update time.
+    double lastUpdateTime = System.nanoTime();
+    //Store the last time we rendered.
+    double lastRenderTime = System.nanoTime();
+
+    //If we are able to get as high as this FPS, don't render again.
+    final double TARGET_FPS = 60;
+    final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
+
+    //Simple way of finding FPS.
+    int lastSecondTime = (int) (lastUpdateTime / 1000000000);
+
+
+    //game loop
+    private int fps = 60;
+    private int frameCount = 0;
+
+    public void runGameLoop(){
+        Thread loop = new Thread()
+        {
+            public void run()
+            {
+                gameLoop();
+            }
+        };
+        loop.start();
+    }
+
+    public void gameLoop(){
+
+        while (isRunning) {
+            double now = System.nanoTime();
+            int updateCount = 0;
+
+            while ( now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < TIME_BETWEEN_UPDATES)
+            {
+                Thread.yield();
+                //This stops the app from consuming all your CPU. It makes this slightly less accurate, but is worth it.
+                //You can remove this line and it will still work (better), your CPU just climbs on certain OSes.
+                //FYI on some OS's this can cause pretty bad stuttering. Scroll down and have a look at different peoples' solutions to this.
+                try {Thread.sleep(1);} catch(Exception e) {}
+                now = System.nanoTime();
+            }
+
             for (Snake snake : snakes.values()) {
                 if(snake.isSpeedBoost()){
                     snake.setBoostSpeedCounter(snake.getBoostSpeedCounter() + 1);
@@ -93,7 +144,26 @@ public class SnakeService {
                 }
                 pickupSpawnCountdown = 0;
             }
-            Thread.sleep(SERVER_TICK);
+            while( now - lastUpdateTime > TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BEFORE_RENDER )
+            {
+                lastUpdateTime += TIME_BETWEEN_UPDATES;
+                updateCount++;
+            }
+
+            if ( now - lastUpdateTime > TIME_BETWEEN_UPDATES)
+            {
+                lastUpdateTime = now - TIME_BETWEEN_UPDATES;
+            }
+            lastRenderTime = now;
+
+            int thisSecond = (int) (lastUpdateTime / 1000000000);
+            if (thisSecond > lastSecondTime)
+            {
+                fps = frameCount;
+                frameCount = 0;
+                lastSecondTime = thisSecond;
+            }
+            //Thread.sleep(SERVER_TICK);
         }
     }
 
