@@ -26,6 +26,10 @@ public class LoggingController {
     }
 
     public void getLogging(LoggingService.messageTypes type,String id, String colour){
-        this.template.convertAndSend("/logging/loggingDetails",new LoggingMessage(loggingService.createMessage(type,id),colour));
+        this.template.convertAndSend("/logging/loggingSquare",new LoggingMessage(loggingService.createMessage(type,id),colour));
+    }
+
+    public void getLoggingSquare(LoggingService.messageTypes type,String id, String colour){
+        this.template.convertAndSend("/logging/loggingCircles",new LoggingMessage(loggingService.createMessage(type,id),colour));
     }
 }

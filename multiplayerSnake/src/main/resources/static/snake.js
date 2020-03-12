@@ -81,7 +81,7 @@ function connect() {
                       );
                   }
     });
-    stompClient.subscribe('/logging/loggingDetails',(status)=> {
+    stompClient.subscribe('/logging/loggingSquare',(status)=> {
       const body =JSON.parse(status.body);
       document.getElementById('loggingArea').innerHTML += '<p style=color:' + body.colour + '>' + body.message + '</p>';
     });
