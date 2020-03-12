@@ -90,12 +90,13 @@ function connect() {
                   }
     });
     stompClient.subscribe('/logging/loggingDetails',(status)=> {
-      console.log(status.body);
-      document.getElementById('loggingArea').value += status.body +'\n';
+      const body =JSON.parse(status.body);
+      document.getElementById('loggingArea').innerHTML += '<p style=color:' + body.colour + '>' + body.message + '</p>';
     });
     stompClient.subscribe('/messaging/message', (status) => {
-
-      document.getElementById("loggingArea").value += status.body  +'\n';
+      const body =JSON.parse(status.body);
+      console.log(body);
+      document.getElementById("loggingArea").innerHTML += '<p style=color:' + body.colour + '>' + body.name + ':' + body.message + '</p>';
     });
     moveSnake();
     getSnakeDetails();
@@ -256,7 +257,11 @@ function setColour() {
 
 connect();
 function sendMessage(){
-    stompClient.send("/app/addMessage",{},JSON.stringify({userName: user.username, message: document.getElementById("message").value}));
+    stompClient.send("/app/addMessage",{},JSON.stringify({
+         playerId:user.username,
+        username: user.username,
+        message: document.getElementById("message").value}
+      ));
     document.getElementById("message").value = "";
 }
 

@@ -13,7 +13,7 @@ public class LoggingService {
     };
 
 
-    public String addMessage(messageTypes type, String name){
+    public String createMessage(messageTypes type, String name){
 
         switch(type){
             case past50:

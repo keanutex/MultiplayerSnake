@@ -6,6 +6,7 @@
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <link rel="stylesheet" href="css/game.css">
   </head>
   <body>
     <noscript
@@ -35,14 +36,22 @@
               <button id="newsnake" class="btn btn-default" type="submit">
                 New Snake
               </button>
-              <textarea id="loggingArea"  readonly="true"></textarea>
-              <input type="text" id="message">
-              <button type="button" onclick="sendMessage()"> send message</button>
             </div>
           </form>
         </div>
       </div>
-      <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+      <div class="container">
+        <div class="row">
+        <div class="col-2">
+          <div id="loggingArea" class="overflow-auto"></div>
+          <input type="text" id="message">
+          <button type="button" onclick="sendMessage()"> send message</button>
+        </div>
+          <div class="col-10">
+          <canvas id="gameCanvas" width="1000" height="1000" ></canvas>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="/snake.js"></script>
   </body>

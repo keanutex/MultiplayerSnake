@@ -269,13 +269,13 @@ public class SnakeService {
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
             //boundary collision
             if (snakesBase.getValue().head().getX() <= 0 || snakesBase.getValue().head().getX() >= (MAP_SIZE_X - 10) || snakesBase.getValue().head().getY() <= 0 || snakesBase.getValue().head().getY() >= (MAP_SIZE_Y - 10)) {
-                loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getKey());
+                loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                 keysToDelete.add(snakesBase.getKey());
                 break;
             }
             //length check
             if(snakesBase.getValue().getLength()>=50){
-                loggingController.getLogging(LoggingService.messageTypes.past50,snakesBase.getKey());
+                loggingController.getLogging(LoggingService.messageTypes.past50,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
             }
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
@@ -314,6 +314,7 @@ public class SnakeService {
             //Random wall collisions
             for(Wall wall: walls){
                 if(snakesBase.getValue().head().getX() == wall.getX() && snakesBase.getValue().head().getY() == wall.getY()){
+                    loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                     keysToDelete.add(snakesBase.getKey());
                 }
             }
@@ -326,10 +327,10 @@ public class SnakeService {
                     }
                     if (snakesBase.getValue().head().getX() == snakesCheck.getValue().getSnakeSegments().get(i).getX() && snakesBase.getValue().head().getY() == snakesCheck.getValue().getSnakeSegments().get(i).getY()) {
                         if (!snakesBase.getKey().equals(snakesCheck.getKey())) {
-                            loggingController.getLogging(LoggingService.messageTypes.diedToEnemy,snakesBase.getKey());
+                            loggingController.getLogging(LoggingService.messageTypes.diedToEnemy,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                             growSnakesOnCollision(snakesCheck.getValue(), snakesBase.getValue().getLength());
                         } else{
-                            loggingController.getLogging(LoggingService.messageTypes.diedToSelf,snakesBase.getKey());
+                            loggingController.getLogging(LoggingService.messageTypes.diedToSelf,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                         }
                         keysToDelete.add(snakesBase.getKey());
                     }
@@ -425,5 +426,9 @@ public class SnakeService {
         snakes.clear();
         pickups.clear();
         bullets.clear();
+    }
+
+    public Snake getsnake(String playerID){
+        return snakes.get(playerID);
     }
 }
