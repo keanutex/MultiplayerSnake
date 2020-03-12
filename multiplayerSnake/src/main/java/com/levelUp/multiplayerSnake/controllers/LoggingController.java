@@ -25,7 +25,7 @@ public class LoggingController {
         this.template = template;
     }
 
-    public void getLogging(LoggingService.messageTypes type,String name, String colour){
-        this.template.convertAndSend("/logging/loggingDetails",new LoggingMessage(loggingService.createMessage(type,name),colour));
+    public void getLogging(LoggingService.messageTypes type,String id, String colour){
+        this.template.convertAndSend("/logging/loggingDetails",new LoggingMessage(loggingService.createMessage(type,id),colour));
     }
 }
