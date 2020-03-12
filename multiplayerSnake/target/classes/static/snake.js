@@ -92,21 +92,32 @@ function connect() {
     });
     stompClient.subscribe("/leaderboard/updateLeaderboard", (status) => {
       
-      let jsonReturn = JSON.parse(status.body); //run every time server is sent a message on this channel
-      let leaderboardJSON = jsonReturn.leaderboard;
-      console.log(leaderboardJSON[0]);
+      let leaderboardJSON = JSON.parse(status.body); //run every time server is sent a message on this channel
+            console.log(leaderboardJSON);
+            console.log(leaderboardJSON[0]);
+            console.log(leaderboardJSON[0].value)
+            for (var key in leaderboardJSON[0]){
+              console.log("key: " + key + "  value: " + leaderboardJSON[0][key]);
+            }
+      //let leaderboardJSON = jsonReturn.leaderboard;
+     // console.log(jsonReturn[0]);
      // console.log(scoresJSON);
-      /*for (let i = 0; i < leaderboardJSON.length; i++) {
+     /* for (let i = 0; i < leaderboardJSON.length; i++) {
         updateLeaderboard(i, leaderboardJSON[i], scoresJSON[i], playersJSON.length);
       }*/
       let index = 0;
-      let playerCount = Object.keys(leaderboardJSON).length;
-      for (var key in leaderboardJSON){
-        console.log("ran");
-        console.log("key: " + key + "  value: " + leaderboardJSON[key] + "  index:" + index + "  length:" + playerCount);
-        updateLeaderboard(index, key, leaderboardJSON[key], playerCount);
+      let playerCount = leaderboardJSON.length;
+      console.log(playerCount);
+     // let playerCount = Object.keys(leaderboardJSON).length;
+      for (let i = 0; i < leaderboardJSON.length; i++) {      
+      for (var key in leaderboardJSON[i]){
+       // console.log("ran");
+      // console.log(key.key);
+       // console.log("key: " + key + "  value: " + leaderboardJSON[key] + "  index:" + index + "  length:" + playerCount);
+        updateLeaderboard(index, key, leaderboardJSON[i][key], playerCount);
         index ++;
       }
+    }
             console.log("returned from BE") 
    });
 

@@ -22,8 +22,8 @@ public class LeaderboardService {
 			leaderboard.deletePlayer(name);
 		}
 		
-		public Leaderboard getLeaderboard() {
-			return leaderboard;
+		public Object getLeaderboard() {
+			return leaderboard.getSortedLeaderboard();
 		}
 		
 		public void updateScores(ArrayList<String> players, ArrayList<Integer> scores) {
