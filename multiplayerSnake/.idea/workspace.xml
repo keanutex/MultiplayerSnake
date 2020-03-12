@@ -2,7 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e1c069c-d025-432b-acec-f84648858c31" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Snake.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Snake.java" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Wall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/Services/SnakeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/Services/SnakeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Pickup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Pickup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/UpdatePayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/UpdatePayload.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/snake.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/snake.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/controllers/SnakeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/controllers/SnakeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Pickup.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Pickup.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Snake.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Snake.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/SnakeSegment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/SnakeSegment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/UpdatePayload.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/UpdatePayload.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/snake.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/snake.js" afterDir="false" />
+>>>>>>> adding-walls
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +62,46 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.MultiplayerSnakeApplication">
+    <configuration name="MazeGeneration" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.levelUp.multiplayerSnake.MazeGeneration" />
+      <module name="multiplayerSnake" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.levelUp.multiplayerSnake.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MazeGenerator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.levelUp.multiplayerSnake.MazeGenerator" />
+      <module name="multiplayerSnake" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.levelUp.multiplayerSnake.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MultiplayerSnakeApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.levelUp.multiplayerSnake.MultiplayerSnakeApplication" />
+      <module name="multiplayerSnake" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.levelUp.multiplayerSnake.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="MultiplayerSnakeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="multiplayerSnake" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.levelUp.multiplayerSnake.MultiplayerSnakeApplication" />
@@ -55,6 +109,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MultiplayerSnakeApplication" />
+        <item itemvalue="Application.MazeGenerator" />
+        <item itemvalue="Application.MazeGeneration" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -113,14 +174,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="532" y="58" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582779311443" />
+    <state x="721" y="217" key="#com.intellij.ide.util.MemberChooser" timestamp="1583997514907">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="721" y="217" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1583997514907" />
     <state x="807" y="187" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1582779250841">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="807" y="187" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582779250841" />
+<<<<<<< HEAD
     <state x="657" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog" timestamp="1583996746685">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="657" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583996746685" />
+=======
+    <state x="664" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog" timestamp="1583995336620">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="664" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583995336620" />
+>>>>>>> adding-walls
     <state x="751" y="361" width="455" height="318" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583163083521">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -133,49 +205,57 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="429" y="56" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582785889404" />
-    <state width="1877" height="261" key="GridCell.Tab.0.bottom" timestamp="1583313173312">
+    <state width="1877" height="261" key="GridCell.Tab.0.bottom" timestamp="1584000946024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="938" height="261" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
-    <state width="1877" height="261" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583313173312" />
-    <state width="1877" height="261" key="GridCell.Tab.0.center" timestamp="1583313173312">
+    <state width="1877" height="261" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1584000946024" />
+    <state width="1877" height="261" key="GridCell.Tab.0.center" timestamp="1584000946024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="938" height="261" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
-    <state width="1877" height="261" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583313173312" />
-    <state width="1877" height="261" key="GridCell.Tab.0.left" timestamp="1583313173312">
+    <state width="1877" height="261" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1584000946024" />
+    <state width="1877" height="261" key="GridCell.Tab.0.left" timestamp="1584000946024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="938" height="261" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
-    <state width="1877" height="261" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583313173312" />
-    <state width="1877" height="261" key="GridCell.Tab.0.right" timestamp="1583313173312">
+    <state width="1877" height="261" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1584000946024" />
+    <state width="1877" height="261" key="GridCell.Tab.0.right" timestamp="1584000946024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="938" height="261" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
-    <state width="1877" height="261" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583313173312" />
-    <state width="1877" height="261" key="GridCell.Tab.1.bottom" timestamp="1583313173312">
+    <state width="1877" height="261" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1584000946024" />
+    <state width="1877" height="326" key="GridCell.Tab.1.bottom" timestamp="1584000497635">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="938" height="261" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
-    <state width="1877" height="261" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583313173312" />
-    <state width="1877" height="261" key="GridCell.Tab.1.center" timestamp="1583313173312">
+    <state width="1877" height="326" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1584000497635" />
+    <state width="1877" height="326" key="GridCell.Tab.1.center" timestamp="1584000497635">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="938" height="261" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
-    <state width="1877" height="261" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583313173312" />
-    <state width="1877" height="261" key="GridCell.Tab.1.left" timestamp="1583313173312">
+    <state width="1877" height="326" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1584000497635" />
+    <state width="1877" height="326" key="GridCell.Tab.1.left" timestamp="1584000497635">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="938" height="261" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
-    <state width="1877" height="261" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583313173312" />
-    <state width="1877" height="261" key="GridCell.Tab.1.right" timestamp="1583313173312">
+    <state width="1877" height="326" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1584000497635" />
+    <state width="1877" height="326" key="GridCell.Tab.1.right" timestamp="1584000497635">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="938" height="261" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
-    <state width="1877" height="261" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583313173312" />
+    <state width="1877" height="326" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1584000497635" />
     <state x="397" y="97" key="SettingsEditor" timestamp="1582781086691">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="397" y="97" key="SettingsEditor/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582781086691" />
+    <state x="636" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1583994537003">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="636" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583994537003" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1583995489027">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1583995489027" />
   </component>
 </project>
