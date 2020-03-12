@@ -90,10 +90,66 @@ function connect() {
       console.log(body);
       document.getElementById("loggingArea").innerHTML += '<p style=color:' + body.colour + '>' + body.name + ':' + body.message + '</p>';
     });
+    stompClient.subscribe("/leaderboard/updateLeaderboard", (status) => {
+      
+      let jsonReturn = JSON.parse(status.body); //run every time server is sent a message on this channel
+      let leaderboardJSON = jsonReturn.leaderboard;
+      console.log(leaderboardJSON[0]);
+     // console.log(scoresJSON);
+      /*for (let i = 0; i < leaderboardJSON.length; i++) {
+        updateLeaderboard(i, leaderboardJSON[i], scoresJSON[i], playersJSON.length);
+      }*/
+      let index = 0;
+      let playerCount = Object.keys(leaderboardJSON).length;
+      for (var key in leaderboardJSON){
+        console.log("ran");
+        console.log("key: " + key + "  value: " + leaderboardJSON[key] + "  index:" + index + "  length:" + playerCount);
+        updateLeaderboard(index, key, leaderboardJSON[key], playerCount);
+        index ++;
+      }
+            console.log("returned from BE") 
+   });
+
     moveSnake();
     getSnakeDetails();
   });
 }
+
+function updateLeaderboard(index, name, score, playerCount){
+    let rows = document.getElementsByClassName("lbRow").length;
+    while (rows != playerCount){
+      if (playerCount == 0)
+        break;
+      else if (rows < playerCount)
+        addToLeaderboard();
+      else if (rows > playerCount)
+        deleteFromLeaderboard(rows);
+
+      rows = document.getElementsByClassName("lbRow").length;
+      console.log(rows);
+    }
+
+    let row = document.getElementsByClassName("lbRow")[index].getElementsByTagName("td");
+    row[0].textContent = name;
+    row[1].textContent = score;
+}
+
+function addToLeaderboard(){
+  $("#leaderboard").append(
+    "<tr class=\"lbRow\">" +
+      "<td> test1</td>" +
+      "<td> 5</td>" +
+    "</tr>");
+
+    console.log("added row");
+}
+
+function deleteFromLeaderboard(rows){
+  console.log("deleted row");
+  var table = document.getElementById("leaderboard");
+  table.deleteRow(rows -1);
+}
+
 
 
 function disconnect() {
