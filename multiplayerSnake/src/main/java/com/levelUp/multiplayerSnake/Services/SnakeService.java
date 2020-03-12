@@ -18,8 +18,12 @@ public class SnakeService {
 
     ArrayList<Pickup> pickups = new ArrayList<>();
     ArrayList<Bullet> bullets = new ArrayList<>();
+    ArrayList<Wall> walls = new ArrayList<>();
 
     final static int SERVER_TICK = 20;
+
+    final static int MAP_SIZE_X = 1000;
+    final static int MAP_SIZE_Y = 1000;
 
     //BULLETS
     final static double BULLET_SPEED_INCREMENTER = 0.995;
@@ -27,6 +31,10 @@ public class SnakeService {
     final static int BULLET_SPEED_CYCLE = 100;
 
     final static double SNAKE_STARTING_SPEED = 30;
+
+    //WALLS
+    final static boolean MUST_GENERATE_WALLS = true;
+    final static int NUMBER_OF_WALLS_TO_GENERATE = 20;
 
     //PICKUPS
     double pickupSpawnCountdown = 0;
@@ -57,9 +65,20 @@ public class SnakeService {
     int lastSecondTime = (int) (lastUpdateTime / 1000000000);
 
     public void runGameLoop() {
+        if(MUST_GENERATE_WALLS){
+            for(int i = 0; i < NUMBER_OF_WALLS_TO_GENERATE; i++){
+                if(generateRandomNumber(0, 10) <= 5){
+                    generateWallSegment(generateRandomNumber(5, 15), "vertical");
+                }else{
+                    generateWallSegment(generateRandomNumber(5, 15), "horizontal");
+                }
+            }
+        }
         Thread loop = new Thread(this::gameLoop);
         loop.start();
     }
+
+
 
     public void gameLoop() {
         while (isRunning) {
@@ -99,6 +118,30 @@ public class SnakeService {
         }
     }
 
+    private void generateWallSegment(int size, String direction){
+        switch (direction) {
+            case "horizontal": {
+                int randomX = generateRandomCoOrd(0, MAP_SIZE_X);
+                int randomY = generateRandomCoOrd(0, MAP_SIZE_Y);
+                for (int i = 0; i < size; i++) {
+                    walls.add(new Wall(randomX + i * 10, randomY));
+                }
+                break;
+            }
+            case "vertical": {
+                int randomX = generateRandomCoOrd(0, MAP_SIZE_X);
+                int randomY = generateRandomCoOrd(0, MAP_SIZE_Y);
+                for (int i = 0; i < size; i++) {
+                    walls.add(new Wall(randomX, randomY + i * 10));
+                }
+                break;
+            }
+            default:
+                System.out.println("direction not recognised");
+                break;
+        }
+    }
+
     public int generateRandomCoOrd(int min, int max) {
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");
@@ -107,6 +150,14 @@ public class SnakeService {
         int number = r.nextInt((max - min) + 1) + min;
         number = (int) (Math.round(number / 10.0) * 10);
         return number;
+    }
+
+    public int generateRandomNumber(int min, int max){
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 
     public void addPlayer(String playerId, String colour) {
@@ -118,7 +169,7 @@ public class SnakeService {
     public UpdatePayload getPayload() {
         Collection<Snake> values = snakes.values();
         ArrayList<Snake> snakeArrayList = new ArrayList<>(values);
-        return new UpdatePayload(snakeArrayList, pickups, bullets);
+        return new UpdatePayload(snakeArrayList, pickups, bullets, walls);
     }
 
     public void removePlayer(String playerId) {
@@ -197,10 +248,10 @@ public class SnakeService {
         if (pickupSpawnCountdown >= PICKUP_SPAWN_RATE) {
             if (pickupCounter < MAXIMUM_PICKUPS) {
                 for (int i = 0; i < PICKUPS_PER_SPAWN; i++) {
-                    int random = generateRandomCoOrd(0, 200);
-                    if (random <= 0) {
+                    int random = generateRandomNumber(0, 200);
+                    if (random <= 15) {
                         pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "SPEED"));
-                    } else if (random <= 10) {
+                    } else if (random <= 30) {
                         pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "SUPER_FOOD"));
                     } else {
                         pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "FOOD"));
@@ -217,7 +268,7 @@ public class SnakeService {
 
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
             //boundary collision
-            if (snakesBase.getValue().head().getX() <= 0 || snakesBase.getValue().head().getX() >= 990 || snakesBase.getValue().head().getY() <= 0 || snakesBase.getValue().head().getY() >= 990) {
+            if (snakesBase.getValue().head().getX() <= 0 || snakesBase.getValue().head().getX() >= (MAP_SIZE_X - 10) || snakesBase.getValue().head().getY() <= 0 || snakesBase.getValue().head().getY() >= (MAP_SIZE_Y - 10)) {
                 loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                 keysToDelete.add(snakesBase.getKey());
                 break;
@@ -257,6 +308,12 @@ public class SnakeService {
             //bullet collisions
             for (Bullet bullet : bullets) {
                 if (didCollide(bullet.getX(), bullet.getY(), snakesBase.getValue().head().getX(), snakesBase.getValue().head().getY(), bullet.getDir(), snakesBase.getValue().getDir())) {
+                    keysToDelete.add(snakesBase.getKey());
+                }
+            }
+            //Random wall collisions
+            for(Wall wall: walls){
+                if(snakesBase.getValue().head().getX() == wall.getX() && snakesBase.getValue().head().getY() == wall.getY()){
                     keysToDelete.add(snakesBase.getKey());
                 }
             }
@@ -368,7 +425,6 @@ public class SnakeService {
         snakes.clear();
         pickups.clear();
         bullets.clear();
-
     }
 
     public Snake getsnake(String playerID){

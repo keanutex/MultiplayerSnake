@@ -51,6 +51,7 @@ function connect() {
       let snakesJSON = jsonReturn.snakes;
       let pickupsJSON = jsonReturn.pickups;
       let bulletsJSON = jsonReturn.bullets;
+      let wallsJSON = jsonReturn.walls;
       ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
       ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
       ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -80,6 +81,13 @@ function connect() {
                   '#f0697b'
                 );
             }
+      for (let i = 0; i < wallsJSON.length; i++) {
+                      displayWall(
+                        wallsJSON[i].x,
+                        wallsJSON[i].y,
+                        wallsJSON[i].colour
+                      );
+                  }
     });
     stompClient.subscribe('/logging/loggingDetails',(status)=> {
       const body =JSON.parse(status.body);
@@ -190,6 +198,13 @@ function displayEntity(x, y, colour) {
   ctx.fillRect(x, y, 10, 10);
   // Draw a border around the snake part
   ctx.strokeRect(x, y, 10, 10);
+}
+
+function displayWall(x, y, colour){
+  ctx.fillStyle = colour;
+  // Draw a "filled" rectangle to represent the snake part at the coordinates
+  // the part is located
+  ctx.fillRect(x, y, 10, 10);
 }
 
 function displayPickups(x, y, colour) {
