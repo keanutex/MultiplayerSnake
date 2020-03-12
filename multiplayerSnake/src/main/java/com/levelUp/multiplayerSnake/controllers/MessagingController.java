@@ -23,8 +23,12 @@ public class MessagingController {
     @SendTo("/messaging/message")
     public  Message addMessage( String data) throws JSONException {
         JSONObject message = new JSONObject(data);
-        Snake playerSnake = snakeService.getsnake(message.getString("playerID"));
-        return new Message(message.getString("playerID"),message.getString("message"),playerSnake.getPlayerColour());
+        Snake playerSnake = snakeService.getsnake(message.getString("playerId"));
+        if(playerSnake!=null) {
+            return new Message(message.getString("username"), message.getString("message"), playerSnake.getPlayerColour());
+        }else{
+            return new Message(message.getString("username"), message.getString("message"));
+        }
     }
 
 

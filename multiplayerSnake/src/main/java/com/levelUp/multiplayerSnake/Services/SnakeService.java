@@ -314,6 +314,7 @@ public class SnakeService {
             //Random wall collisions
             for(Wall wall: walls){
                 if(snakesBase.getValue().head().getX() == wall.getX() && snakesBase.getValue().head().getY() == wall.getY()){
+                    loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                     keysToDelete.add(snakesBase.getKey());
                 }
             }

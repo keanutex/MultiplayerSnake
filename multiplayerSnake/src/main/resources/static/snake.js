@@ -257,7 +257,11 @@ function setColour() {
 
 connect();
 function sendMessage(){
-    stompClient.send("/app/addMessage",{},JSON.stringify({playerID: user.username, message: document.getElementById("message").value}));
+    stompClient.send("/app/addMessage",{},JSON.stringify({
+         playerId:user.username,
+        username: user.username,
+        message: document.getElementById("message").value}
+      ));
     document.getElementById("message").value = "";
 }
 
