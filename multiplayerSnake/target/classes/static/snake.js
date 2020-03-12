@@ -92,33 +92,15 @@ function connect() {
     });
     stompClient.subscribe("/leaderboard/updateLeaderboard", (status) => {
       
-      let leaderboardJSON = JSON.parse(status.body); //run every time server is sent a message on this channel
-            console.log(leaderboardJSON);
-            console.log(leaderboardJSON[0]);
-            console.log(leaderboardJSON[0].value)
-            for (var key in leaderboardJSON[0]){
-              console.log("key: " + key + "  value: " + leaderboardJSON[0][key]);
-            }
-      //let leaderboardJSON = jsonReturn.leaderboard;
-     // console.log(jsonReturn[0]);
-     // console.log(scoresJSON);
-     /* for (let i = 0; i < leaderboardJSON.length; i++) {
-        updateLeaderboard(i, leaderboardJSON[i], scoresJSON[i], playersJSON.length);
-      }*/
+      let leaderboardJSON = JSON.parse(status.body); 
       let index = 0;
       let playerCount = leaderboardJSON.length;
-      console.log(playerCount);
-     // let playerCount = Object.keys(leaderboardJSON).length;
       for (let i = 0; i < leaderboardJSON.length; i++) {      
-      for (var key in leaderboardJSON[i]){
-       // console.log("ran");
-      // console.log(key.key);
-       // console.log("key: " + key + "  value: " + leaderboardJSON[key] + "  index:" + index + "  length:" + playerCount);
-        updateLeaderboard(index, key, leaderboardJSON[i][key], playerCount);
-        index ++;
+        for (var key in leaderboardJSON[i]){
+          updateLeaderboard(index, key, leaderboardJSON[i][key], playerCount);
+          index ++;
+        }
       }
-    }
-            console.log("returned from BE") 
    });
 
     moveSnake();
@@ -137,9 +119,7 @@ function updateLeaderboard(index, name, score, playerCount){
         deleteFromLeaderboard(rows);
 
       rows = document.getElementsByClassName("lbRow").length;
-      console.log(rows);
     }
-
     let row = document.getElementsByClassName("lbRow")[index].getElementsByTagName("td");
     row[0].textContent = name;
     row[1].textContent = score;
@@ -151,12 +131,9 @@ function addToLeaderboard(){
       "<td> test1</td>" +
       "<td> 5</td>" +
     "</tr>");
-
-    console.log("added row");
 }
 
 function deleteFromLeaderboard(rows){
-  console.log("deleted row");
   var table = document.getElementById("leaderboard");
   table.deleteRow(rows -1);
 }

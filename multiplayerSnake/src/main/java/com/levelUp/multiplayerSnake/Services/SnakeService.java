@@ -403,6 +403,7 @@ public class SnakeService {
                 snakeThatShot.removeTail();
             }
             bullets.add(bullet);
+            updateLeaderBoard();
         }
     }
 
