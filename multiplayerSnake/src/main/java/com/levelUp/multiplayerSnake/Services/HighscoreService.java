@@ -14,6 +14,7 @@ public class HighscoreService
 {
 
     private ArrayList<Integer> Playerscores = new ArrayList<>(); // List for storing scores
+    private int HighScore;
 
     public void createPlayer(Player player)
     {
@@ -23,17 +24,14 @@ public class HighscoreService
     public void savePlayerScore(int snakeLength, int numberOfPlayers)
     {
         Playerscores.add(snakeLength);
-        System.out.println("Score is: "+snakeLength);
-        System.out.println("Score is: "+Playerscores);
         if(numberOfPlayers ==0){
-            System.out.println("Score is: "+Playerscores);
             Collections.sort(Playerscores, Collections.reverseOrder());
             checkHighScore(Playerscores.get(0));  
           }
     }
     private void checkHighScore(Integer curHighScore) {
         Scanner scanner;
-        int HighScore = 0;
+        //int HighScore = 0;
         try {
             scanner = new Scanner(new File("doc/highscore.txt"));
             while(scanner.hasNextInt())
@@ -57,7 +55,26 @@ public class HighscoreService
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        
     }
+        //a function to return high score 
+
+        public int getHighScore()
+        {
+            Scanner scanner;
+            int HighScore = 0;
+            try {
+                scanner = new Scanner(new File("doc/highscore.txt"));
+                while(scanner.hasNextInt())
+                {   HighScore = scanner.nextInt();}
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();}
+
+            return HighScore;
+
+        }
+    }
+ 
 
     
-}
