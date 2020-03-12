@@ -9,8 +9,6 @@ const SNAKE_BORDER_COLOUR = "darkgreen";
 // Get the canvas element
 let ctx;
 
-let playerId = "";
-
 function setConnected(connected) {
   $("#connect").prop("disabled", connected);
   $("#disconnect").prop("disabled", !connected);
@@ -32,12 +30,6 @@ function connect() {
   ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-  playerId =
-    "_" +
-    Math.random()
-      .toString(36)
-      .substr(2, 9);
 
   const socket = new SockJS("/gs-guide-websocket");
   stompClient = Stomp.over(socket);
@@ -114,7 +106,7 @@ function disconnect() {
 }
 
 function deletePlayer() {
-  stompClient.send("/app/" + playerId + "/removeSnake");
+  stompClient.send("/app/" + user.playerId + "/removeSnake");
 }
 
 function moveSnake() {
@@ -167,7 +159,7 @@ function keyBoardInput() {
       case 32:
       event.preventDefault();
          stompClient.send(
-            "/app/" + user.username + "/shoot"
+            "/app/" + user.playerId + "/shoot"
           );
       break;
       default:
@@ -176,7 +168,7 @@ function keyBoardInput() {
     }
     if (sendKeyCode) {
       stompClient.send(
-        "/app/" + user.username + "/changeDirection",
+        "/app/" + user.playerId + "/changeDirection",
         {},
         changeD
       ); //needs to send through the direction as a field (make a JSON/class for multiple fields)
@@ -219,7 +211,7 @@ function displayPickups(x, y, colour) {
 }
 
 function addPlayer() {
-  stompClient.send("/app/newPlayer/" + user.username, {}, user.color); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
+  stompClient.send("/app/newPlayer/" + user.playerId, {}, JSON.stringify({color: user.color, playerName: user.username})); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
 }
 
 $(function() {
@@ -259,7 +251,7 @@ connect();
 function sendMessage(){
   if(document.getElementById("message").value.length>0) {
       stompClient.send("/app/addMessage", {}, JSON.stringify({
-            playerId: user.username,
+            playerId: user.playerId,
             username: user.username,
             message: document.getElementById("message").value
           }

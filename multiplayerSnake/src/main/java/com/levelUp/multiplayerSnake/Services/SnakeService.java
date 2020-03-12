@@ -2,6 +2,8 @@ package com.levelUp.multiplayerSnake.Services;
 
 import com.levelUp.multiplayerSnake.controllers.LoggingController;
 import com.levelUp.multiplayerSnake.models.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -160,10 +162,13 @@ public class SnakeService {
         return r.nextInt((max - min) + 1) + min;
     }
 
-    public void addPlayer(String playerId, String colour) {
+    public void addPlayer(String playerId, String stringInput) throws JSONException {
+        JSONObject input = new JSONObject(stringInput);
         numberOfPlayers++;
-        snakes.put(playerId, new Snake(SNAKE_STARTING_SPEED, "up"));
-        snakes.get(playerId).setPlayerColour(colour);
+        Snake snakeToAdd = new Snake(SNAKE_STARTING_SPEED, "up");
+        snakeToAdd.setName(input.getString("playerName"));
+        snakes.put(playerId, snakeToAdd);
+        snakes.get(playerId).setPlayerColour(input.getString("color"));
     }
 
     public UpdatePayload getPayload() {
