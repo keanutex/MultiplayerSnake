@@ -2,22 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e1c069c-d025-432b-acec-f84648858c31" name="Default Changelist" comment="">
-<<<<<<< HEAD
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Snake.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Snake.java" afterDir="false" />
-=======
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Wall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/Services/SnakeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/Services/SnakeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Pickup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/Pickup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/UpdatePayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/levelUp/multiplayerSnake/models/UpdatePayload.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/snake.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/snake.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/controllers/SnakeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/controllers/SnakeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Pickup.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Pickup.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Snake.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Snake.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/SnakeSegment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/SnakeSegment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/UpdatePayload.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/UpdatePayload.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/snake.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/snake.js" afterDir="false" />
->>>>>>> adding-walls
+      <change beforePath="$PROJECT_DIR$/target/classes/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +21,12 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="InvalidFacetManager">
+    <ignored-facets>
+      <facet id="multiplayerSnake/invalid/Spring" />
+      <facet id="multiplayerSnake/invalid/Web" />
+    </ignored-facets>
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -182,17 +176,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="807" y="187" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582779250841" />
-<<<<<<< HEAD
     <state x="657" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog" timestamp="1583996746685">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="657" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583996746685" />
-=======
     <state x="664" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog" timestamp="1583995336620">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="664" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583995336620" />
->>>>>>> adding-walls
     <state x="751" y="361" width="455" height="318" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583163083521">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
