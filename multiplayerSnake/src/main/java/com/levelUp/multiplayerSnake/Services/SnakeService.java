@@ -39,7 +39,7 @@ public class SnakeService {
     //PICKUPS
     double pickupSpawnCountdown = 0;
     int pickupCounter = 0;
-    final static int MAXIMUM_PICKUPS = 100;
+    final static int MAXIMUM_PICKUPS = 50;
     final static int PICKUPS_PER_SPAWN = 2;
     final static double PICKUP_SPAWN_RATE = 4 * SERVER_TICK;
     final static int SUPER_FOOD_GROW_AMOUNT = 10;
