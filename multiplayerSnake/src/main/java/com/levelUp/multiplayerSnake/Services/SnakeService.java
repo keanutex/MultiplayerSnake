@@ -12,6 +12,9 @@ public class SnakeService {
 
     @Autowired
     LoggingController loggingController;
+    @Autowired 
+    HighscoreService highscore;
+    
 
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<>();
@@ -122,6 +125,8 @@ public class SnakeService {
     }
 
     public void removePlayer(String playerId) {
+        numberOfPlayers--;
+        highscore.savePlayerScore(snakes.get(playerId).getLength(), numberOfPlayers);
         snakes.remove(playerId);
     }
 
