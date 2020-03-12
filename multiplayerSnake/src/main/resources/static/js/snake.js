@@ -1,4 +1,9 @@
 const user = JSON.parse(window.localStorage.getItem("user"));
+user.playerId =
+  "_" +
+  Math.random()
+    .toString(36)
+    .substr(2, 9);
 
 var stompClient = null;
 
@@ -8,8 +13,6 @@ let SNAKE_COLOUR = "lightgreen";
 const SNAKE_BORDER_COLOUR = "darkgreen";
 // Get the canvas element
 let ctx;
-
-let playerId = "";
 
 function setConnected(connected) {
   $("#connect").prop("disabled", connected);
@@ -32,12 +35,6 @@ function connect() {
   ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-  playerId =
-    "_" +
-    Math.random()
-      .toString(36)
-      .substr(2, 9);
 
   const socket = new SockJS("/gs-guide-websocket");
   stompClient = Stomp.over(socket);
@@ -75,34 +72,33 @@ function connect() {
         }
       }
       for (let i = 0; i < bulletsJSON.length; i++) {
-                displayEntity(
-                  bulletsJSON[i].x,
-                  bulletsJSON[i].y,
-                  '#f0697b'
-                );
-            }
+        displayEntity(bulletsJSON[i].x, bulletsJSON[i].y, "#f0697b");
+      }
       for (let i = 0; i < wallsJSON.length; i++) {
-                      displayWall(
-                        wallsJSON[i].x,
-                        wallsJSON[i].y,
-                        wallsJSON[i].colour
-                      );
-                  }
+        displayWall(wallsJSON[i].x, wallsJSON[i].y, wallsJSON[i].colour);
+      }
     });
-    stompClient.subscribe('/logging/loggingDetails',(status)=> {
-      const body =JSON.parse(status.body);
-      document.getElementById('loggingArea').innerHTML += '<p style=color:' + body.colour + '>' + body.message + '</p>';
+    stompClient.subscribe("/logging/loggingDetails", status => {
+      const body = JSON.parse(status.body);
+      document.getElementById("loggingArea").innerHTML +=
+        "<p style=color:" + body.colour + ">" + body.message + "</p>";
     });
-    stompClient.subscribe('/messaging/message', (status) => {
-      const body =JSON.parse(status.body);
+    stompClient.subscribe("/messaging/message", status => {
+      const body = JSON.parse(status.body);
       console.log(body);
-      document.getElementById("loggingArea").innerHTML += '<p style=color:' + body.colour + '>' + body.name + ':' + body.message + '</p>';
+      document.getElementById("loggingArea").innerHTML +=
+        "<p style=color:" +
+        body.colour +
+        ">" +
+        body.name +
+        ":" +
+        body.message +
+        "</p>";
     });
     moveSnake();
     getSnakeDetails();
   });
 }
-
 
 function disconnect() {
   deletePlayer();
@@ -128,8 +124,6 @@ function closingCode() {
 }
 
 let interval = setInterval(keyBoardInput, 5);
-
-
 
 function keyBoardInput() {
   document.onkeydown = function(event) {
@@ -165,18 +159,16 @@ function keyBoardInput() {
         sendKeyCode = true;
         break;
       case 32:
-      event.preventDefault();
-         stompClient.send(
-            "/app/" + user.username + "/shoot"
-          );
-      break;
+        event.preventDefault();
+        stompClient.send("/app/" + user.playerId + "/shoot");
+        break;
       default:
         console.log("UNRECOGNISED KEYCODE: " + keyCode);
         break;
     }
     if (sendKeyCode) {
       stompClient.send(
-        "/app/" + user.username + "/changeDirection",
+        "/app/" + user.playerId + "/changeDirection",
         {},
         changeD
       ); //needs to send through the direction as a field (make a JSON/class for multiple fields)
@@ -200,7 +192,7 @@ function displayEntity(x, y, colour) {
   ctx.strokeRect(x, y, 10, 10);
 }
 
-function displayWall(x, y, colour){
+function displayWall(x, y, colour) {
   ctx.fillStyle = colour;
   // Draw a "filled" rectangle to represent the snake part at the coordinates
   // the part is located
@@ -218,8 +210,13 @@ function displayPickups(x, y, colour) {
   ctx.strokeRect(x, y, 10, 10);
 }
 
+// PROPOSED!!!
 function addPlayer() {
-  stompClient.send("/app/newPlayer/" + user.username, {}, user.color); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
+  stompClient.send(
+    "/app/newPlayer/" + user.playerId,
+    {},
+    JSON.stringify({ color: user.color, username: user.usernames })
+  ); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
 }
 
 $(function() {
@@ -256,18 +253,15 @@ function setColour() {
 }
 
 connect();
-function sendMessage(){
-    stompClient.send("/app/addMessage",{},JSON.stringify({
-         playerId:user.username,
-        username: user.username,
-        message: document.getElementById("message").value}
-      ));
-    document.getElementById("message").value = "";
+function sendMessage() {
+  stompClient.send(
+    "/app/addMessage",
+    {},
+    JSON.stringify({
+      playerId: user.username,
+      username: user.username,
+      message: document.getElementById("message").value
+    })
+  );
+  document.getElementById("message").value = "";
 }
-
-
-
-
-
-
-
