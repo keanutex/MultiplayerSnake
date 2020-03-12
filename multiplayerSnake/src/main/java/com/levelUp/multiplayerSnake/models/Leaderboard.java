@@ -4,13 +4,23 @@ import java.util.*;
 
 public class Leaderboard {
 	
-	private ArrayList<Player> Players = new ArrayList<Player>();
+	//private ArrayList<Player> Players = new ArrayList<Player>();
+	public HashMap<String, Integer> leaderboard;
 	
-	public void AddPlayer(String name) {
-		Players.add(new Player(name));
+	
+	public void addPlayer(String name) {
+		leaderboard.put(name, 5);
 	}
 	
-	public ArrayList<Player> getPlayers(){
-		return this.Players;
+	public void deletePlayer(String name) {
+		leaderboard.remove(name);
+	}
+	
+	public void updateScore(String name, int score) {
+		leaderboard.put(name, score);
+	}
+	
+	private void sortLeaderboard() {
+		
 	}
 }

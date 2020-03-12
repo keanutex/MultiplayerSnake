@@ -89,11 +89,20 @@ function connect() {
 
       document.getElementById("loggingArea").value += status.body  +'\n';
     });
+    stompClient.subscribe("/leaderboard/updateLeaderboard", (status) => {
+      
+      console.log("returned from BE") 
+   });
+
+
     moveSnake();
     getSnakeDetails();
   });
 }
 
+function updateLeaderboard(){
+  stompClient.send("/app/updateLeaderboard");
+}
 
 function disconnect() {
   deletePlayer();
@@ -138,6 +147,7 @@ function keyBoardInput() {
       case 65:
       case 37:
         changeD = "left";
+        updateLeaderboard();
         sendKeyCode = true;
         break;
       case 87:
@@ -203,6 +213,8 @@ function displayPickups(x, y, colour) {
 }
 
 function addPlayer() {
+  console.log("Added player from FE");
+  stompClient.send("/app/addToLeaderboard/" + user.username, {});
   stompClient.send("/app/newPlayer/" + user.username, {}, user.color); //TODO IMPORTANT. ALL INFO THAT SHOULD HAPPEN WHEN A NEW PLAYER JOIN SHOULD HAPPEN HERE. MODEL NEEDS TO BE MADE EVENTUALLY FOR THESE INPUTS
 }
 

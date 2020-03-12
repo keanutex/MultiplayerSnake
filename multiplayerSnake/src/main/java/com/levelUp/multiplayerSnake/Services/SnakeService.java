@@ -1,6 +1,6 @@
 package com.levelUp.multiplayerSnake.Services;
 
-import com.levelUp.multiplayerSnake.controllers.LoggingController;
+import com.levelUp.multiplayerSnake.controllers.*;
 import com.levelUp.multiplayerSnake.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,9 @@ public class SnakeService {
 
     @Autowired
     LoggingController loggingController;
+    
+    @Autowired
+    LeaderboardController leaderboardController;
 
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<>();
@@ -113,7 +116,8 @@ public class SnakeService {
         numberOfPlayers++;
         snakes.put(playerId, new Snake(SNAKE_STARTING_SPEED, "up"));
         snakes.get(playerId).setPlayerColour(colour);
-    }
+        leaderboardController.addToLeaderBoard(playerId);
+        }
 
     public UpdatePayload getPayload() {
         Collection<Snake> values = snakes.values();
