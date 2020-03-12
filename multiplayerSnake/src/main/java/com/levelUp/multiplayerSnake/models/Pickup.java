@@ -16,7 +16,7 @@ public class Pickup {
                 this.setColour("#ffdb78");
                 break;
             case "SPEED":
-                this.setColour("#000000");
+                this.setColour("#317DD7");
                 break;
             case "SHOOT":
                 this.setColour("#949494");

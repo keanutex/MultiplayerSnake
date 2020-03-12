@@ -1,7 +1,9 @@
 package com.levelUp.multiplayerSnake.Services;
 
-import com.levelUp.multiplayerSnake.controllers.*;
+import com.levelUp.multiplayerSnake.controllers.LoggingController;
 import com.levelUp.multiplayerSnake.models.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +14,18 @@ public class SnakeService {
 
     @Autowired
     LoggingController loggingController;
-    
-    @Autowired
-    LeaderboardController leaderboardController;
 
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<>();
 
     ArrayList<Pickup> pickups = new ArrayList<>();
     ArrayList<Bullet> bullets = new ArrayList<>();
+    ArrayList<Wall> walls = new ArrayList<>();
 
     final static int SERVER_TICK = 20;
+
+    final static int MAP_SIZE_X = 1000;
+    final static int MAP_SIZE_Y = 1000;
 
     //BULLETS
     final static double BULLET_SPEED_INCREMENTER = 0.995;
@@ -31,10 +34,14 @@ public class SnakeService {
 
     final static double SNAKE_STARTING_SPEED = 30;
 
+    //WALLS
+    final static boolean MUST_GENERATE_WALLS = true;
+    final static int NUMBER_OF_WALLS_TO_GENERATE = 20;
+
     //PICKUPS
     double pickupSpawnCountdown = 0;
     int pickupCounter = 0;
-    final static int MAXIMUM_PICKUPS = 100;
+    final static int MAXIMUM_PICKUPS = 50;
     final static int PICKUPS_PER_SPAWN = 2;
     final static double PICKUP_SPAWN_RATE = 4 * SERVER_TICK;
     final static int SUPER_FOOD_GROW_AMOUNT = 10;
@@ -60,9 +67,20 @@ public class SnakeService {
     int lastSecondTime = (int) (lastUpdateTime / 1000000000);
 
     public void runGameLoop() {
+        if(MUST_GENERATE_WALLS){
+            for(int i = 0; i < NUMBER_OF_WALLS_TO_GENERATE; i++){
+                if(generateRandomNumber(0, 10) <= 5){
+                    generateWallSegment(generateRandomNumber(5, 15), "vertical");
+                }else{
+                    generateWallSegment(generateRandomNumber(5, 15), "horizontal");
+                }
+            }
+        }
         Thread loop = new Thread(this::gameLoop);
         loop.start();
     }
+
+
 
     public void gameLoop() {
         while (isRunning) {
@@ -94,11 +112,35 @@ public class SnakeService {
                 //You can remove this line and it will still work (better), your CPU just climbs on certain OSes.
                 //FYI on some OS's this can cause pretty bad stuttering.
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(10);
                 } catch (Exception e) {
                 }
                 now = System.nanoTime();
             }
+        }
+    }
+
+    private void generateWallSegment(int size, String direction){
+        switch (direction) {
+            case "horizontal": {
+                int randomX = generateRandomCoOrd(0, MAP_SIZE_X);
+                int randomY = generateRandomCoOrd(0, MAP_SIZE_Y);
+                for (int i = 0; i < size; i++) {
+                    walls.add(new Wall(randomX + i * 10, randomY));
+                }
+                break;
+            }
+            case "vertical": {
+                int randomX = generateRandomCoOrd(0, MAP_SIZE_X);
+                int randomY = generateRandomCoOrd(0, MAP_SIZE_Y);
+                for (int i = 0; i < size; i++) {
+                    walls.add(new Wall(randomX, randomY + i * 10));
+                }
+                break;
+            }
+            default:
+                System.out.println("direction not recognised");
+                break;
         }
     }
 
@@ -112,17 +154,27 @@ public class SnakeService {
         return number;
     }
 
-    public void addPlayer(String playerId, String colour) {
-        numberOfPlayers++;
-        snakes.put(playerId, new Snake(SNAKE_STARTING_SPEED, "up"));
-        snakes.get(playerId).setPlayerColour(colour);
-        leaderboardController.addToLeaderBoard(playerId);
+    public int generateRandomNumber(int min, int max){
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
         }
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
+    }
+
+    public void addPlayer(String playerId, String stringInput) throws JSONException {
+        JSONObject input = new JSONObject(stringInput);
+        numberOfPlayers++;
+        Snake snakeToAdd = new Snake(SNAKE_STARTING_SPEED, "up");
+        snakeToAdd.setName(input.getString("playerName"));
+        snakes.put(playerId, snakeToAdd);
+        snakes.get(playerId).setPlayerColour(input.getString("color"));
+    }
 
     public UpdatePayload getPayload() {
         Collection<Snake> values = snakes.values();
         ArrayList<Snake> snakeArrayList = new ArrayList<>(values);
-        return new UpdatePayload(snakeArrayList, pickups, bullets);
+        return new UpdatePayload(snakeArrayList, pickups, bullets, walls);
     }
 
     public void removePlayer(String playerId) {
@@ -201,10 +253,10 @@ public class SnakeService {
         if (pickupSpawnCountdown >= PICKUP_SPAWN_RATE) {
             if (pickupCounter < MAXIMUM_PICKUPS) {
                 for (int i = 0; i < PICKUPS_PER_SPAWN; i++) {
-                    int random = generateRandomCoOrd(0, 200);
-                    if (random <= 0) {
+                    int random = generateRandomNumber(0, 200);
+                    if (random <= 15) {
                         pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "SPEED"));
-                    } else if (random <= 10) {
+                    } else if (random <= 30) {
                         pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "SUPER_FOOD"));
                     } else {
                         pickups.add(new Pickup(this.generateRandomCoOrd(10, 980), this.generateRandomCoOrd(10, 980), "FOOD"));
@@ -221,14 +273,10 @@ public class SnakeService {
 
         for (Map.Entry<String, Snake> snakesBase : snakes.entrySet()) {
             //boundary collision
-            if (snakesBase.getValue().head().getX() <= 0 || snakesBase.getValue().head().getX() >= 990 || snakesBase.getValue().head().getY() <= 0 || snakesBase.getValue().head().getY() >= 990) {
-                loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getKey());
+            if (snakesBase.getValue().head().getX() <= 0 || snakesBase.getValue().head().getX() >= (MAP_SIZE_X - 10) || snakesBase.getValue().head().getY() <= 0 || snakesBase.getValue().head().getY() >= (MAP_SIZE_Y - 10)) {
+                loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                 keysToDelete.add(snakesBase.getKey());
                 break;
-            }
-            //length check
-            if(snakesBase.getValue().getLength()>=50){
-                loggingController.getLogging(LoggingService.messageTypes.past50,snakesBase.getKey());
             }
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
@@ -264,6 +312,13 @@ public class SnakeService {
                     keysToDelete.add(snakesBase.getKey());
                 }
             }
+            //Random wall collisions
+            for(Wall wall: walls){
+                if(snakesBase.getValue().head().getX() == wall.getX() && snakesBase.getValue().head().getY() == wall.getY()){
+                    loggingController.getLogging(LoggingService.messageTypes.diedToWall,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
+                    keysToDelete.add(snakesBase.getKey());
+                }
+            }
 
             //snake on snake collisions
             for (Map.Entry<String, Snake> snakesCheck : snakes.entrySet()) {
@@ -273,10 +328,10 @@ public class SnakeService {
                     }
                     if (snakesBase.getValue().head().getX() == snakesCheck.getValue().getSnakeSegments().get(i).getX() && snakesBase.getValue().head().getY() == snakesCheck.getValue().getSnakeSegments().get(i).getY()) {
                         if (!snakesBase.getKey().equals(snakesCheck.getKey())) {
-                            loggingController.getLogging(LoggingService.messageTypes.diedToEnemy,snakesBase.getKey());
+                            loggingController.getLogging(LoggingService.messageTypes.diedToEnemy,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                             growSnakesOnCollision(snakesCheck.getValue(), snakesBase.getValue().getLength());
                         } else{
-                            loggingController.getLogging(LoggingService.messageTypes.diedToSelf,snakesBase.getKey());
+                            loggingController.getLogging(LoggingService.messageTypes.diedToSelf,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
                         }
                         keysToDelete.add(snakesBase.getKey());
                     }
@@ -372,6 +427,9 @@ public class SnakeService {
         snakes.clear();
         pickups.clear();
         bullets.clear();
+    }
 
+    public Snake getsnake(String playerID){
+        return snakes.get(playerID);
     }
 }

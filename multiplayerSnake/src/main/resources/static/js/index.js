@@ -21,7 +21,9 @@ document.querySelector(".btn-submit").addEventListener("click", () => {
     "user",
     JSON.stringify({
       username: document.querySelector(".form-input").value,
-      color: document.querySelector(".form-colorpicker").value
+      color: document.querySelector(".form-colorpicker").value,
+      playerId:("_" +Math.random().toString(36).substr(2, 9))
+
     })
   );
 });

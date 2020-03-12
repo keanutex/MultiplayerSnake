@@ -1,49 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Hello WebSocket</title>
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-  </head>
-  <body>
-    <noscript
-      ><h2 style="color: #ff0000">
-        Seems your browser doesn't support Javascript! Websocket relies on
-        Javascript being enabled. Please enable Javascript and reload this page!
-      </h2></noscript
-    >
-    <div id="main-content" class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <form class="form-inline">
-            <div class="form-group">
-              <label for="connect">WebSocket connection:</label>
-              <button id="connect" class="btn btn-default" type="submit">
-                Reconnect
-              </button>
-              <!-- <input id="colorText" type="text" placeholder="Input Color" /> -->
-              <button
-                id="disconnect"
-                class="btn btn-default"
-                type="submit"
-                disabled="disabled"
-              >
-                Disconnect
-              </button>
-              <button id="newsnake" class="btn btn-default" type="submit">
-                New Snake
-              </button>
-              <textarea id="loggingArea"  readonly="true"></textarea>
-              <input type="text" id="message">
-              <button type="button" onclick="sendMessage()"> send message</button>
-            </div>
-          </form>
+<head>
+  <title>Hello WebSocket</title>
+  <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="/webjars/jquery/jquery.min.js"></script>
+  <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+  <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+  <link rel="stylesheet" href="css/game.css" />
+  <link rel="icon" type="image/png" href="img/favicon.png" />
+</head>
+<body>
+<noscript
+><h2 style="color: #ff0000">
+  Seems your browser doesn't support Javascript! Websocket relies on
+  Javascript being enabled. Please enable Javascript and reload this page!
+</h2></noscript
+>
+<div id="main-content" class="container">
+  <div class="row top-ribbon">
+    <div class="col-md-6">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="connect">WebSocket connection:</label>
+          <button id="connect" class="btn btn-default" type="submit">
+            Reconnect
+          </button>
+          <!-- <input id="colorText" type="text" placeholder="Input Color" /> -->
+          <button
+                  id="disconnect"
+                  class="btn btn-default"
+                  type="submit"
+                  disabled="disabled"
+          >
+            Disconnect
+          </button>
+          <button id="newsnake" class="btn btn-default" type="submit">
+            New Snake
+          </button>
         </div>
-      </div>
-      <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+      </form>
     </div>
-    <script src="/snake.js"></script>
-  </body>
+    <div class="score-box">
+      score goes here!!!
+    </div>
+  </div>
+  <div class="logging-box">
+    <div id="loggingArea" class="overflow-auto"></div>
+    <input type="text" id="message" />
+    <button type="button" onclick="sendMessage()">send message</button>
+  </div>
+  <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+  <div class="leaderboard-box">
+    <h3>leaderboard goes here!!!</h3>
+  </div>
+</div>
+<script src="/snake.js"></script>
+</body>
 </html>
