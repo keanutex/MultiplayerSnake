@@ -1,5 +1,28 @@
-.loggingArea{
-    position: absolute;
-    left: auto;
-    max-width: 200px;
+.main-content {
+  position: relative;
+}
+
+.logging-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+}
+
+.leaderboard-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 25%;
+}
+
+.top-ribbon {
+  position: relative;
+  width: 1000px;
+}
+
+.score-box {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
