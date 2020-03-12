@@ -13,7 +13,6 @@ public class LoggingService {
     SnakeService snakeService;
 
     public enum messageTypes {
-        past50,
         diedToWall,
         diedToEnemy,
         diedToSelf
@@ -23,15 +22,6 @@ public class LoggingService {
     public String createMessage(messageTypes type, String id){
 
         switch(type){
-            case past50:
-
-                if(!checkInThe50(id)) {
-                    thePast50.add(id);
-                    return(snakeService.getsnake(id).getName() +" has a length of 50");
-                }else{
-                    return "";
-                }
-
             case diedToSelf:
                 return(snakeService.getsnake(id).getName() + " has just eaten themselves");
             case diedToWall:
@@ -40,22 +30,6 @@ public class LoggingService {
                 return(snakeService.getsnake(id).getName() + " was killed");
             default:
                 return ("invalid");
-        }
-    }
-
-    private boolean checkInThe50(String ID){
-        boolean found = false;
-        for (String s : thePast50) {
-            if(s.equals(ID)) {
-                found = true;
-                break;
-            }
-        }
-        return found;
-    }
-    public void removeThe50(String ID){
-       if (checkInThe50(ID)) {
-           thePast50.remove(ID);
         }
     }
 }

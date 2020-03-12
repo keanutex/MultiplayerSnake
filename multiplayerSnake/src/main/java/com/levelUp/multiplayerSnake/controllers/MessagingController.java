@@ -32,5 +32,16 @@ public class MessagingController {
     }
 
 
+    @MessageMapping("/addMessageCircle")
+    @SendTo("/messaging/messageCircle")
+    public  Message addMessageCircle( String data) throws JSONException {
+        JSONObject message = new JSONObject(data);
+        Snake playerSnake = snakeService.getsnake(message.getString("playerId"));
+        if(playerSnake!=null) {
+            return new Message(message.getString("username"), message.getString("message"), playerSnake.getPlayerColour());
+        }else{
+            return new Message(message.getString("username"), message.getString("message"));
+        }
+    }
 
 }

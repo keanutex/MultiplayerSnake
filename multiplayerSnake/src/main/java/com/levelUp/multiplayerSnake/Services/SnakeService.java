@@ -278,10 +278,6 @@ public class SnakeService {
                 keysToDelete.add(snakesBase.getKey());
                 break;
             }
-            //length check
-            if(snakesBase.getValue().getLength()>=50){
-                loggingController.getLogging(LoggingService.messageTypes.past50,snakesBase.getKey(),snakesBase.getValue().getPlayerColour());
-            }
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().getSnakeSegments().get(0).getX() == pickups.get(i).getX() && snakesBase.getValue().getSnakeSegments().get(0).getY() == pickups.get(i).getY()) {
