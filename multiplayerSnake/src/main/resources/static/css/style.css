@@ -307,8 +307,7 @@ form {
   font-size: 1.5rem;
 }
 
-.btn-submit:link,
-.btn-submit:visited {
+.btn-submit {
   display: inline-block;
   padding: 0.7rem;
   font-size: 1rem;
@@ -319,6 +318,7 @@ form {
   color: #638268;
   letter-spacing: 2px;
   text-emphasis: bold;
+  border: none;
 }
 
 .btn-submit:hover {
