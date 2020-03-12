@@ -110,7 +110,7 @@ public class SnakeService {
                 //You can remove this line and it will still work (better), your CPU just climbs on certain OSes.
                 //FYI on some OS's this can cause pretty bad stuttering.
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(10);
                 } catch (Exception e) {
                 }
                 now = System.nanoTime();
