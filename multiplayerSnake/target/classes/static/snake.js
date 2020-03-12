@@ -241,9 +241,7 @@ function setColour() {
 
 connect();
 function sendMessage(){
-    console.log('sending',{playerID: playerId, message: document.getElementById("message").value});
-
-    stompClient.send("/app/addMessage",{},JSON.stringify({playerID: playerId, message: document.getElementById("message").value}));
+    stompClient.send("/app/addMessage",{},JSON.stringify({userName: user.username, message: document.getElementById("message").value}));
     document.getElementById("message").value = "";
 }
 

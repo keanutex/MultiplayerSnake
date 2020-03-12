@@ -23,8 +23,8 @@ public class MessagingController {
     @MessageMapping("/addMessage")
     @SendTo("/messaging/message")
     public  String addMessage( String data) throws JSONException {
-        JSONObject asd = new JSONObject(data);
-        return asd.getString("playerID") + ": " + asd.getString("message");
+        JSONObject message = new JSONObject(data);
+        return message.getString("userName") + ": " + message.getString("message");
     }
 
 
