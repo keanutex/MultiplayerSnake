@@ -25,10 +25,6 @@ public class LoggingController {
         this.template = template;
     }
 
-
-
-
-    @RequestMapping(path="/loggingDetails")
     public void getLogging(LoggingService.messageTypes type,String name, String colour){
         this.template.convertAndSend("/logging/loggingDetails",new LoggingMessage(loggingService.createMessage(type,name),colour));
     }
