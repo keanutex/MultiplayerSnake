@@ -90,10 +90,54 @@ function connect() {
       console.log(body);
       document.getElementById("loggingArea").innerHTML += '<p style=color:' + body.colour + '>' + body.name + ':' + body.message + '</p>';
     });
+    stompClient.subscribe("/leaderboard/updateLeaderboard", (status) => {
+      
+      let leaderboardJSON = JSON.parse(status.body); 
+      let index = 0;
+      let playerCount = leaderboardJSON.length;
+      for (let i = 0; i < leaderboardJSON.length; i++) {      
+        for (var key in leaderboardJSON[i]){
+          updateLeaderboard(index, key, leaderboardJSON[i][key], playerCount);
+          index ++;
+        }
+      }
+   });
+
     moveSnake();
     getSnakeDetails();
   });
 }
+
+function updateLeaderboard(index, name, score, playerCount){
+    let rows = document.getElementsByClassName("lbRow").length;
+    while (rows != playerCount){
+      if (playerCount == 0)
+        break;
+      else if (rows < playerCount)
+        addToLeaderboard();
+      else if (rows > playerCount)
+        deleteFromLeaderboard(rows);
+
+      rows = document.getElementsByClassName("lbRow").length;
+    }
+    let row = document.getElementsByClassName("lbRow")[index].getElementsByTagName("td");
+    row[0].textContent = name;
+    row[1].textContent = score;
+}
+
+function addToLeaderboard(){
+  $("#leaderboard").append(
+    "<tr class=\"lbRow\">" +
+      "<td> test1</td>" +
+      "<td> 5</td>" +
+    "</tr>");
+}
+
+function deleteFromLeaderboard(rows){
+  var table = document.getElementById("leaderboard");
+  table.deleteRow(rows -1);
+}
+
 
 
 function disconnect() {

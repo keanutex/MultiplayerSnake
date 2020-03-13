@@ -1,6 +1,6 @@
 package com.levelUp.multiplayerSnake.Services;
 
-import com.levelUp.multiplayerSnake.controllers.LoggingController;
+import com.levelUp.multiplayerSnake.controllers.*;
 import com.levelUp.multiplayerSnake.models.*;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +14,9 @@ public class SnakeService {
 
     @Autowired
     LoggingController loggingController;
+    
+    @Autowired
+    LeaderboardController leaderboardController;
 
     int numberOfPlayers = 0;
     HashMap<String, Snake> snakes = new HashMap<>();
@@ -169,6 +172,9 @@ public class SnakeService {
         snakeToAdd.setName(input.getString("playerName"));
         snakes.put(playerId, snakeToAdd);
         snakes.get(playerId).setPlayerColour(input.getString("color"));
+        String playerName = snakes.get(playerId).getName();	
+        leaderboardController.addToLeaderBoard(playerName);
+        updateLeaderBoard();
     }
 
     public UpdatePayload getPayload() {
@@ -178,7 +184,10 @@ public class SnakeService {
     }
 
     public void removePlayer(String playerId) {
-        snakes.remove(playerId);
+        String playerName = snakes.get(playerId).getName();	
+    	snakes.remove(playerId);
+        leaderboardController.deleteFromLeaderBoard(playerName);
+        updateLeaderBoard();
     }
 
     public void setColour(String playerId, String colour) {
@@ -267,6 +276,16 @@ public class SnakeService {
             pickupSpawnCountdown = 0;
         }
     }
+    
+    public void updateLeaderBoard() {
+        ArrayList<String> players = new ArrayList<String>();
+        ArrayList<Integer> scores = new ArrayList<Integer>();
+        for (var snake: snakes.values()) {
+        	players.add(snake.getName());
+            scores.add(snake.getLength());
+        }
+       leaderboardController.updateLeaderBoard(players, scores);
+    }
 
     public void checkCollisions() {
         ArrayList<String> keysToDelete = new ArrayList<>();
@@ -281,12 +300,13 @@ public class SnakeService {
             //pickup collisions
             for (int i = 0; i < pickups.size(); i++) {
                 if (snakesBase.getValue().getSnakeSegments().get(0).getX() == pickups.get(i).getX() && snakesBase.getValue().getSnakeSegments().get(0).getY() == pickups.get(i).getY()) {
-                    switch (pickups.get(i).getType()) {
+                	switch (pickups.get(i).getType()) {
                         case "FOOD":
                             snakesBase.getValue().setBaseSpeed(snakesBase.getValue().getBaseSpeed() * BULLET_SPEED_INCREMENTER);
                             snakesBase.getValue().addSegment();
                             pickups.remove(pickups.get(i));
                             pickupCounter--;
+                        	updateLeaderBoard();
                             break;
                         case "SPEED":
                             snakesBase.getValue().setBoostSpeedCounter(0);
@@ -302,6 +322,7 @@ public class SnakeService {
                             }
                             pickups.remove(pickups.get(i));
                             pickupCounter--;
+                        	updateLeaderBoard();
                             break;
                     }
                 }
@@ -382,6 +403,7 @@ public class SnakeService {
                 snakeThatShot.removeTail();
             }
             bullets.add(bullet);
+            updateLeaderBoard();
         }
     }
 
