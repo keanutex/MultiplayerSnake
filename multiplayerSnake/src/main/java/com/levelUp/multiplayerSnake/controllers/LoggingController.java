@@ -1,6 +1,7 @@
 package com.levelUp.multiplayerSnake.controllers;
 
 import com.levelUp.multiplayerSnake.Services.LoggingService;
+import com.levelUp.multiplayerSnake.models.LoggingMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -24,11 +25,11 @@ public class LoggingController {
         this.template = template;
     }
 
+    public void getLogging(LoggingService.messageTypes type,String id, String colour){
+        this.template.convertAndSend("/logging/loggingSquare",new LoggingMessage(loggingService.createMessage(type,id),colour));
+    }
 
-
-
-    @RequestMapping(path="/loggingDetails")
-    public void getLogging(LoggingService.messageTypes type,String name){
-        this.template.convertAndSend("/logging/loggingDetails",loggingService.addMessage(type,name));
+    public void getLoggingSquare(LoggingService.messageTypes type,String id, String colour){
+        this.template.convertAndSend("/logging/loggingCircles",new LoggingMessage(loggingService.createMessage(type,id),colour));
     }
 }
