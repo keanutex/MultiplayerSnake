@@ -14,6 +14,9 @@ public class SnakeService {
 
     @Autowired
     LoggingController loggingController;
+
+    @Autowired 
+    HighscoreService highscore;
     
     @Autowired
     LeaderboardController leaderboardController;
@@ -184,6 +187,9 @@ public class SnakeService {
     }
 
     public void removePlayer(String playerId) {
+        numberOfPlayers--;
+        highscore.savePlayerScore(snakes.get(playerId).getLength(), numberOfPlayers);
+        snakes.remove(playerId);
         String playerName = snakes.get(playerId).getName();	
     	snakes.remove(playerId);
         leaderboardController.deleteFromLeaderBoard(playerName);
