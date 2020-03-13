@@ -45,7 +45,8 @@ Thumbs.db
 # file: ~/.gitignore_global
 .DS_Store
 .idea
-
+.vscode
 .settings
 .classpath
 .project
+/.idea/

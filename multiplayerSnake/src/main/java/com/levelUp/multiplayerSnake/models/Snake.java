@@ -16,7 +16,8 @@ public class Snake {
      private double baseSpeed = 0;
      private boolean speedBoost = false;
      private boolean canShoot = false;
-     private double shootCounter = 0;
+    private double shootCounter = 0;
+    private String name;
 
 
     public Snake(double baseSpeed, String dir){
@@ -95,13 +96,7 @@ public class Snake {
     }
 
 
-    @Override
-    public String toString() {
-        return "Snake{" +
-                "snakeSegments=" + getSnakeSegments() +
-                ", playerColour='" + getPlayerColour() + '\'' +
-                '}';
-    }
+
 
     public ArrayList<SnakeSegment> getSnakeSegments() {
         return snakeSegments;
@@ -198,5 +193,21 @@ public class Snake {
 
     public void setShootCounter(double shootCounter) {
         this.shootCounter = shootCounter;
+    }
+
+    @Override
+    public String toString() {
+        return "Snake{" +
+                "snakeSegments=" + getSnakeSegments() +
+                ", playerColour='" + getPlayerColour() + '\'' +
+                '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

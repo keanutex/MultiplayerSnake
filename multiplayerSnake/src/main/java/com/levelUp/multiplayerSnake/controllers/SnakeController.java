@@ -2,6 +2,8 @@ package com.levelUp.multiplayerSnake.controllers;
 
 import com.levelUp.multiplayerSnake.Services.SnakeService;
 import com.levelUp.multiplayerSnake.models.UpdatePayload;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -38,8 +40,8 @@ public class SnakeController {
 
     @MessageMapping("/newPlayer/{playerId}")
     @SendTo("/snake/newPlayer/{playerId}")
-    public void insertPlayerIntoGame(@DestinationVariable String playerId, String colour) {
-        snakeService.addPlayer(playerId, colour);
+    public void insertPlayerIntoGame(@DestinationVariable String playerId, String input) throws JSONException {
+        snakeService.addPlayer(playerId, input);
     }
 
     @MessageMapping("/snakeDetails")

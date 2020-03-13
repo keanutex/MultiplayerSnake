@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0e1c069c-d025-432b-acec-f84648858c31" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Snake.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/levelUp/multiplayerSnake/models/Snake.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/index.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="InvalidFacetManager">
+    <ignored-facets>
+      <facet id="multiplayerSnake/invalid/Spring" />
+      <facet id="multiplayerSnake/invalid/Web" />
+    </ignored-facets>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1YHsKSUOiGSI7n3OzNIAUlyguqt" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RunManager" selected="Application.MultiplayerSnakeApplication">
+    <configuration name="MazeGeneration" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.levelUp.multiplayerSnake.MazeGeneration" />
+      <module name="multiplayerSnake" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.levelUp.multiplayerSnake.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MazeGenerator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.levelUp.multiplayerSnake.MazeGenerator" />
+      <module name="multiplayerSnake" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.levelUp.multiplayerSnake.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MultiplayerSnakeApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.levelUp.multiplayerSnake.MultiplayerSnakeApplication" />
+      <module name="multiplayerSnake" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.levelUp.multiplayerSnake.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MultiplayerSnakeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="multiplayerSnake" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.levelUp.multiplayerSnake.MultiplayerSnakeApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MultiplayerSnakeApplication" />
+        <item itemvalue="Application.MazeGenerator" />
+        <item itemvalue="Application.MazeGeneration" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0e1c069c-d025-432b-acec-f84648858c31" name="Default Changelist" comment="" />
+      <created>1582610789132</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582610789132</updated>
+      <workItem from="1582610791045" duration="1313000" />
+      <workItem from="1582778970114" duration="344000" />
+      <workItem from="1582779324540" duration="1195000" />
+      <workItem from="1582780680277" duration="5251000" />
+      <workItem from="1582808388290" duration="657000" />
+      <workItem from="1583127057784" duration="906000" />
+      <workItem from="1583132657895" duration="329000" />
+      <workItem from="1583159755076" duration="4888000" />
+      <workItem from="1583223550483" duration="2158000" />
+      <workItem from="1583302796050" duration="2755000" />
+      <workItem from="1583310882807" duration="2283000" />
+    </task>
+    <task id="LOCAL-00001" summary="changed gitignore">
+      <created>1582611458351</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1582611458351</updated>
+    </task>
+    <task id="LOCAL-00002" summary="added pickups">
+      <created>1582785889964</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1582785889964</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="changed gitignore" />
+    <MESSAGE value="Added pickup" />
+    <MESSAGE value="added pickups" />
+    <option name="LAST_COMMIT_MESSAGE" value="added pickups" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="552" y="178" key="#Notifications" timestamp="1583310995178">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="178" key="#Notifications/0.0.1920.1040@0.0.1920.1040" timestamp="1583310995178" />
+    <state x="532" y="58" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582779311443">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="532" y="58" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582779311443" />
+    <state x="721" y="217" key="#com.intellij.ide.util.MemberChooser" timestamp="1583997514907">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="721" y="217" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1583997514907" />
+    <state x="807" y="187" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1582779250841">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="807" y="187" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582779250841" />
+    <state x="657" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog" timestamp="1583996746685">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="657" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583996746685" />
+    <state x="664" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog" timestamp="1583995336620">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="664" y="52" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583995336620" />
+    <state x="751" y="361" width="455" height="318" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583163083521">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="751" y="361" width="455" height="318" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1040@0.0.1920.1040" timestamp="1583163083521" />
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1582782026349">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582782026349" />
+    <state x="429" y="56" key="CommitChangelistDialog2" timestamp="1582785889404">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="429" y="56" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582785889404" />
+    <state width="1877" height="261" key="GridCell.Tab.0.bottom" timestamp="1584000946024">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="261" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
+    <state width="1877" height="261" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1584000946024" />
+    <state width="1877" height="261" key="GridCell.Tab.0.center" timestamp="1584000946024">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="261" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
+    <state width="1877" height="261" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1584000946024" />
+    <state width="1877" height="261" key="GridCell.Tab.0.left" timestamp="1584000946024">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="261" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
+    <state width="1877" height="261" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1584000946024" />
+    <state width="1877" height="261" key="GridCell.Tab.0.right" timestamp="1584000946024">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="261" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
+    <state width="1877" height="261" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1584000946024" />
+    <state width="1877" height="326" key="GridCell.Tab.1.bottom" timestamp="1584000497635">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="261" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
+    <state width="1877" height="326" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1584000497635" />
+    <state width="1877" height="326" key="GridCell.Tab.1.center" timestamp="1584000497635">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="261" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
+    <state width="1877" height="326" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1584000497635" />
+    <state width="1877" height="326" key="GridCell.Tab.1.left" timestamp="1584000497635">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="261" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
+    <state width="1877" height="326" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1584000497635" />
+    <state width="1877" height="326" key="GridCell.Tab.1.right" timestamp="1584000497635">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="261" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582809045652" />
+    <state width="1877" height="326" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1584000497635" />
+    <state x="397" y="97" key="SettingsEditor" timestamp="1582781086691">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="397" y="97" key="SettingsEditor/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1582781086691" />
+    <state x="636" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1583994537003">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="636" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583994537003" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1583995489027">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1583995489027" />
+  </component>
+</project>

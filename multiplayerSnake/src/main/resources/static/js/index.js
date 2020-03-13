@@ -21,7 +21,21 @@ document.querySelector(".btn-submit").addEventListener("click", () => {
     "user",
     JSON.stringify({
       username: document.querySelector(".form-input").value,
-      color: document.querySelector(".form-colorpicker").value
+      color: document.querySelector(".form-colorpicker").value,
+      playerId:
+        "_" +
+        Math.random()
+          .toString(36)
+          .substr(2, 9)
     })
   );
 });
+
+// ----------------------- Highscore ------------------------------------------
+
+fetch("http://localhost:8080/HighscoreDetails")
+  .then(res => res.json())
+  .then(data => {
+    document.querySelector(".highscore-score").innerHTML = data.highscore;
+    // console.log(data);
+  });
